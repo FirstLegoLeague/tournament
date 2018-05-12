@@ -1,6 +1,16 @@
 api: '1.0'           
 name: 'schedule'         
 version: '0.0.1'   
-type: 'node'  
+type: 'node'
+script: 'yarn start index.js'
+require:
+  mongodb
 config:
-  script: 'node index.js'
+  - name: mongo
+      fields:
+        - name: db-name
+          type: string
+          default: 'tournament_data'
+        - name: db-url
+          type: string
+          default: 'localhost:27017'
