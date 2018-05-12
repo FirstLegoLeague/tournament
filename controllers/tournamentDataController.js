@@ -1,6 +1,5 @@
 'use strict'
 const express = require('express');
-const fs = require('fs');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const tournamentDataParser = require('../logic/parseTournamentFile');
@@ -10,10 +9,10 @@ const DATABASE_NAME = 'test';
 router.post('/', (req, res) => {
     if (!req.body.tourData) {
         res.status(500);
+        res.send('Please provide data..');
     }
 
-    let rawData = fs.readFileSync('./docs/test-file_converted.csv', 'utf-8');
-    let data = tournamentDataParser.parse(rawData, ',');
+    let data = tournamentDataParser.parse(req.body.tourData, ',');
     MongoClient.connect(process.env.MONGO).then((conn) => {
 
         conn.db(DATABASE_NAME).collection('tables').insertMany(data.tables).then(() => {
