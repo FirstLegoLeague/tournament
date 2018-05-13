@@ -1,6 +1,6 @@
 'use strict'
-let teamsLogic = require('./teams');
-let matchLogic = require('./matches');
+const Team = require('../models/Team');
+const Match = require('../models/Match');
 const Table = require('./../models/Table');
 
 const TEAM_DATA_BLOCK_ID = 1;
@@ -26,16 +26,14 @@ function parse(data, delimiter) {
     }
 
     let blocks = [];
-    let parseTournamentFile = 0;
-    for (let line of lines) {
+    lines.forEach((line, index) => {
         if (line[0] === 'Block Format') {
             blocks.push({
                 "blockId": parseInt(line[1]),
-                "lineNumber": parseTournamentFile
+                "lineNumber": index
             });
         }
-        parseTournamentFile++;
-    }
+    });
 
     let numOfTeams = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1];
     let teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeams[1]))
@@ -63,9 +61,9 @@ function parse(data, delimiter) {
         tables.push(new Table(i - 3, tablesRaw[i]))
     }
 
-    let teams = teamsLogic.convertTeamBlockToTeamArray(teamsRaw);
-    let rankingMatches = matchLogic.ConvertMatchBlockToMatchArray(rankingMatchesRaw);
-    let practiceMatches = matchLogic.ConvertMatchBlockToMatchArray(practiceMatchesRaw);
+    let teams = teamsRaw.map(Team.deserialize);
+    let rankingMatches = rankingMatchesRaw.map(Match.deserialize);
+    let practiceMatches = practiceMatchesRaw.map(Match.deserialize)
 
     return {
         'teams': teams,

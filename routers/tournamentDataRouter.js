@@ -2,13 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
-const tournamentDataParser = require('../logic/parseTournamentFile');
+const tournamentDataParser = require('../logic/tournamentDataParser');
 
 const DATABASE_NAME = 'test';
 
 router.post('/', (req, res) => {
     if (!req.body.tourData) {
-        res.status(500);
+        res.status(400);
         res.send('Please provide data..');
     }
 
@@ -48,7 +48,7 @@ router.post('/', (req, res) => {
         });
 
 
-        res.status(200);
+        res.status(201);
         return;
     }).catch((err) => {
         console.log(err);

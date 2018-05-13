@@ -6,10 +6,10 @@ app.use(bodyParser.json());
 
 const appPort = process.env.PORT || 3001;
 
-let tournamentDataController = require('./controllers/tournamentDataController');
+let tournamentDataController = require('./routers/tournamentDataRouter');
 app.use('/tournamentData', tournamentDataController);
 
-let teamsController = require('./controllers/TeamsController');
+let teamsController = require('./routers/teamsRouter');
 app.use('/teams', teamsController);
 
 app.listen(appPort, () => {

@@ -1,6 +1,8 @@
 
 # Created by https://www.gitignore.io/api/node,webstorm+all
 
+/docs
+
 ### Node ###
 # Logs
 logs

@@ -29,11 +29,11 @@ class Match {
 
 }
 
-function parseFloatOrUndefined(int){
-    if (int == ''){
+function parseFloatOrUndefined(float){
+    if (float == ''){
         return undefined;
     }
-    return parseFloat(int);
+    return parseFloat(float);
 }
 
 module.exports = Match;

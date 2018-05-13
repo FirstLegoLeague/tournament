@@ -5,12 +5,3 @@ type: 'node'
 script: 'yarn start index.js'
 require:
   mongodb
-config:
-  - name: mongo
-      fields:
-        - name: db-name
-          type: string
-          default: 'tournament_data'
-        - name: db-url
-          type: string
-          default: 'localhost:27017'
