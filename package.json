@@ -4,23 +4,5 @@
   "main": "index.js",
   "repository": "git@github.com:FirstLegoLeagueIL/schedule.git",
   "author": "Tal Taub <taltaub22@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "@first-lego-league/ms-authentication": "^1.0.1",
-    "@first-lego-league/ms-logger": "^1.0.1",
-    "body-parser": "^1.18.2",
-    "csv-parse": "^2.2.0",
-    "express": "^4.16.3",
-    "mhub": "^0.9.1",
-    "moment": "^2.22.1",
-    "mongodb": "^3.0.5"
-  },
-  "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.10.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1"
-  }
+  "license": "MIT"
 }

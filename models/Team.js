@@ -26,7 +26,7 @@ class Team {
         newTeam.judgingGroup = stringOrUndefined(rawTeam[7]);
         newTeam.pitNumber = parseIntOrUndefined(rawTeam[8]);
         newTeam.pitLocation = stringOrUndefined(rawTeam[9]);
-        newTeam.translationNeeded = parseBooleanOrUndefined(rawTeam[10]);
+        newTeam.translationNeeded = parseBooleanOrUndifined(rawTeam[10]);
 
         return newTeam;
     }
@@ -48,7 +48,7 @@ function stringOrUndefined(string){
     return string
 }
 
-function parseBooleanOrUndefined(bool){
+function parseBooleanOrUndifined(bool){
     if(bool == ''){
         return undefined;
     }
