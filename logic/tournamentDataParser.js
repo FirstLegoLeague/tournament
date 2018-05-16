@@ -1,7 +1,9 @@
 'use strict'
 const Team = require('../models/Team');
 const Match = require('../models/Match');
-const Table = require('./../models/Table');
+const Table = require('../models/Table');
+
+const objectDataParser = require('objectDataParser');
 
 const TEAM_DATA_BLOCK_ID = 1;
 const TEAM_DATE_HEADER_LINE_AMOUNT = 2;
@@ -56,14 +58,15 @@ function parse(data, delimiter) {
     let numOfTeamsPerTable = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 3][1];
     let numOfActualFields = parseInt(numOfTables) * parseInt(numOfTeamsPerTable);
     let tablesRaw = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
+
     let tables = [];
     for (let i = 3; i < numOfActualFields + 3; i++) {
         tables.push(new Table(i - 3, tablesRaw[i]))
     }
 
-    let teams = teamsRaw.map(Team.deserialize);
-    let rankingMatches = rankingMatchesRaw.map(Match.deserialize);
-    let practiceMatches = practiceMatchesRaw.map(Match.deserialize)
+    let teams = teamsRaw.map(objectDataParser.deserializeTeam);
+    let rankingMatches = rankingMatchesRaw.map(objectDataParser.deserializeMatch);
+    let practiceMatches = practiceMatchesRaw.map(objectDataParser.deserializeMatch)
 
     return {
         'teams': teams,

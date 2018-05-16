@@ -4,7 +4,6 @@ const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 const tournamentDataParser = require('../logic/tournamentDataParser');
 
-const DATABASE_NAME = 'test';
 
 router.post('/', (req, res) => {
     if (!req.body.tourData) {
@@ -15,7 +14,7 @@ router.post('/', (req, res) => {
     let data = tournamentDataParser.parse(req.body.tourData, ',');
     MongoClient.connect(process.env.MONGO).then((conn) => {
 
-        conn.db(DATABASE_NAME).collection('tables').insertMany(data.tables).then(() => {
+        conn.db.collection('tables').insertMany(data.tables).then(() => {
             //TODO: use ms-logger
             console.log("all good")
         }).catch((err) => {
@@ -23,7 +22,7 @@ router.post('/', (req, res) => {
             console.log(err)
         });
 
-        conn.db(DATABASE_NAME).collection('teams').insertMany(data.teams).then(() => {
+        conn.db.collection('teams').insertMany(data.teams).then(() => {
              //TODO: use ms-logger
             console.log("all good")
         }).catch((err) => {
@@ -31,7 +30,7 @@ router.post('/', (req, res) => {
             console.log(err)
         });
 
-        conn.db(DATABASE_NAME).collection('practice-matches').insertMany(data.practiceMatches).then(() => {
+        conn.db.collection('practice-matches').insertMany(data.practiceMatches).then(() => {
             //TODO: use ms-logger
             console.log("all good")
         }).catch((err) => {
@@ -39,7 +38,7 @@ router.post('/', (req, res) => {
             console.log(err)
         });
 
-        conn.db(DATABASE_NAME).collection('ranking-matches').insertMany(data.rankingMatches).then(() => {
+        conn.db.collection('ranking-matches').insertMany(data.rankingMatches).then(() => {
             //TODO: use ms-logger
             console.log("all good")
         }).catch((err) => {
