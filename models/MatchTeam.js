@@ -1,9 +1,8 @@
 class MatchTeam {
-    constructor(teamNumber, tableId) {
-        this.teamNumber = teamNumber;
-        this.tableId = tableId;
-    }
-
+  constructor (teamNumber, tableId) {
+    this.teamNumber = teamNumber
+    this.tableId = tableId
+  }
 }
 
-module.exports = MatchTeam;
+module.exports = MatchTeam
