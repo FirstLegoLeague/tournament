@@ -3,7 +3,7 @@ const Team = require('../models/Team');
 const Match = require('../models/Match');
 const Table = require('../models/Table');
 
-const objectDataParser = require('objectDataParser');
+const objectDataParser = require('./objectDataParser');
 
 const TEAM_DATA_BLOCK_ID = 1;
 const TEAM_DATE_HEADER_LINE_AMOUNT = 2;
@@ -36,6 +36,7 @@ function parse(data, delimiter) {
             });
         }
     });
+
 
     let numOfTeams = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1];
     let teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeams[1]))
