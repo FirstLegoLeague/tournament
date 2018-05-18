@@ -38,8 +38,8 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
   MongoClient.connect(MONGU_URI).then(connection => {
-    connection.db().collection(TEAMS_COLLECTION).findOneAndUpdate({ 'number': parseInt(req.params.id) }, req.body).then(a => {
-      if (a.ok === 1) {
+    connection.db().collection(TEAMS_COLLECTION).findOneAndUpdate({ 'number': parseInt(req.params.id) }, req.body).then(dbResponse => {
+      if (dbResponse.ok === 1) {
         res.sendStatus(200)
       }
     })
@@ -55,7 +55,7 @@ router.post('/', (req, res) => {
     connection.db().collection(TEAMS_COLLECTION).findOne({ 'number': parseInt(req.body.number) }).then(data => {
       if (data) {
         res.status(400)
-        res.send('Team allready exists')
+        res.send('Team already exists')
         return
       }
       connection.db.collection('teams').insertOne(req.body).then(a => {
@@ -73,8 +73,8 @@ router.post('/', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   MongoClient.connect(MONGU_URI).then(connection => {
-    connection.db().collection(TEAMS_COLLECTION).findOneAndDelete({ 'number': parseInt(req.params.id) }).then(a => {
-      if (a.ok === 1) {
+    connection.db().collection(TEAMS_COLLECTION).findOneAndDelete({ 'number': parseInt(req.params.id) }).then(dbResponse => {
+      if (dbResponse.ok === 1) {
         res.sendStatus(200)
       }
     })
