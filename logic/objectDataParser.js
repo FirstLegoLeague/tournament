@@ -40,17 +40,11 @@ function deserializeTeam (rawTeam) {
 }
 
 function parseIntOrUndefined (int) {
-  if (int == '') {
-    return undefined
-  }
-  return parseInt(int)
+  return parseInt(int) || undefined
 }
 
 function parseFloatOrUndefined (float) {
-  if (float == '') {
-    return undefined
-  }
-  return parseFloat(float)
+  return parseFloat(float) || undefined
 }
 
 module.exports = {
