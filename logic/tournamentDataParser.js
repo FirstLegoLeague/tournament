@@ -18,6 +18,8 @@ const JUDJING_INFO_HEADER_LINE_AMOUNT = 6
 const PRACTICE_MATCH_SCHEDULE_ID = 4
 const PRACTICE_MATCH_HEADER_LINE_AMOUNT = 6
 
+const TABLE_NAMES_START = 3
+
 function parse (data, delimiter) {
   const dataLines = data.split('\n')
 
@@ -59,8 +61,8 @@ function parse (data, delimiter) {
   const tablesRaw = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
 
   const tables = []
-  for (let i = 3; i < numOfActualFields + 3; i++) {
-    tables.push(new Table(i - 3, tablesRaw[i]))
+  for (let i = 0; i < numOfActualFields; i++) {
+    tables.push(new Table(i, tablesRaw[i + TABLE_NAMES_START]))
   }
 
   const teams = teamsRaw.map(objectDataParser.deserializeTeam)
