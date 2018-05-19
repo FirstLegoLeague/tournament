@@ -1,6 +1,7 @@
 api: '1.0'           
 name: 'schedule'         
 version: '0.0.1'   
-type: 'node'  
-config:
-  script: 'node index.js'
+type: 'node'
+script: 'yarn start index.js'
+require:
+  mongodb
