@@ -1,24 +1,25 @@
 'use strict'
 const express = require('express')
-const msLogger = require('@first-lego-league/ms-logger')()
+const msLogger = require('@first-lego-league/ms-logger').Logger()
+const msCorrelation = require('@first-lego-league/ms-correlation')
+const crudRouter = require('./routers/crudRouter').getRouter
+
+const appPort = process.env.PORT || 3001
+const bodyParser = require('body-parser')
 
 msLogger.setLogLevel(process.env.LOG_LEVEL || msLogger.LOG_LEVELS.DEBUG)
-const bodyParser = require('body-parser')
 
 const app = express()
 app.use(bodyParser.json())
-
-const appPort = process.env.PORT || 3001
-
+app.use(msCorrelation.correlationMiddleware)
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 
 app.use('/tournamentData', tournamentDataRouter)
-
-const teamsRouter = require('./routers/teamsRouter')
-
-app.use('/team', teamsRouter)
+app.use('/team', crudRouter('teams'))
+app.use('/match/practice', crudRouter('practice-matches'))
+app.use('/match/ranking', crudRouter('ranking-matches'))
+app.use('/table', crudRouter('tables'))
 
 app.listen(appPort, () => {
-  // TODO: Add real correlation id
-  msLogger.info('corr-id', 'Server started on port ' + appPort)
+  msLogger.info('Server started on port ' + appPort)
 })
