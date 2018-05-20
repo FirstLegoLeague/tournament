@@ -1,11 +1,7 @@
-extends:
-- standard
+extends: standard
 
 parserOptions:
-  sourceType: module
-
-plugins:
-  - html
+  sourceType: script
 
 rules:
   arrow-parens:
@@ -17,7 +13,7 @@ rules:
   object-curly-spacing: [ warn, always ]
   prefer-arrow-callback: warn
   prefer-const: warn
-
+  strict: [ warn, global ]
 
   import/newline-after-import: warn
   import/no-absolute-path: warn
@@ -32,14 +28,13 @@ rules:
     - parent
     newlines-between: always-and-inside-groups
 
-  node/exports-style: [ warn, exports ]
+  node/exports-style:
+  - warn
+  - exports
+  node/no-unsupported-features: warn
   node/shebang: warn
 
   promise/catch-or-return: warn
   promise/no-callback-in-promise: warn
   promise/no-native: warn
   promise/no-return-wrap: warn
-
-  indent:
-    - error
-    - 4
