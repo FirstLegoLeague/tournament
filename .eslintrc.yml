@@ -39,3 +39,7 @@ rules:
   promise/no-callback-in-promise: warn
   promise/no-native: warn
   promise/no-return-wrap: warn
+
+  indent:
+    - error
+    - 4
