@@ -30,13 +30,8 @@ app.use('/team', crudRouter({
   'IdField': Team.IdField
 }))
 
-app.use('/match/practice', crudRouter({
-  'collectionName': 'practice-matches',
-  'IdField': Match.IdField
-}))
-
-app.use('/match/ranking', crudRouter({
-  'collectionName': 'ranking-matches',
+app.use('/match/', crudRouter({
+  'collectionName': 'matches',
   'IdField': Match.IdField
 }))
 
