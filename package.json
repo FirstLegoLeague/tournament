@@ -6,7 +6,7 @@
   "author": "Tal Taub <taltaub22@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@first-lego-league/ms-correlation": "^0.0.1",
+    "@first-lego-league/ms-correlation": "^0.0.2",
     "@first-lego-league/ms-logger": "^1.0.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",

@@ -43,17 +43,17 @@ function parse (data, delimiter) {
 
   const numRankingOfMatches = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 1]
   const rankingMatchesRaw = lines.slice(blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
-        RANKING_MATCH_HEADER_LINE_AMOUNT,
+    RANKING_MATCH_HEADER_LINE_AMOUNT,
   blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
-        RANKING_MATCH_HEADER_LINE_AMOUNT +
-        Math.ceil(parseFloat(numRankingOfMatches[1])))
+    RANKING_MATCH_HEADER_LINE_AMOUNT +
+    Math.ceil(parseFloat(numRankingOfMatches[1])))
 
   const numOfPracticeMatches = lines[blocks.find(x => x.blockId == PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
   const practiceMatchesRaw = lines.slice(blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
-        PRACTICE_MATCH_HEADER_LINE_AMOUNT,
+    PRACTICE_MATCH_HEADER_LINE_AMOUNT,
   blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
-        PRACTICE_MATCH_HEADER_LINE_AMOUNT +
-        Math.ceil(parseFloat(numOfPracticeMatches[1])))
+    PRACTICE_MATCH_HEADER_LINE_AMOUNT +
+    Math.ceil(parseFloat(numOfPracticeMatches[1])))
 
   const numOfTables = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 2][1]
   const numOfTeamsPerTable = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 3][1]
@@ -66,8 +66,8 @@ function parse (data, delimiter) {
   }
 
   const teams = teamsRaw.map(objectDataParser.deserializeTeam)
-  const rankingMatches = rankingMatchesRaw.map(objectDataParser.deserializeMatch)
-  const practiceMatches = practiceMatchesRaw.map(objectDataParser.deserializeMatch)
+  const rankingMatches = rankingMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'ranking'))
+  const practiceMatches = practiceMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'practice'))
 
   return {
     'teams': teams,

@@ -5,12 +5,13 @@ const Match = require('../models/Match')
 const Team = require('../models/Team')
 const MatchTeam = require('../models/MatchTeam')
 
-function deserializeMatch (rawMatch) {
+function deserializeMatch (rawMatch, stage) {
   const newMatch = new Match()
 
   newMatch.matchId = parseIntOrUndefined(rawMatch[0])
   newMatch.startTime = moment(rawMatch[1], 'hh:mm:ss A').toDate()
   newMatch.endTime = moment(rawMatch[2], 'hh:mm:ss A').toDate()
+  newMatch.stage = stage
   newMatch.matchTeams = []
 
   const matchTeamsRaw = rawMatch.slice(2, rawMatch.length)
