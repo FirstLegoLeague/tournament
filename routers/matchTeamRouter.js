@@ -1,0 +1,43 @@
+'use strict'
+const express = require('express')
+const MongoClient = require('mongodb').MongoClient
+const MsLogger = require('@first-lego-league/ms-logger').Logger()
+
+const Team = require('../models/Team')
+const Match = require('../models/Match')
+const Table = require('../models/Table')
+
+const MONGU_URI = process.env.MONGO
+
+exports.getRouter = function () {
+  const router = express.Router()
+
+  router.get('/:team/matches', (req, res) => {
+    MongoClient.connect(MONGU_URI).then(connection => {
+      connection.db().collection('matches').find().toArray().then(data => {
+        if (!data) {
+          res.sendStatus(404)
+          return
+        }
+
+        let newdata = data.filter(match => {
+          for (let matchteam of match.matchTeams) {
+            if (matchteam.teamNumber == req.params.team) {
+              return true
+            }
+          }
+          return false
+        })
+
+        res.send(newdata);
+      })
+
+    }).catch(err => {
+      console.log(err)
+      MsLogger.error(err)
+      res.sendStatus(500)
+    })
+  })
+
+  return router
+}

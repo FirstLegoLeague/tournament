@@ -21,7 +21,9 @@ msLogger.setLogLevel(process.env.LOG_LEVEL || msLogger.LOG_LEVELS.DEBUG)
 const app = express()
 app.use(bodyParser.json())
 app.use(msCorrelation.correlationMiddleware)
+
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
+const matchTeamRouter = require('./routers/matchTeamRouter');
 
 app.use('/tournamentData', tournamentDataRouter)
 
@@ -30,7 +32,9 @@ app.use('/team', crudRouter({
   'IdField': Team.IdField
 }))
 
-app.use('/match/', crudRouter({
+app.use('/team', matchTeamRouter.getRouter());
+
+app.use('/match', crudRouter({
   'collectionName': 'matches',
   'IdField': Match.IdField
 }))

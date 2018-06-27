@@ -1,7 +1,7 @@
 'use strict'
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
-const MsLogger = require('@first-lego-league/ms-logger').Logger
+const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const MONGU_URI = process.env.MONGO
 
