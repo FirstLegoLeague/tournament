@@ -14,24 +14,14 @@ exports.getRouter = function () {
 
   router.get('/:team/matches', (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection('matches').find().toArray().then(data => {
+      connection.db().collection('matches').find({ 'matchTeams.teamNumber': parseInt(req.params.team) }).toArray().then(data => {
         if (!data) {
           res.sendStatus(404)
           return
         }
 
-        let newdata = data.filter(match => {
-          for (let matchteam of match.matchTeams) {
-            if (matchteam.teamNumber == req.params.team) {
-              return true
-            }
-          }
-          return false
-        })
-
-        res.send(newdata);
+        res.send(data)
       })
-
     }).catch(err => {
       console.log(err)
       MsLogger.error(err)
