@@ -1,0 +1,8 @@
+/* 
+ * This is meant ot fix the bug occouring with the Foundation Reveal on firefox
+ * Please see isapir's comment in https://github.com/zurb/foundation-sites/issues/10824
+ */
+
+ .reveal-overlay {
+ 	overflow: inherit;
+ }
