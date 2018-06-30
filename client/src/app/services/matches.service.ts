@@ -9,7 +9,7 @@ export class MatchesService {
 
   constructor(private requests: RequestService) { }
 
-  getAllMatches() : Observable<Array<any>>{
+  getAllMatches() : Observable<any>{
     return this.requests.get('/match/all');
   }
 

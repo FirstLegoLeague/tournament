@@ -11,7 +11,7 @@ export class TeamsService {
   constructor(private request: RequestService) {
   }
 
-  getAllTeams() : Observable<Array<Team>>{
+  getAllTeams() : Observable<any>{
     return this.request.get('/team/all')
   }
 
