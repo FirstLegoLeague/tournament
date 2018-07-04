@@ -1,0 +1,19 @@
+<table>
+  <tr style="font-weight: bold;">
+    <td>Id</td>
+    <td>Stage</td>
+    <td>Time</td>
+    <td>WTF is this number?</td>
+    <td *ngFor="let tale of tables">
+      {{tale.tableName}}
+    </td>
+  </tr>
+  <tr *ngFor="let match of matches">
+    <td>{{match.matchId}}</td>
+    <td>{{match.stage}}</td>
+    <td>{{match.startTime | date : 'shortTime'}}</td>
+    <td *ngFor="let matchTeam of match.matchTeams">
+    {{matchTeam.teamNumber}}
+    </td>
+  </tr>
+</table>
