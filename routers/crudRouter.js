@@ -5,12 +5,12 @@ const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const MONGU_URI = process.env.MONGO
 
-exports.getRouter = function (Model) {
+exports.getRouter = function (options) {
   const router = express.Router()
 
   router.get('/all', (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection(Model.collectionName).find().toArray().then(data => {
+      connection.db().collection(options.collectionName).find().toArray().then(data => {
         res.send(data)
       })
     }).catch(err => {
@@ -21,7 +21,7 @@ exports.getRouter = function (Model) {
 
   router.get('/:id', (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection(Model.collectionName).findOne(idMongoQuery(Model.IdField, parseInt(req.params.id))).then(data => {
+      connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, parseInt(req.params.id))).then(data => {
         if (!data) {
           res.sendStatus(404)
           return
@@ -36,52 +36,85 @@ exports.getRouter = function (Model) {
   })
 
   router.put('/:id', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
-      // TODO: validate
-      connection.db().collection(Model.collectionName).findOneAndUpdate(idMongoQuery(Model.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
-        if (dbResponse.ok === 1) {
-          res.sendStatus(200)
-        }
+    let validationResult = true
+    if (options.validationMethods.put) {
+      validationResult = options.validationMethods.put(req.params)
+    }
+
+    if (validationResult) {
+      MongoClient.connect(MONGU_URI).then(connection => {
+        connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
+          if (dbResponse.ok === 1) {
+            res.sendStatus(204)
+          }
+        })
+      }).catch(err => {
+        MsLogger.error(err)
+        res.sendStatus(500)
       })
-    }).catch(err => {
-      MsLogger.error(err)
-      res.sendStatus(500)
-    })
+    } else {
+      res.sendStatus(400)
+    }
   })
 
   router.post('/', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection(Model.collectionName).findOne(idMongoQuery(Model.IdField, req.body[Model.IdField])).then(data => {
-        if (data) {
-          res.status(400)
-          res.send('Object already exists')
-          return
-        }
-        // TODO: validate
-        connection.db.collection(Model.collectionName).insertOne(req.body).then(a => {
-          if (a.insertedCount > 0) {
-            res.sendStatus(200)
+    let validationResult = true
+    if (options.validationMethods.post) {
+      validationResult = options.validationMethods.post(req.params)
+    }
+
+    if (validationResult) {
+      MongoClient.connect(MONGU_URI).then(connection => {
+        connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, req.body[options.IdField])).then(data => {
+          if (data) {
+            res.status(400)
+            res.send('Object already exists')
+            return
           }
+          connection.db.collection(options.collectionName).insertOne(req.body).then(a => {
+            if (a.insertedCount > 0) {
+              res.sendStatus(201)
+            }
+          })
         })
+      }).catch(err => {
+        MsLogger.error(err)
+        res.sendStatus(500)
       })
-    }).catch(err => {
-      MsLogger.error(err)
-      res.sendStatus(500)
-    })
+    } else {
+      res.sendStatus(400)
+    }
   })
 
   router.delete('/:id', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection(Model.collectionName).findOneAndDelete(idMongoQuery(Model.IdField, parseInt(req.params.id))).then(dbResponse => {
-        if (dbResponse.ok === 1) {
-          res.sendStatus(200)
-        }
+    console.log(req.params.id)
+    let validationResult = true
+    if (options.validationMethods.delete) {
+      validationResult = options.validationMethods.delete(req.params)
+      console.log(validationResult)
+    }
+
+    if (validationResult) {
+      MongoClient.connect(MONGU_URI).then(connection => {
+        connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, parseInt(req.params.id))).then(dbResponse => {
+          if (dbResponse.ok === 1) {
+            res.sendStatus(200)
+          }
+        })
+      }).catch(err => {
+        MsLogger.error(err)
+        res.sendStatus(500)
       })
-    }).catch(err => {
-      MsLogger.error(err)
-      res.sendStatus(500)
-    })
+    } else {
+      res.sendStatus(400)
+    }
   })
+
+  if (options.extraRouters) {
+    for (const extraRouter of options.extraRouters) {
+      router.use('/', extraRouter)
+    }
+  }
 
   return router
 }

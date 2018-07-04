@@ -2,7 +2,7 @@
 
 const express = require('express')
 const domain = require('domain')
-const {correlateSession} = require('@first-lego-league/ms-correlation')
+const { correlateSession } = require('@first-lego-league/ms-correlation')
 const msLogger = require('@first-lego-league/ms-logger').Logger()
 const msCorrelation = require('@first-lego-league/ms-correlation')
 
@@ -23,16 +23,25 @@ app.use(bodyParser.json())
 app.use(msCorrelation.correlationMiddleware)
 
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
-const matchTeamRouter = require('./routers/matchTeamRouter');
+const matchTeamRouter = require('./routers/matchTeamRouter')
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
 
 app.use('/tournamentData', tournamentDataRouter)
 
+const teamLogic = require('./logic/teamLogic')
 app.use('/team', crudRouter({
   'collectionName': 'teams',
-  'IdField': Team.IdField
+  'IdField': Team.IdField,
+  'extraRouters': [matchTeamRouter.getRouter()],
+  'validationMethods': {
+    'delete': teamLogic.deleteValidation
+  }
 }))
-
-app.use('/team', matchTeamRouter.getRouter());
 
 app.use('/match', crudRouter({
   'collectionName': 'matches',
