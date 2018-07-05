@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@first-lego-league/ms-auth@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-auth/-/ms-auth-1.1.1.tgz#7f49f711097fd29a491825ceb24577b4a16c70d9"
+  dependencies:
+    "@first-lego-league/ms-logger" "^1.2.0"
+    cookie-parser "^1.4.3"
+    express "^4.16.3"
+    jsonwebtoken "^8.2.0"
+
 "@first-lego-league/ms-correlation@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@first-lego-league/ms-correlation/-/ms-correlation-0.0.2.tgz#387abe6f243ee5c603c25731e0a789f74bbd3c49"
@@ -12,6 +21,16 @@
 "@first-lego-league/ms-logger@^1.0.1":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@first-lego-league/ms-logger/-/ms-logger-1.2.0.tgz#c9a16dc97052e6e31ec0e5fd51e4ad3ab6803a70"
+  dependencies:
+    jsonfile "^4.0.0"
+    on-finished "^2.3.0"
+    on-headers "^1.0.1"
+    path "^0.12.7"
+    yamljs "^0.3.0"
+
+"@first-lego-league/ms-logger@^1.2.0":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-logger/-/ms-logger-1.2.2.tgz#c5e2623d687566745b5f782930a9ec92fd5ee15c"
   dependencies:
     jsonfile "^4.0.0"
     on-finished "^2.3.0"
@@ -264,6 +283,13 @@ content-disposition@0.5.2:
 content-type@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
+
+cookie-parser@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/cookie-parser/-/cookie-parser-1.4.3.tgz#0fe31fa19d000b95f4aadf1f53fdc2b8a203baa5"
+  dependencies:
+    cookie "0.3.1"
+    cookie-signature "1.0.6"
 
 cookie-signature@1.0.6:
   version "1.0.6"
@@ -916,6 +942,20 @@ jsonfile@^4.0.0:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
+jsonwebtoken@^8.2.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.3.0.tgz#056c90eee9a65ed6e6c72ddb0a1d325109aaf643"
+  dependencies:
+    jws "^3.1.5"
+    lodash.includes "^4.3.0"
+    lodash.isboolean "^3.0.3"
+    lodash.isinteger "^4.0.4"
+    lodash.isnumber "^3.0.3"
+    lodash.isplainobject "^4.0.6"
+    lodash.isstring "^4.0.1"
+    lodash.once "^4.0.0"
+    ms "^2.1.1"
+
 jsonwebtoken@^8.2.1:
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.2.1.tgz#333ee39aa8f238f32fa41693e7a2fb7e42f82b31"
@@ -939,7 +979,7 @@ jwa@^1.1.5:
     ecdsa-sig-formatter "1.0.10"
     safe-buffer "^5.0.1"
 
-jws@^3.1.4:
+jws@^3.1.4, jws@^3.1.5:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/jws/-/jws-3.1.5.tgz#80d12d05b293d1e841e7cb8b4e69e561adcf834f"
   dependencies:

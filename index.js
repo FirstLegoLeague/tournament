@@ -2,8 +2,11 @@
 
 const express = require('express')
 const domain = require('domain')
-const {correlateSession} = require('@first-lego-league/ms-correlation')
-const msLogger = require('@first-lego-league/ms-logger').Logger()
+const { correlateSession } = require('@first-lego-league/ms-correlation')
+const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
+const msLogger = require('@first-lego-league/ms-logger')
+
+const logger = msLogger.Logger()
 const msCorrelation = require('@first-lego-league/ms-correlation')
 
 const crudRouter = require('./routers/crudRouter').getRouter
@@ -16,14 +19,21 @@ const appPort = process.env.PORT || 3001
 
 const bodyParser = require('body-parser')
 
-msLogger.setLogLevel(process.env.LOG_LEVEL || msLogger.LOG_LEVELS.DEBUG)
+logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
 app.use(bodyParser.json())
 app.use(msCorrelation.correlationMiddleware)
+app.use(msLogger.middleware)
+
+if (process.env.DEV) {
+  app.use(authenticationDevMiddleware())
+} else {
+  app.use(authenticationMiddleware)
+}
 
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
-const matchTeamRouter = require('./routers/matchTeamRouter');
+const matchTeamRouter = require('./routers/matchTeamRouter')
 
 app.use('/tournamentData', tournamentDataRouter)
 
@@ -32,7 +42,7 @@ app.use('/team', crudRouter({
   'IdField': Team.IdField
 }))
 
-app.use('/team', matchTeamRouter.getRouter());
+app.use('/team', matchTeamRouter.getRouter())
 
 app.use('/match', crudRouter({
   'collectionName': 'matches',
@@ -47,6 +57,6 @@ app.use('/table', crudRouter({
 app.listen(appPort, () => {
   domain.create().run(() => {
     correlateSession()
-    msLogger.info('Server started on port ' + appPort)
+    logger.info('Server started on port ' + appPort)
   })
 })

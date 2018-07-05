@@ -2,6 +2,9 @@
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+
+const adminAction = authroizationMiddlware(['admin', 'scorekeeper', 'development'])
 
 const MONGU_URI = process.env.MONGO
 
@@ -35,9 +38,8 @@ exports.getRouter = function (Model) {
     })
   })
 
-  router.put('/:id', (req, res) => {
+  router.put('/:id', adminAction, (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
-      // TODO: validate
       connection.db().collection(Model.collectionName).findOneAndUpdate(idMongoQuery(Model.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
         if (dbResponse.ok === 1) {
           res.sendStatus(200)
@@ -49,7 +51,7 @@ exports.getRouter = function (Model) {
     })
   })
 
-  router.post('/', (req, res) => {
+  router.post('/', adminAction, (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(Model.collectionName).findOne(idMongoQuery(Model.IdField, req.body[Model.IdField])).then(data => {
         if (data) {
@@ -57,7 +59,6 @@ exports.getRouter = function (Model) {
           res.send('Object already exists')
           return
         }
-        // TODO: validate
         connection.db.collection(Model.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
             res.sendStatus(200)
@@ -70,7 +71,7 @@ exports.getRouter = function (Model) {
     })
   })
 
-  router.delete('/:id', (req, res) => {
+  router.delete('/:id', adminAction, (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(Model.collectionName).findOneAndDelete(idMongoQuery(Model.IdField, parseInt(req.params.id))).then(dbResponse => {
         if (dbResponse.ok === 1) {
@@ -86,7 +87,7 @@ exports.getRouter = function (Model) {
   return router
 }
 
-function idMongoQuery(idField, id) {
+function idMongoQuery (idField, id) {
   const query = {}
   query[idField] = id
   return query
