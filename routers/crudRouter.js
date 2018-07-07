@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const adminAction = authroizationMiddlware(['admin', 'scorekeeper', 'development'])
+const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const MONGU_URI = process.env.MONGO
 
