@@ -2,6 +2,7 @@
 
 const express = require('express')
 const domain = require('domain')
+const cors = require('cors')
 const {correlateSession} = require('@first-lego-league/ms-correlation')
 const msLogger = require('@first-lego-league/ms-logger').Logger()
 const msCorrelation = require('@first-lego-league/ms-correlation')
@@ -21,6 +22,7 @@ msLogger.setLogLevel(process.env.LOG_LEVEL || msLogger.LOG_LEVELS.DEBUG)
 const app = express()
 app.use(bodyParser.json())
 app.use(msCorrelation.correlationMiddleware)
+app.use(cors())
 
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter');
