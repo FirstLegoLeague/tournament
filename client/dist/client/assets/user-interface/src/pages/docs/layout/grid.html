@@ -1,0 +1,87 @@
+<div class="grid-x grid-margin-x grid-margin-y">
+  	<div class="large-8 large-offset-2 cell">
+		<h1>XY Grid Layout</h1>
+		<p>
+			The XY Grid Layout is the most abundant way to organize layouts in the system.
+			Using it, you can create a large variaty of rectangular areas in the page.
+		</p>
+		<p>
+			There are two types of grids. A <code>x-grid</code> and a <code>y-grid</code>. A <code>x-grid</code> is divided horizontaly, providing control over the width of the columns, while a <code>y-grid</code> is divided vertically, providing control over the height of the rows.
+		</p>
+		
+		<h2>Inside the Grid</h2>
+		
+		<h3>Cells</h3>
+		<p>
+			The children elements of the grid are <code>cells</code>. Each grid is divided into 12 parts, and each <code>cell</code> can have an <code>offset</code> and <code>size</code>. In <code>x-grid</code> this division regards the horizontal layout, and in <code>y-grid</code> this division regards the vertial layout.
+		</p>
+		<p>
+			In order to create responsive grids, that match themselves to the size of the screen, foundation created classes based on the screen's size, with the three options: <code>small</code>, <code>medium</code> and <code>large</code>. So, for example, if I wanted a cell to be of <code>size</code> 3 and with <code>offset</code> 2 when the screen is <code>small</code>, My cell would look like this: &lt;div class=&quot;cell small-3 small-offset-2&quot;&gt;&lt;/div&gt;. The classes follow the pattern [size]-[n], and [size]-offset-[n]. Notice that if there is only one class regarding the side of the cell, it would apply to all sizes.
+		</p>
+		
+		<h3>Cell classes reference</h3>
+		<ul>
+			<li><code>cell</code> - Declares this element to be a cell in the table</li>
+			<li><code>[size]-[n]</code> - Defines the size [n] of this cell regarding the grid's axis</li>
+			<li><code>[size]-offset-[n]</code> - Defines the offset [n] of this cell regarding the grid's axis</li>
+			<li><code>auto</code> - Tells the cell to fill the ramining space</li>
+			<li><code>[size]-auto</code> - Spcifies the <code>auto</code> class for a specific screen size</li>
+		</ul>
+
+		<h2>Outside the Grid</h2>
+		
+		<h3>Grid container</h3>
+		<p>A grid container is meant to control the size of the grid. It is 1200px wide by default, and has sides padding of 20-30px depending on the screen size.</p>
+
+		<h3>Grid container classes reference</h3>
+		<ul>
+			<li><code>fluid</code> - Removes the 1200px limit on the width of the container</li>
+			<li><code>full</code> - Removes the width limit and the sides padding</li>
+		</ul>
+
+		<h3>Grid classes reference</h3>
+		<ul>
+			<li><code>grid-x</code> - Declares this element to be the root of a x-grid</li>
+			<li><code>grid-y</code> - Declares this element to be the root of a y-grid</li>
+			<li><code>grid-margin-x</code> - Adds the grid margins on the sides of each cell</li>
+			<li><code>grid-margin-y</code> - Adds the grid margins on the top and bottom of each cell</li>
+			<li><code>grid-padding-x</code> - Adds the grid paddings on the sides</li>
+			<li><code>grid-padding-y</code> - Adds the grid paddings on the top and bottom</li>
+			<li><code>[size]-up-[n]</code> - Tells the table to display maximum [n] cells when in screen size [size], regarding the grid's direction</li>
+			<li><code>[size]-[margin|padding]-collapse</code> - Tells the table to not have margin/padding in this specific screen size</li>
+		</ul>
+
+		<h2>Examples</h2>
+
+		<h5>Simple equal-width horizontal grid with four cells</h5>
+<code class="code-block">&lt;div class=&quot;grid-x&quot;&gt;
+	&lt;div class=&quot;cell auto&quot;&gt;
+	&lt;div class=&quot;cell auto&quot;&gt;
+	&lt;div class=&quot;cell auto&quot;&gt;
+	&lt;div class=&quot;cell auto&quot;&gt;
+&lt;/div&gt;</code>
+
+		<div class="example">
+			<div class="grid-x">
+				<div class="cell auto"><div class="secondary callout"></div></div>
+				<div class="cell auto"><div class="secondary callout"></div></div>
+				<div class="cell auto"><div class="secondary callout"></div></div>
+				<div class="cell auto"><div class="secondary callout"></div></div>
+			</div>
+		</div>
+
+		<h5>Using <code>[size]-[n]</code> and <code>[size]-offset-[n]</code></h5>
+<code class="code-block">&lt;div class=&quot;grid-x&quot;&gt;
+	&lt;div class=&quot;cell small-5&quot;&gt;
+	&lt;div class=&quot;cell small-4&quot;&gt;
+	&lt;div class=&quot;cell small-2 small-offset-1&quot;&gt;
+&lt;/div&gt;</code>
+
+		<div class="example">
+			<div class="grid-x">
+				<div class="cell small-5"><div class="secondary callout"></div></div>
+				<div class="cell small-4"><div class="secondary callout"></div></div>
+				<div class="cell small-2 small-offset-1"><div class="secondary callout"></div></div>
+			</div>
+		</div>
+</div>

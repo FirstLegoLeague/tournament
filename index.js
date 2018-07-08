@@ -2,9 +2,10 @@
 
 const express = require('express')
 const domain = require('domain')
+const cors = require('cors')
 const { correlateSession, correlationMiddleware } = require('@first-lego-league/ms-correlation')
 const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
-const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
+const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
 const crudRouter = require('./routers/crudRouter').getRouter
@@ -30,7 +31,6 @@ if (process.env.DEV) {
   app.use(authenticationMiddleware)
 }
 
-app.use(msCorrelation.correlationMiddleware)
 app.use(cors())
 
 const tournamentDataRouter = require('./routers/tournamentDataRouter')

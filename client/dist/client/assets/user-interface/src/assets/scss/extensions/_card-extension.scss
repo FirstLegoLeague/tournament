@@ -1,0 +1,12 @@
+.card, .card-section {
+
+  @each $name, $color in $foundation-palette {
+    &.#{$name} {
+      $background: scale-color($color, $lightness: $callout-background-fade);
+
+      background-color: $background;
+      color: color-pick-contrast($background, ($callout-font-color, $callout-font-color-alt));
+    }
+  }
+
+}
