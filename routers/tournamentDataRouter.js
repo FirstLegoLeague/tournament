@@ -4,10 +4,13 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+
+const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const tournamentDataParser = require('../logic/tournamentDataParser')
 
-router.post('/', (req, res) => {
+router.post('/', adminAction, (req, res) => {
   if (!req.body.tourData) {
     res.status(400)
     res.send('Please provide data..')
