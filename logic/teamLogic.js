@@ -14,22 +14,21 @@ module.exports.deleteValidation = function (params) {
 
 function deleteMatchesForTeam (teamNumber) {
   MongoClient.connect(MONGU_URI).then(connection => {
-    connection.db().collection('matches').find({ 'matchTeams.teamNumber': teamNumber }).toArray().then(data => {
-      for (const match of data) {
-        for (const matchTeam of match.matchTeams) {
-          if (matchTeam.teamNumber == teamNumber) {
-            matchTeam.teamNumber = undefined
-          }
-        }
-
-        connection.db().collection('matches').replaceOne({ _id: match._id }, match).then(dbResponse => {
-          if (dbResponse.ok === 1) {
-            console.log('OK')
-          }
-        })
+    connection.db().collection('matches').updateOne({ 'matchTeams.teamNumber': teamNumber },
+      { $set: { 'matchTeams.$.teamNumber': 'null' } },
+      {
+        'arrayFilters':
+          [{
+            'arrayFilter':
+              { 'elem.teamNumber': { '$eq': teamNumber } }
+          }]
       }
-
-    })
+    )
+      .then(dbResponse => {
+        if (dbResponse.modifiedCount > 0) {
+          MsLogger.info('Matches were updates successfully')
+        }
+      })
   }).catch(err => {
     MsLogger.error(err)
     throw err

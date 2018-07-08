@@ -25,12 +25,6 @@ app.use(msCorrelation.correlationMiddleware)
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  next()
-})
-
 app.use('/tournamentData', tournamentDataRouter)
 
 const teamLogic = require('./logic/teamLogic')
