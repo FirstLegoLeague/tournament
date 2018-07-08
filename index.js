@@ -7,7 +7,6 @@ const { authenticationMiddleware, authenticationDevMiddleware } = require('@firs
 const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
-
 const crudRouter = require('./routers/crudRouter').getRouter
 
 const Team = require('./models/Team')
@@ -30,6 +29,9 @@ if (process.env.DEV) {
 } else {
   app.use(authenticationMiddleware)
 }
+
+app.use(msCorrelation.correlationMiddleware)
+app.use(cors())
 
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
