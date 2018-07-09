@@ -3,7 +3,7 @@
 const express = require('express')
 const domain = require('domain')
 const cors = require('cors')
-const { correlateSession, correlationMiddleware } = require('@first-lego-league/ms-correlation')
+const {correlateSession, correlationMiddleware} = require('@first-lego-league/ms-correlation')
 const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
 const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
 
@@ -38,9 +38,14 @@ const matchTeamRouter = require('./routers/matchTeamRouter')
 
 app.use('/tournamentData', tournamentDataRouter)
 
+const teamLogic = require('./logic/teamLogic')
 app.use('/team', crudRouter({
   'collectionName': 'teams',
-  'IdField': Team.IdField
+  'IdField': Team.IdField,
+  'extraRouters': [matchTeamRouter.getRouter()],
+  'validationMethods': {
+    'delete': teamLogic.deleteValidation
+  }
 }))
 
 app.use('/team', matchTeamRouter.getRouter())
