@@ -2,11 +2,24 @@
 const express = require('express')
 
 const router = express.Router()
+const domain = require('domain')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const { getCorrelationId, correlateSession } = require('@first-lego-league/ms-correlation')
+const { MClient } = require('mhub')
+
+const { getFieldDefaultValue } = require('../Utils/configuration')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
+
+const mhubClient = new MClient(process.env.MHUB)
+mhubClient.on('error', msg => {
+  domain.create().run(() => {
+    correlateSession()
+    MsLogger.error('Unable to connect to mhub, other modules won\'t be notified about this change \n ' + msg)
+  })
+})
 
 const tournamentDataParser = require('../logic/tournamentDataParser')
 
@@ -45,6 +58,13 @@ router.post('/', adminAction, (req, res) => {
       MsLogger.info('ranking matches successfully to collection ranking-matches')
     }).catch(err => {
       MsLogger.error('Something went wrong while saving data \n' + err)
+    })
+
+    mhubClient.connect().then(() => {
+      mhubClient.publish(getFieldDefaultValue('mhub', 'node'), 'all:reload', {
+        'client-id': getFieldDefaultValue('mhub', 'client-id'),
+        'correlation-id': getCorrelationId()
+      })
     })
 
     res.status(201)
