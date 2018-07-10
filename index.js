@@ -33,9 +33,13 @@ if (process.env.DEV) {
 
 app.use(cors())
 
+const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 
+setDefaultSettings()
+
+app.use('/settings', getSettingsRouter())
 app.use('/tournamentData', tournamentDataRouter)
 
 const teamLogic = require('./logic/teamLogic')
