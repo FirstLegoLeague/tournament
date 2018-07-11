@@ -10,14 +10,14 @@ const MONGU_URI = process.env.MONGO
 const SETTING_COLLECTION_NAME = 'settings'
 
 exports.setDefaultSettings = function () {
-  const settings = {
+  const defaultSettings = {
     'tournamentLevel': 'practice',
     'tournamentTitle': 'World Festival 2018'
   }
   MongoClient.connect(MONGU_URI).then(connection => {
     connection.db().collection(SETTING_COLLECTION_NAME).findOne().then(response => {
       if (!response) {
-        return connection.db().collection(SETTING_COLLECTION_NAME).insert(settings)
+        return connection.db().collection(SETTING_COLLECTION_NAME).insert(defaultSettings)
       }
     })
   })
