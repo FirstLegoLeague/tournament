@@ -5,14 +5,3 @@ type: 'node'
 script: 'yarn start index.js'
 require:
   mongodb
-config:
- - name: mhub
-   fields:
-    - name: node
-      type: string
-      default: 'public'
-    - name: client-id
-      type: string
-      defaule: 'cl-schedule'
-      min_length: 1
-      max_length: 20

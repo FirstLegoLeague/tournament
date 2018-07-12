@@ -1,26 +1,10 @@
 'use strict'
 const express = require('express')
-const domain = require('domain')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
-const { getCorrelationId, correlateSession } = require('@first-lego-league/ms-correlation')
-const { MClient } = require('mhub')
-
-const { getFieldDefaultValue } = require('../Utils/configuration')
-
+const mhubConnection = require('../Utils/mhubConnection')
 const adminAction = authroizationMiddlware(['admin', 'development'])
-
-const mhubClient = new MClient(process.env.MHUB)
-mhubClient.on('error', msg => {
-  domain.create().run(() => {
-    correlateSession()
-    MsLogger.error('Unable to connect to mhub, other modules won\'t be notified about this change \n ' + msg)
-  })
-})
-
-const MHUB_NODE = getFieldDefaultValue('mhub', 'node')
-const MHUB_CLIENT_ID = getFieldDefaultValue('mhub', 'client-id')
 
 const MONGU_URI = process.env.MONGO
 
@@ -68,12 +52,7 @@ exports.getRouter = function (options) {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
         if (dbResponse.ok === 1) {
-          mhubClient.connect().then(() => {
-            mhubClient.publish(MHUB_NODE, MHUB_UPDATE_TOPIC, {
-              'client-id': MHUB_CLIENT_ID,
-              'correlation-id': getCorrelationId()
-            })
-          })
+          mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, MHUB_UPDATE_TOPIC)
           res.sendStatus(204)
         }
       })
@@ -101,12 +80,7 @@ exports.getRouter = function (options) {
         }
         connection.db.collection(options.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
-            mhubClient.connect().then(() => {
-              mhubClient.publish(MHUB_NODE, MHUB_UPDATE_TOPIC, {
-                'client-id': MHUB_CLIENT_ID,
-                'correlation-id': getCorrelationId()
-              })
-            })
+            mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, MHUB_UPDATE_TOPIC)
             res.sendStatus(201)
           }
         })
@@ -129,12 +103,7 @@ exports.getRouter = function (options) {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, parseInt(req.params.id))).then(dbResponse => {
         if (dbResponse.ok === 1) {
-          mhubClient.connect().then(() => {
-            mhubClient.publish(MHUB_NODE, MHUB_UPDATE_TOPIC, {
-              'client-id': MHUB_CLIENT_ID,
-              'correlation-id': getCorrelationId()
-            })
-          })
+          mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, MHUB_UPDATE_TOPIC)
           res.sendStatus(200)
         }
       })
