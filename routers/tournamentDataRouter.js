@@ -5,6 +5,7 @@ const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const mhubConnection = require('../Utils/mhubConnection')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -47,6 +48,7 @@ router.post('/', adminAction, (req, res) => {
       MsLogger.error('Something went wrong while saving data \n' + err)
     })
 
+    mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, 'all:reload')
     res.status(201)
   }).catch(err => {
     console.log(err)
