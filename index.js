@@ -3,12 +3,13 @@
 const express = require('express')
 const domain = require('domain')
 const cors = require('cors')
-const {correlateSession, correlationMiddleware} = require('@first-lego-league/ms-correlation')
+const { correlateSession, correlationMiddleware } = require('@first-lego-league/ms-correlation')
 const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
 const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
 const crudRouter = require('./routers/crudRouter').getRouter
+const { initImagesFolder } = require('./logic/images')
 
 const Team = require('./models/Team')
 const Match = require('./models/Match')
@@ -19,9 +20,10 @@ const appPort = process.env.PORT || 3001
 const bodyParser = require('body-parser')
 
 logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
+initImagesFolder()
 
 const app = express()
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 
@@ -36,13 +38,16 @@ app.use(cors())
 const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
+const { imagesRouter } = require('./routers/imagesRouter')
 
 setDefaultSettings()
 
 app.use('/settings', getSettingsRouter())
+app.use('/image', imagesRouter)
 app.use('/tournamentData', tournamentDataRouter)
 
 const teamLogic = require('./logic/teamLogic')
+
 app.use('/team', crudRouter({
   'collectionName': 'teams',
   'IdField': Team.IdField,
