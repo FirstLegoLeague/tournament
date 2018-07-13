@@ -20,7 +20,6 @@ const appPort = process.env.PORT || 3001
 const bodyParser = require('body-parser')
 
 logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
-initImagesFolder()
 
 const app = express()
 app.use(bodyParser.json({limit: '50mb'}))
@@ -39,8 +38,6 @@ const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSett
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const { imagesRouter } = require('./routers/imagesRouter')
-
-setDefaultSettings()
 
 app.use('/settings', getSettingsRouter())
 app.use('/image', imagesRouter)
@@ -72,6 +69,8 @@ app.use('/table', crudRouter({
 app.listen(appPort, () => {
   domain.create().run(() => {
     correlateSession()
+    setDefaultSettings()
+    initImagesFolder()
     logger.info('Server started on port ' + appPort)
   })
 })

@@ -25,10 +25,7 @@ function getAllImages () {
   const imagesNames = getAllImagesNames()
   const images = []
   for (const imageName of imagesNames) {
-    const image = {}
-    image['name'] = imageName
-    image['image'] = base64Sync(path.resolve(IMAGES_DIR, imageName))
-    images.push(image)
+    images.push(createReturnObject(imageName))
   }
   return images
 }
@@ -40,10 +37,7 @@ function getImage (name) {
     throw 'Image does not exists'
   }
 
-  return {
-    'name': image,
-    'image': base64Sync(path.resolve(IMAGES_DIR, image))
-  }
+  return createReturnObject(image)
 }
 
 function saveImageFromBase64 (name, data) {
@@ -57,6 +51,13 @@ function saveImageFromBase64 (name, data) {
 
 function deleteImage (name) {
   fs.unlinkSync(path.resolve(IMAGES_DIR, name))
+}
+
+function createReturnObject (imageName) {
+  return {
+    'name': imageName,
+    'image': base64Sync(path.resolve(IMAGES_DIR, imageName))
+  }
 }
 
 module.exports = {
