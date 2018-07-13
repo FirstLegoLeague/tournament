@@ -10,7 +10,6 @@ const MONGU_URI = process.env.MONGO
 
 exports.getRouter = function (options) {
   const router = express.Router()
-  const MHUB_UPDATE_TOPIC = options.mhubNamespace + ':' + 'reload'
 
   router.get('/all', (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
@@ -52,7 +51,7 @@ exports.getRouter = function (options) {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
         if (dbResponse.ok === 1) {
-          mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, MHUB_UPDATE_TOPIC)
+          mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(204)
         }
       })
@@ -80,7 +79,7 @@ exports.getRouter = function (options) {
         }
         connection.db.collection(options.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
-            mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, MHUB_UPDATE_TOPIC)
+            mhubConnection.publishUpdateMsg(options.mhubNamespace)
             res.sendStatus(201)
           }
         })
@@ -103,7 +102,7 @@ exports.getRouter = function (options) {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, parseInt(req.params.id))).then(dbResponse => {
         if (dbResponse.ok === 1) {
-          mhubConnection.publish(mhubConnection.MHUB_NODES.PUBLIC, MHUB_UPDATE_TOPIC)
+          mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(200)
         }
       })

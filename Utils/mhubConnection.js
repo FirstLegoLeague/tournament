@@ -1,15 +1,18 @@
 const domain = require('domain')
-const {MClient} = require('mhub')
+const { MClient } = require('mhub')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const {getCorrelationId, correlateSession} = require('@first-lego-league/ms-correlation')
+const { getCorrelationId, correlateSession } = require('@first-lego-league/ms-correlation')
 
 const MHUB_NODES = {
-  PUBLIC: 'public'
+  PUBLIC: 'public',
+  PROTECTED: 'protected'
 }
 
 const MHUB_CLIENT_ID = 'cl-schedule'
 
 const mhubClient = new MClient(process.env.MHUB)
+mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
+
 mhubClient.on('error', msg => {
   domain.create().run(() => {
     correlateSession()
@@ -17,9 +20,9 @@ mhubClient.on('error', msg => {
   })
 })
 
-function publish(node, topic, msg) {
+function publishUpdateMsg (nameSpace) {
   mhubClient.connect().then(() => {
-    mhubClient.publish(node, topic, msg, {
+    mhubClient.publish(MHUB_NODES.PROTECTED, `${nameSpace}:reload`, '', {
       'client-id': MHUB_CLIENT_ID,
       'correlation-id': getCorrelationId()
     })
@@ -27,6 +30,6 @@ function publish(node, topic, msg) {
 }
 
 exports = {
-  publish,
+  publishUpdateMsg: publishUpdateMsg,
   MHUB_NODES
 }
