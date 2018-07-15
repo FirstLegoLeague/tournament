@@ -1,42 +1,47 @@
 'use strict'
 const express = require('express')
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const {getAllImages, getImage, saveImageFromBase64, deleteImage} = require('../logic/images')
+const { getAllImages, getImage, saveImageFromBase64, deleteImage } = require('../logic/images')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const router = express.Router()
 
 router.get('/all', (req, res) => {
-  res.send(getAllImages())
+  getAllImages().then(images => {
+    res.send(images)
+  }).catch(err => {
+    res.status(500)
+    res.send(err.message)
+  })
 })
 
 router.get('/:imageName', (req, res) => {
-  try {
-    let image = getImage(req.params.imageName)
+  getImage(req.params.imageName).then(image => {
     res.send(image)
-  } catch (e) {
+  }).catch(err => {
     res.status(500)
-    res.send(e.message)
-  }
-
+    res.send(err.message)
+  })
 })
 
 router.post('/', adminAction, (req, res) => {
-  try {
-    saveImageFromBase64(req.body.imageName, req.body.image)
+  saveImageFromBase64(req.body.imageName, req.body.image).then(() => {
     res.sendStatus(201)
-  } catch (e) {
+  }).catch(e => {
     res.status(500)
     res.send(e.message)
-  }
-
+  })
 })
 
 router.delete('/:imageName', adminAction, (req, res) => {
-  deleteImage(req.params.imageName)
-  res.sendStatus(204)
+  deleteImage(req.params.imageName).then(() => {
+    res.sendStatus(204)
+  }).catch(err => {
+    res.status(500)
+    res.send(err.message)
+  })
 })
 
-module.exports = {imagesRouter: router}
+module.exports = { imagesRouter: router }

@@ -3,57 +3,70 @@
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const path = require('path')
 const fs = require('fs')
-const { base64Sync, imgSync } = require('base64-img')
+const {base64Sync, imgSync} = require('base64-img')
 
 const IMAGES_DIR = path.resolve(process.env.DATA_DIR, 'images')
 const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 
-function initImagesFolder () {
+function initImagesFolder() {
   if (!fs.existsSync(IMAGES_DIR)) {
     MsLogger.info(`Created images folder at: ${IMAGES_DIR}`)
     fs.mkdirSync(IMAGES_DIR)
   }
 }
 
-function getAllImagesNames () {
-  return fs.readdirSync(IMAGES_DIR).filter(filename => {
-    return ALLOWED_FORMATS.find(x => x == filename.split('.')[1])
+function getAllImagesNames() {
+  return new Promise((resolve, reject) => {
+    fs.readdir(IMAGES_DIR).then(data => {
+      resolve(data.filter(filename => {
+        ALLOWED_FORMATS.find(x => x == filename.split('.')[1])
+      }))
+    })
   })
 }
 
-function getAllImages () {
-  const imagesNames = getAllImagesNames()
-  const images = []
-  for (const imageName of imagesNames) {
-    images.push(createReturnObject(imageName))
-  }
-  return images
+function getAllImages() {
+  getAllImagesNames().then(imagesNames => {
+    const images = []
+    for (const imageName of imagesNames) {
+      images.push(createReturnObject(imageName))
+    }
+    return new Promise((resolve, reject) => {
+      resolve(images)
+    })
+  })
 }
 
-function getImage (name) {
-  const image = getAllImagesNames().find(x => x == name)
-  if (!image) {
-    MsLogger.error(`trying to get image ${name} but it does not exists`)
-    throw 'Image does not exists'
-  }
+function getImage(name) {
+  getAllImagesNames().then(images => {
+    return new Promise((resolve, reject) => {
+      const image = images.find(x => x == name)
+      if (!image) {
+        reject(new Error('Image does not exists'))
+      }
 
-  return createReturnObject(image)
+      resolve(createReturnObject(image))
+    })
+  })
 }
 
-function saveImageFromBase64 (name, data) {
-  const image = getAllImagesNames().find(x => x == name)
-  if (image) {
-    throw 'Image with that name already exists'
-  }
-  imgSync(data, IMAGES_DIR, name)
-  MsLogger.info(`Saved a new image at: ${IMAGES_DIR} with name ${name}`)
+function saveImageFromBase64(name, data) {
+  return new Promise((resolve, reject) => {
+    getAllImagesNames().then(images => {
+      const image = images.find(x => x == name)
+      if (image) {
+        reject(new Error('Image with that name already exists'))
+      }
+      resolve(imgSync(data, IMAGES_DIR, name))
+    })
+  })
 }
 
-function deleteImage (name) {
-  fs.unlinkSync(path.resolve(IMAGES_DIR, name))
+function deleteImage(name) {
+  return fs.unlink(path.resolve(IMAGES_DIR, name))
 }
 
-function createReturnObject (imageName) {
+function createReturnObject(imageName) {
   return {
     'name': imageName,
     'image': base64Sync(path.resolve(IMAGES_DIR, imageName))
