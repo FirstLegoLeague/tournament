@@ -27,7 +27,7 @@ router.get('/:imageName', (req, res) => {
 })
 
 router.post('/', adminAction, (req, res) => {
-  saveImageFromBase64(req.body.imageName, req.body.image).then(() => {
+  saveImageFromBase64(req.body.name, req.body.image).then(() => {
     res.sendStatus(201)
   }).catch(e => {
     res.status(500)
