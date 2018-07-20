@@ -24,14 +24,8 @@ const app = express()
 app.use(bodyParser.json())
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
-
-if (process.env.DEV) {
-  app.use(authenticationDevMiddleware())
-} else {
-  app.use(authenticationMiddleware)
-}
-
 app.use(cors())
+
 
 const {getSettingsRouter, setDefaultSettings} = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
@@ -40,6 +34,13 @@ const matchTeamRouter = require('./routers/matchTeamRouter')
 setDefaultSettings()
 
 app.use('/settings', getSettingsRouter())
+
+if (process.env.DEV) {
+  app.use(authenticationDevMiddleware())
+} else {
+  app.use(authenticationMiddleware)
+}
+
 app.use('/tournamentData', tournamentDataRouter)
 
 const teamLogic = require('./logic/teamLogic')

@@ -23,7 +23,7 @@ router.post('/', adminAction, (req, res) => {
   }
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
-  MongoClient.connect(process.env.MONGO).then(conn => {
+  MongoClient.connect(process.env.MONGO_URI).then(conn => {
     conn.db().collection('tables').insertMany(data.tables).then(() => {
       MsLogger.info('Data saved successfully to collection tables')
     }).catch(err => {
