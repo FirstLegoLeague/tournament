@@ -10,7 +10,7 @@ const MHUB_NODES = {
 
 const MHUB_CLIENT_ID = 'cl-schedule'
 
-const mhubClient = new MClient(process.env.MHUB)
+const mhubClient = new MClient(process.env.MHUB_URI)
 mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
 
 mhubClient.on('error', msg => {
