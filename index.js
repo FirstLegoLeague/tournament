@@ -2,6 +2,7 @@
 
 const express = require('express')
 const domain = require('domain')
+const path = require('path')
 const { correlateSession } = require('@first-lego-league/ms-correlation')
 const msLogger = require('@first-lego-league/ms-logger').Logger()
 const msCorrelation = require('@first-lego-league/ms-correlation')
@@ -49,6 +50,14 @@ app.use('/table', crudRouter({
   'collectionName': 'tables',
   'IdField': Table.IdField
 }))
+
+app.use(express.static(path.join(__dirname, 'dist/client')))
+// Design files
+app.use('/design', express.static(path.resolve(__dirname, 'node_modules/@first-lego-league/user-interface/current/assets')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/client/index.html'))
+})
 
 app.listen(appPort, () => {
   domain.create().run(() => {
