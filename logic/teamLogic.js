@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const MONGU_URI = process.env.MONGO
+const MONGU_URI = process.env.MONGO_URI
 
 module.exports.deleteValidation = function (params) {
   try {

@@ -6,7 +6,7 @@ const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
-const MONGU_URI = process.env.MONGO
+const MONGU_URI = process.env.MONGO_URI
 const SETTING_COLLECTION_NAME = 'settings'
 
 exports.setDefaultSettings = function () {

@@ -1,5 +1,5 @@
 api: '1.0'           
-name: 'schedule'         
+name: 'tournament'
 version: '0.0.1'   
 type: 'node'
 script: 'yarn start index.js'
