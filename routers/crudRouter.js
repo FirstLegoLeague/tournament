@@ -3,7 +3,7 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
-
+const mhubConnection = require('../Utils/mhubConnection')
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const MONGU_URI = process.env.MONGO
@@ -51,6 +51,7 @@ exports.getRouter = function (options) {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
         if (dbResponse.ok === 1) {
+          mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(204)
         }
       })
@@ -78,6 +79,7 @@ exports.getRouter = function (options) {
         }
         connection.db.collection(options.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
+            mhubConnection.publishUpdateMsg(options.mhubNamespace)
             res.sendStatus(201)
           }
         })
@@ -100,6 +102,7 @@ exports.getRouter = function (options) {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, parseInt(req.params.id))).then(dbResponse => {
         if (dbResponse.ok === 1) {
+          mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(200)
         }
       })

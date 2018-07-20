@@ -45,6 +45,7 @@ const teamLogic = require('./logic/teamLogic')
 app.use('/team', crudRouter({
   'collectionName': 'teams',
   'IdField': Team.IdField,
+  'mhubNamespace': 'teams',
   'extraRouters': [matchTeamRouter.getRouter()],
   'validationMethods': {
     'delete': teamLogic.deleteValidation
@@ -55,12 +56,14 @@ app.use('/team', matchTeamRouter.getRouter())
 
 app.use('/match', crudRouter({
   'collectionName': 'matches',
-  'IdField': Match.IdField
+  'IdField': Match.IdField,
+  'mhubNamespace': 'matches'
 }))
 
 app.use('/table', crudRouter({
   'collectionName': 'tables',
-  'IdField': Table.IdField
+  'IdField': Table.IdField,
+  'mhubNamespace': 'tables'
 }))
 
 app.listen(appPort, () => {
