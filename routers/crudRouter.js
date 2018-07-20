@@ -6,7 +6,7 @@ const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 const mhubConnection = require('../Utils/mhubConnection')
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
-const MONGU_URI = process.env.MONGO
+const MONGU_URI = process.env.MONGO_URI
 
 exports.getRouter = function (options) {
   const router = express.Router()

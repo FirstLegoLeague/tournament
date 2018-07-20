@@ -7,7 +7,7 @@ const Team = require('../models/Team')
 const Match = require('../models/Match')
 const Table = require('../models/Table')
 
-const MONGU_URI = process.env.MONGO
+const MONGU_URI = process.env.MONGO_URI
 
 exports.getRouter = function () {
   const router = express.Router()
