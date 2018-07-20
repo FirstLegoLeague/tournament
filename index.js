@@ -1,11 +1,10 @@
 'use strict'
 
 const express = require('express')
-const domain = require('domain')
 const cors = require('cors')
-const {correlateSession, correlationMiddleware} = require('@first-lego-league/ms-correlation')
-const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
-const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
+const {correlationMiddleware} = require('@first-lego-league/ms-correlation')
+const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-lego-league/ms-auth')
+const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
 const crudRouter = require('./routers/crudRouter').getRouter
@@ -33,7 +32,7 @@ if (process.env.DEV) {
 
 app.use(cors())
 
-const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSettingsRouter')
+const {getSettingsRouter, setDefaultSettings} = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 
@@ -68,8 +67,20 @@ app.use('/table', crudRouter({
 }))
 
 app.listen(appPort, () => {
-  domain.create().run(() => {
-    correlateSession()
-    logger.info('Server started on port ' + appPort)
-  })
+  logger.info('Server started on port ' + appPort)
+})
+
+process.on('SIGINT', () => {
+  logger.info('Process received SIGINT: shutting down')
+  process.exit(130)
+})
+
+process.on('uncaughtException', (err) => {
+  logger.fatal(err.message)
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (err) => {
+  logger.fatal(err.message)
+  process.exit(1)
 })

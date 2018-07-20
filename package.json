@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@first-lego-league/ms-auth": "^1.1.1",
-    "@first-lego-league/ms-correlation": "^0.0.2",
+    "@first-lego-league/ms-correlation": "^0.0.3",
     "@first-lego-league/ms-logger": "^1.0.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
