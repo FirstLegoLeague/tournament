@@ -2,8 +2,8 @@
   <tr style="font-weight: bold;">
     <td>Id</td>
     <td>Stage</td>
-    <td>Time</td>
-    <td>WTF is this number?</td>
+    <td>Start Time</td>
+    <td>End Time</td>
     <td *ngFor="let tale of tables">
       {{tale.tableName}}
     </td>
@@ -12,6 +12,7 @@
     <td>{{match.matchId}}</td>
     <td>{{match.stage}}</td>
     <td>{{match.startTime | date : 'shortTime'}}</td>
+    <td>{{match.endTime | date : 'shortTime'}}</td>
     <td *ngFor="let matchTeam of match.matchTeams">
     {{matchTeam.teamNumber}}
     </td>
