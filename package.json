@@ -6,6 +6,7 @@
   "author": "Tal Taub <taltaub22@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "prepack": "ng build",
     "start": "ng build --prod && node index.js",
     "build": "ng build"
   },
