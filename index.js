@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const path = require('path')
 const cors = require('cors')
 const {correlationMiddleware} = require('@first-lego-league/ms-correlation')
 const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-lego-league/ms-auth')
@@ -66,6 +67,14 @@ app.use('/table', crudRouter({
   'IdField': Table.IdField,
   'mhubNamespace': 'tables'
 }))
+
+app.use(express.static(path.join(__dirname, 'dist/client')))
+// Design files
+app.use('/design', express.static(path.resolve(__dirname, 'node_modules/@first-lego-league/user-interface/current/assets')))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/client/index.html'))
+})
 
 app.listen(appPort, () => {
   logger.info('Server started on port ' + appPort)
