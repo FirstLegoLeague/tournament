@@ -2,7 +2,7 @@
 
 const objectDataParser = require('./objectDataParser')
 
-exports.parse = function (data, delimeter) {
+exports.parse = function (data, delimiter) {
   return data.split('\n')
-    .map(line => objectDataParser.deserializeTeam(line.split(delimeter)))
+    .map(line => objectDataParser.deserializeTeam(line.split(delimiter)))
 }

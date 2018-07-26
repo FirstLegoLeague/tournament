@@ -11,8 +11,18 @@ exports.getRouter = function () {
   const router = express.Router()
 
   router.post('/batch', (req, res) => {
+    if (!req.body.teamsData) {
+      res.status(400)
+      res.send('Please provide data..')
+    }
+
+    if (!req.body.delimiter) {
+      res.status(400)
+      res.send('Please provide delimiter..')
+    }
+
     MongoClient.connect(MONGU_URI).then(connection => {
-      const teams = teamsBatchParser.parse(req.body)
+      const teams = teamsBatchParser.parse(req.body.teamsData, req.body.delimiter)
       return connection.db().collection('teams').insertMany(teams).then(() => {
         res.status(201).send()
       })
