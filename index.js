@@ -26,8 +26,7 @@ app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-
-const {getSettingsRouter, setDefaultSettings} = require('./routers/generalSettingsRouter')
+const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 
@@ -44,6 +43,7 @@ if (process.env.DEV) {
 app.use('/tournamentData', tournamentDataRouter)
 
 const teamLogic = require('./logic/teamLogic')
+
 app.use('/team', crudRouter({
   'collectionName': 'teams',
   'IdField': Team.IdField,
@@ -53,8 +53,6 @@ app.use('/team', crudRouter({
     'delete': teamLogic.deleteValidation
   }
 }))
-
-app.use('/team', matchTeamRouter.getRouter())
 
 app.use('/match', crudRouter({
   'collectionName': 'matches',
