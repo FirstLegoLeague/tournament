@@ -20,6 +20,7 @@ const appPort = process.env.PORT || 3001
 logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
