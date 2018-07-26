@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "prepack": "ng build",
-    "start": "ng build --prod && node index.js",
+    "start": "ng build --prod &&start mongod&& start mhub-server&& set DEV=true&& set MHUB_URI=ws://localhost:13900&& set MONGO_URI=mongodb://127.0.0.1:27017/local&& node index.js",
     "build": "ng build"
   },
   "dependencies": {
@@ -23,7 +23,7 @@
     "@first-lego-league/ms-auth": "^1.1.1",
     "@first-lego-league/ms-correlation": "^0.0.3",
     "@first-lego-league/ms-logger": "^1.0.1",
-    "@first-lego-league/user-interface": "^1.2.3",
+    "@first-lego-league/user-interface": "^1.2.7",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
