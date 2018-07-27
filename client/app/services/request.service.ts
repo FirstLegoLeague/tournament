@@ -16,7 +16,7 @@ export class RequestService {
   }
 
   post(endpoint: string, data: any) {
-    return this.http.post(endpoint, data);	
+    return this.http.post(endpoint, data);
   }
 
 }
