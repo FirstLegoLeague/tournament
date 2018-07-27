@@ -15,4 +15,8 @@ export class TeamsService {
     return this.request.get('/team/all')
   }
 
+  uploadBatch(data: string) : Observable<any>{
+    return this.request.post('/team/batch', { delimiter: ',', teamsData: data })
+  }
+
 }

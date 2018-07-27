@@ -49,7 +49,7 @@ app.use('/team', crudRouter({
   'collectionName': 'teams',
   'IdField': Team.IdField,
   'mhubNamespace': 'teams',
-  'extraRouters': [matchTeamRouter.getRouter(), teamsBatchUploadRouter.getRouter()],
+  'extraRouters': [teamsBatchUploadRouter.getRouter(), matchTeamRouter.getRouter()],
   'validationMethods': {
     'delete': teamLogic.deleteValidation
   }

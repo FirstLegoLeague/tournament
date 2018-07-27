@@ -11,11 +11,11 @@ export class ParserService {
   }
 
   parseTeams(data: string) : Observable<any>{
-    return this.request.get('/team/batch?delimiter=,&teamsData=' + data)
+    return this.request.get('/team/batch/parse?delimiter=,&teamsData=' + encodeURIComponent(data))
   }
 
-  parseTeams(data: string) : Observable<any>{
-    return this.request.get('/tournamentData?delimiter=,&tourData=' + data)
+  parseTournamentData(data: string) : Observable<any>{
+    return this.request.get('/tournamentData/parse?delimiter=,&tourData=' + encodeURIComponent(data))
   }
 
 }

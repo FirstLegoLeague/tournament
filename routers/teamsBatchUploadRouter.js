@@ -13,15 +13,13 @@ const adminAction = authroizationMiddlware(['admin', 'development'])
 exports.getRouter = function () {
   const router = express.Router()
 
-  router.get('/batch', (req, res) => {
+  router.get('/batch/parse', (req, res) => {
     if (!req.query.teamsData) {
-      res.status(400)
-      res.send('Please provide data..')
+      return res.status(400).send('Please provide data..')
     }
 
     if (!req.query.delimiter) {
-      res.status(400)
-      res.send('Please provide delimiter..')
+      return res.status(400).send('Please provide delimiter..')
     }
 
     res.send(teamsBatchParser.parse(req.query.teamsData, req.query.delimiter))

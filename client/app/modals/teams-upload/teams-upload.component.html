@@ -4,9 +4,22 @@
   	<div class="big loader"></div>
   </div>
 
-  <file-drop class="hollow expanded button" headertext="Drop your Teams CSV file here" (onFileDrop)="dropped($event)"></file-drop>
+  <file-drop class="expanded button" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Teams CSV file here</file-drop>
 
-  <button class="close-button" data-close aria-label="Close modal" type="button">
+  <table *ngIf="teams">
+    <tr>
+      <th>Number</th>
+      <th>Name</th>
+    </tr>
+    <tr *ngFor="let team of teams">
+      <td>{{team.number}}</td>
+      <td>{{team.name}}</td>
+    </tr>
+  </table>
+
+  <button class="button" *ngIf="teams" (click)="upload($event)" >Upload</button>
+
+  <button id="teams-close-button" class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>

@@ -11,7 +11,7 @@ const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const tournamentDataParser = require('../logic/tournamentDataParser')
 
-router.get('/', (req, res) => {
+router.get('/parse', (req, res) => {
   if (!req.query.tourData) {
     res.status(400)
     res.send('Please provide data..')

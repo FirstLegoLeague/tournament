@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 
-import { parseTeams } from '../../services/parsers.service';
+import { ParserService } from '../../services/parser.service';
+import { TeamsService } from '../../services/teams.service';
 import { Team } from '../../models/team';
 
 @Component({
@@ -12,19 +13,56 @@ import { Team } from '../../models/team';
 export class TeamsUpload {
 
   public file: UploadFile;
+  public content: string;
+  public fileHovering: Boolean;
   public loading: Boolean;
   public teams: Array<Team>;
 
-  constructor() {
+  constructor(private parser: ParserService, private teamsService: TeamsService) {
   }
 
   public dropped(event: UploadEvent) {
   	this.file = event.files[0]
     this.loading = true
-    parseTeams(file).subscribe((data: any) =>{
-      this.teams = data;
+    if (this.file.fileEntry.isFile) {
+      const fileEntry = this.file.fileEntry as FileSystemFileEntry;
+      fileEntry.file((file: File) => {
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          this.content = fileReader.result
+          this.parser.parseTeams(this.content).subscribe((data: any) =>{
+            this.teams = data;
+            this.loading = false;
+          });
+        }
+        fileReader.readAsText(file, "UTF-8");
+      });
+    } else {
+      this.file = null
+    }
+  }
+
+  public upload(event) {
+    this.loading = true
+    this.teamsService.uploadBatch(this.content).subscribe((data: any) =>{
       this.loading = false;
+      this.close()
+      this.file = null
+      this.content = null
+      this.teams = null
     });
+  }
+  
+  public fileOver(event) {
+    this.fileHovering = true
+  }
+ 
+  public fileLeave(event) {
+    this.fileHovering = false
+  }
+
+  public close() {
+    document.getElementById('teams-close-button').click();
   }
 
 }

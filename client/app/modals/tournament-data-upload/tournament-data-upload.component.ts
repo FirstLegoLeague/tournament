@@ -9,6 +9,7 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 export class TournamentDataUpload {
 
   public file: UploadFile;
+  public fileHovering: Boolean;
   public loading: Boolean;
 
   constructor() {
@@ -17,6 +18,14 @@ export class TournamentDataUpload {
   public dropped(event: UploadEvent) {
   	this.file = event.files[0]
     this.loading = true
+  }
+  
+  public fileOver(event){
+    this.fileHovering = true
+  }
+ 
+  public fileLeave(event){
+    this.fileHovering = false
   }
 
 }
