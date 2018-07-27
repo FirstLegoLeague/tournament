@@ -12,17 +12,17 @@ const adminAction = authroizationMiddlware(['admin', 'development'])
 const tournamentDataParser = require('../logic/tournamentDataParser')
 
 router.get('/', (req, res) => {
-  if (!req.body.tourData) {
+  if (!req.query.tourData) {
     res.status(400)
     res.send('Please provide data..')
   }
 
-  if (!req.body.delimiter) {
+  if (!req.query.delimiter) {
     res.status(400)
     res.send('Please provide delimiter..')
   }
 
-  res.send(tournamentDataParser.parse(req.body.tourData, req.body.delimiter))
+  res.send(tournamentDataParser.parse(req.query.tourData, req.query.delimiter))
 })
 
 router.post('/', adminAction, (req, res) => {

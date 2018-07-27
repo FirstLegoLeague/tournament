@@ -14,17 +14,17 @@ exports.getRouter = function () {
   const router = express.Router()
 
   router.get('/batch', (req, res) => {
-    if (!req.body.tourData) {
+    if (!req.query.tourData) {
       res.status(400)
       res.send('Please provide data..')
     }
 
-    if (!req.body.delimiter) {
+    if (!req.query.delimiter) {
       res.status(400)
       res.send('Please provide delimiter..')
     }
 
-    res.send(teamsBatchParser.parse(req.body.teamsData, req.body.delimiter))
+    res.send(teamsBatchParser.parse(req.query.teamsData, req.query.delimiter))
   })
 
   router.post('/batch', adminAction, (req, res) => {
