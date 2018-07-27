@@ -14,7 +14,7 @@ exports.getRouter = function () {
   const router = express.Router()
 
   router.get('/batch', (req, res) => {
-    if (!req.query.tourData) {
+    if (!req.query.teamsData) {
       res.status(400)
       res.send('Please provide data..')
     }
