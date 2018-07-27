@@ -7,9 +7,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationComponent implements OnInit {
 
-  constructor() { }
+  public links: Array<Object>;
+  public page: String;
+  public loading: Object;
+
+  constructor() {
+  	this.links = [
+      { href: '/matches', title: 'Matches', icon: 'fa-clipboard-list' },
+      { href: '/teams', title: 'Teams', icon: 'fa-users' }
+  	]
+  }
 
   ngOnInit() {
+  	this.page = document.location.pathname
+    if(this.page === '/') {
+      document.location.pathname = this.links[0]['href']
+    }
+  }
+
+  linkClass(link) {
+  	return this.page === link.href ? '' : 'hollow'
+  }
+
+  iconClass(link) {
+  	return this.loading === link ? 'fa-circle-notch fa-spin' : link.icon
   }
 
 }

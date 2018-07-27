@@ -1,5 +1,9 @@
 <ul class="menu">
   <li class="menu-text">Tournament</li>
-  <li><a href="/teams">Teams</a></li>
-  <li><a href="/matches">Matches</a></li>
+  <li *ngFor="let link of links">
+  	<a href="{{link.href}}" class="button" [ngClass]="linkClass(link)" (click)="loading = link">
+  	  <i class="fa" [ngClass]="iconClass(link)"></i>
+       {{link.title}}
+  	</a>
+  </li>
 </ul>
