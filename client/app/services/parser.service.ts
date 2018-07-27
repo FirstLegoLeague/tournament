@@ -10,12 +10,12 @@ export class ParserService {
   constructor(private request: RequestService) {
   }
 
-  parseTeams() : Observable<any>{
-    return this.request.get('/team/batch')
+  parseTeams(data: string) : Observable<any>{
+    return this.request.get('/team/batch?delimiter=,&teamsData=' + data)
   }
 
-  parseTeams() : Observable<any>{
-    return this.request.get('/tournamentData/')
+  parseTeams(data: string) : Observable<any>{
+    return this.request.get('/tournamentData?delimiter=,&tourData=' + data)
   }
 
 }
