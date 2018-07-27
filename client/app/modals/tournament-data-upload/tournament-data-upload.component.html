@@ -1,5 +1,10 @@
-<div class="fast large reveal" id="tournament-data-upload" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-  <h1>Upload tournament data CSV</h1>
+<div class="fast reveal" id="tournament-data-upload" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
+  <h2>Upload tournament data CSV</h2>
+  <div class="subheader">Paste your Tournament CSV file here</div>
+
+  <file-drop headertext="Drop file here" (onFileDrop)="dropped($event)" 
+    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+  </file-drop>
 
   <button class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>

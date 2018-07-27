@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
+import { FileDropModule } from 'ngx-file-drop'
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -31,7 +32,8 @@ const appRoutes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FileDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
