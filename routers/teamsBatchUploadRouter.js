@@ -13,6 +13,20 @@ const adminAction = authroizationMiddlware(['admin', 'development'])
 exports.getRouter = function () {
   const router = express.Router()
 
+  router.get('/batch', (req, res) => {
+    if (!req.body.tourData) {
+      res.status(400)
+      res.send('Please provide data..')
+    }
+
+    if (!req.body.delimiter) {
+      res.status(400)
+      res.send('Please provide delimiter..')
+    }
+
+    res.send(teamsBatchParser.parse(req.body.teamsData, req.body.delimiter))
+  })
+
   router.post('/batch', adminAction, (req, res) => {
     if (!req.body.teamsData) {
       return res.status(400).send('Please provide data..')
@@ -22,8 +36,8 @@ exports.getRouter = function () {
       return res.status(400).send('Please provide delimiter..')
     }
 
+    const teams = teamsBatchParser.parse(req.body.teamsData, req.body.delimiter)
     MongoClient.connect(MONGU_URI).then(connection => {
-      const teams = teamsBatchParser.parse(req.body.teamsData, req.body.delimiter)
       return connection.db().collection('teams').insertMany(teams).then(() => {
         res.status(201).send()
       })
