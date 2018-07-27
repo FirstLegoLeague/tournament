@@ -25,10 +25,6 @@ export class NavigationComponent implements OnInit {
     }
   }
 
-  linkClass(link) {
-  	return this.page === link.href ? '' : 'hollow'
-  }
-
   iconClass(link) {
   	return this.loading === link ? 'fa-circle-notch fa-spin' : link.icon
   }
