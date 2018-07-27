@@ -10,6 +10,7 @@ import {Team} from '../../models/team';
 export class TeamsComponent implements OnInit {
 
   public teams: Array<Team>;
+  public showAffiliation: Boolean;
 
   constructor(private teamsService: TeamsService) { }
 
@@ -17,6 +18,7 @@ export class TeamsComponent implements OnInit {
 
     this.teamsService.getAllTeams().subscribe((data: Array<Team>) =>{
       this.teams = data;
+      this.showAffiliation = this.teams.some(team => team.affiliation !== null)
     });
 
 

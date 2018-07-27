@@ -2,12 +2,12 @@
   <tr>
   	<th>Number</th>
   	<th>Name</th>
-  	<th>Affiliation</th>
+  	<th *ngIf="showAffiliation">Affiliation</th>
   </tr>
   <tr *ngFor="let team of teams">
     <td>{{team.number}}</td>
     <td>{{team.name}}</td>
-    <td>{{team.affiliation}}</td>
+    <td *ngIf="showAffiliation">{{team.affiliation}}</td>
   </tr>
 </table>
 
