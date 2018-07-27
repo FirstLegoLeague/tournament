@@ -8,13 +8,15 @@ import {Observable} from 'rxjs';
 })
 export class RequestService {
 
-  base_url: string = 'http://localhost:3001';
-
   constructor(private http: HttpClient) {
   }
 
   get(endpoint: string) {
-    return this.http.get(this.base_url + endpoint);
+    return this.http.get(endpoint);
+  }
+
+  post(endpoint: string, data: any) {
+    return this.http.post(endpoint, data);	
   }
 
 }

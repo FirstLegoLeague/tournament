@@ -1,9 +1,12 @@
-<div class="fast reveal" id="teams-upload" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
+<div id="teams-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
   <h2>Upload teams CSV</h2>
-  <div class="subheader">Paste your Teams CSV file here</div>
+  <div class="dimmer">
+  	<div class="big loader"></div>
+  </div>
+
+  <file-drop class="hollow expanded button" headertext="Drop your Teams CSV file here" (onFileDrop)="dropped($event)"></file-drop>
+
   <button class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
-
-  
 </div>

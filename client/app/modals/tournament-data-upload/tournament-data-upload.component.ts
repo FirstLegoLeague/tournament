@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 
 @Component({
@@ -6,27 +6,17 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
   templateUrl: './tournament-data-upload.component.html',
   styleUrls: ['./tournament-data-upload.component.css']
 })
-export class TournamentDataUpload implements OnInit {
+export class TournamentDataUpload {
 
   public file: UploadFile;
-  public isFileOver: Boolean;
+  public loading: Boolean;
 
   constructor() {
   }
 
-  ngOnInit() {
-  }
-
   public dropped(event: UploadEvent) {
   	this.file = event.files[0]
-  }
-
-  public fileOver(event){
-    this.isFileOver = true
-  }
-
-  public fileLeave(event){
-    this.isFileOver = false
+    this.loading = true
   }
 
 }

@@ -2,3 +2,11 @@
 body {
 	background: url('/design/img/background_tile.jpg');
 }
+
+.drop-zone {
+	border: none !important;
+}
+
+.drop-zone .content {
+	color: inherit !important;
+}
