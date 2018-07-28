@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "prepack": "ng build",
-    "start": "ng build --prod &&start mongod&& start mhub-server&& set DEV=true&& set MHUB_URI=ws://localhost:13900&& set MONGO_URI=mongodb://127.0.0.1:27017/local&& node index.js",
+    "start": "ng build --prod && node index.js",
     "build": "ng build"
   },
   "dependencies": {
