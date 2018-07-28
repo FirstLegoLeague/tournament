@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
+
+import { ParserService } from '../../services/parser.service';
+import { TournamentDataService } from '../../services/tournament-data.service';
 
 @Component({
   selector: 'tournament-data-upload',
@@ -9,15 +12,44 @@ import { UploadEvent, UploadFile } from 'ngx-file-drop';
 export class TournamentDataUpload {
 
   public file: UploadFile;
+  public content: string;
   public fileHovering: Boolean;
   public loading: Boolean;
+  public data: any;
 
-  constructor() {
+  constructor(private parser: ParserService, private tournamentDataService: TournamentDataService) {
   }
 
   public dropped(event: UploadEvent) {
-  	this.file = event.files[0]
+    this.file = event.files[0]
     this.loading = true
+    if (this.file.fileEntry.isFile) {
+      const fileEntry = this.file.fileEntry as FileSystemFileEntry;
+      fileEntry.file((file: File) => {
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          this.content = fileReader.result
+          this.parser.parseTournamentData(this.content).subscribe((data: any) =>{
+            this.data = data;
+            this.loading = false;
+          });
+        }
+        fileReader.readAsText(file, "UTF-8");
+      });
+    } else {
+      this.file = null
+    }
+  }
+
+  public timeString(dateString) {
+    return dateString.match(/T(.+)Z/)[1]
+  }
+
+  public upload(event) {
+    this.loading = true
+    this.tournamentDataService.upload(this.content).subscribe(() =>{
+      this.reload();
+    });
   }
   
   public fileOver(event){
@@ -26,6 +58,10 @@ export class TournamentDataUpload {
  
   public fileLeave(event){
     this.fileHovering = false
+  }
+
+  public reload(){
+    document.location.href = document.location.href
   }
 
 }

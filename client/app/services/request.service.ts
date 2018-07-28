@@ -15,8 +15,8 @@ export class RequestService {
     return this.http.get(endpoint);
   }
 
-  post(endpoint: string, data: any) {
-    return this.http.post(endpoint, data);
+  post(endpoint: string, data: any, headers: any) {
+    return this.http.post(endpoint, data, headers);
   }
 
 }

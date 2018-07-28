@@ -65,13 +65,11 @@ router.post('/', adminAction, (req, res) => {
     mhubConnection.publishUpdateMsg('teams')
     mhubConnection.publishUpdateMsg('tables')
     mhubConnection.publishUpdateMsg('matches')
-    res.status(201)
+    res.status(201).send()
   }).catch(err => {
     console.log(err)
-    res.status(500)
+    res.status(500).send(err.message)
   })
-
-  res.sendStatus(201)
 })
 
 module.exports = router

@@ -1,9 +1,60 @@
 <div id="tournament-data-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
   <h2>Upload tournament data CSV</h2>
+  <div class="dimmer">
+  	<div class="big loader"></div>
+  </div>
 
-  <file-drop class="expanded button" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Tournament data CSV file here</file-drop>
+  <file-drop class="expanded button" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Tournament CSV file here</file-drop>
 
-  <button class="close-button" data-close aria-label="Close modal" type="button">
+  <div class="grid-x" *ngIf="data">
+
+  <div id="data-grid" *ngIf="data" class="grid-x">
+    <div class="cell small-3">
+      <table>
+        <tr>
+          <th>Tables</th>
+        </tr>
+        <tr *ngFor="let table of data.tables">
+          <td>{{table.tableName}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="cell small-9">
+      <table>
+        <tr>
+          <th>Teams</th>
+        </tr>
+        <tr *ngFor="let team of data.teams">
+          <td>{{team.number}}</td>
+          <td>{{team.name}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="cell small-12">
+      <table>
+        <tr>
+          <th>Matches</th>
+        </tr>
+        <tr *ngFor="let match of data.practiceMatches">
+          <td>{{match.stage}} {{match.matchId}}</td>
+          <td>{{timeString(match.endTime)}}</td>
+          <td>{{timeString(match.endTime)}}</td>
+        </tr>
+        <tr *ngFor="let match of data.rankingMatches">
+          <td>{{match.stage}} {{match.matchId}}</td>
+          <td>{{timeString(match.endTime)}}</td>
+          <td>{{timeString(match.endTime)}}</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <button class="button" *ngIf="data" (click)="upload($event)" >Upload</button>
+
+  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>

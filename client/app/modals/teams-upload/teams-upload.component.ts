@@ -44,12 +44,8 @@ export class TeamsUpload {
 
   public upload(event) {
     this.loading = true
-    this.teamsService.uploadBatch(this.content).subscribe((data: any) =>{
-      this.loading = false;
-      this.close()
-      this.file = null
-      this.content = null
-      this.teams = null
+    this.teamsService.uploadBatch(this.content).subscribe(() => {
+      this.reload();
     });
   }
   
@@ -63,6 +59,10 @@ export class TeamsUpload {
 
   public close() {
     document.getElementById('teams-close-button').click();
+  }
+
+  public reload(){
+    document.location.href = document.location.href
   }
 
 }
