@@ -3,6 +3,12 @@
 const objectDataParser = require('./objectDataParser')
 
 exports.parse = function (data, delimiter) {
-  return data.split('\n')
+  const teams = data.split('\n')
     .map(line => objectDataParser.deserializeTeam(line.split(delimiter)))
+
+  if (teams.length > 0 && teams[0].number === undefined) {
+    teams.unshift()
+  }
+
+  return teams
 }
