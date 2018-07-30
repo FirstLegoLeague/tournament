@@ -13,13 +13,11 @@ const tournamentDataParser = require('../logic/tournamentDataParser')
 
 router.get('/', (req, res) => {
   if (!req.query.tourData) {
-    res.status(400)
-    res.send('Please provide data..')
+    res.status(400).send('Please provide data..')
   }
 
   if (!req.query.delimiter) {
-    res.status(400)
-    res.send('Please provide delimiter..')
+    res.status(400).send('Please provide delimiter..')
   }
 
   res.send(tournamentDataParser.parse(req.query.tourData, req.query.delimiter))
@@ -27,22 +25,24 @@ router.get('/', (req, res) => {
 
 router.post('/', adminAction, (req, res) => {
   if (!req.body.tourData) {
-    res.status(400)
-    res.send('Please provide data..')
+    res.status(400).send('Please provide data..')
   }
 
   if (!req.body.delimiter) {
-    res.status(400)
-    res.send('Please provide delimiter..')
+    res.status(400).send('Please provide delimiter..')
   }
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   MongoClient.connect(process.env.MONGO_URI).then(conn => {
-    conn.db().collection('tables').insertMany(data.tables).then(() => {
-      MsLogger.info('Data saved successfully to collection tables')
-    }).catch(err => {
-      MsLogger.error('Something went wrong while saving data \n' + err)
-    })
+    if(data.tables) {
+      conn.db().collection('tables').insertMany(data.tables).then(() => {
+        MsLogger.info('Data saved successfully to collection tables')
+      }).catch(err => {
+        MsLogger.error('Something went wrong while saving data \n' + err)
+      })
+
+      mhubConnection.publishUpdateMsg('tables')
+    }
 
     conn.db().collection('teams').insertMany(data.teams).then(() => {
       MsLogger.info('Data saved successfully to collection teams')
@@ -50,28 +50,36 @@ router.post('/', adminAction, (req, res) => {
       MsLogger.error('Something went wrong while saving data \n' + err)
     })
 
-    conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
-      MsLogger.info('practice matches saved successfully to collection matches')
-    }).catch(err => {
-      MsLogger.error('Something went wrong while saving data \n' + err)
-    })
-
-    conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
-      MsLogger.info('ranking matches successfully to collection ranking-matches')
-    }).catch(err => {
-      MsLogger.error('Something went wrong while saving data \n' + err)
-    })
-
     mhubConnection.publishUpdateMsg('teams')
-    mhubConnection.publishUpdateMsg('tables')
-    mhubConnection.publishUpdateMsg('matches')
-    res.status(201)
+
+
+    if(data.practiceMatches) {
+      conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
+        MsLogger.info('practice matches saved successfully to collection matches')
+      }).catch(err => {
+        MsLogger.error('Something went wrong while saving data \n' + err)
+      })
+    }
+
+    if(data.rankingMatches) {
+      conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
+        MsLogger.info('ranking matches successfully to collection ranking-matches')
+      }).catch(err => {
+        MsLogger.error('Something went wrong while saving data \n' + err)
+      })
+    }
+
+    if(data.rankingMatches || data.practiceMatches){
+      mhubConnection.publishUpdateMsg('matches')
+    }
+
+    res.sendStatus(201)
+
   }).catch(err => {
     console.log(err)
-    res.status(500)
+    res.sendStatus(500)
   })
 
-  res.sendStatus(201)
 })
 
 module.exports = router
