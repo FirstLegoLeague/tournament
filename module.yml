@@ -1,6 +1,6 @@
 api: '1.0'           
 name: 'tournament'
-version: '0.0.1'   
+version: '0.0.1 alpha-1'
 type: 'node'
 script: 'index.js'
 require:
