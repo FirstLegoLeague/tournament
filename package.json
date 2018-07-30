@@ -1,8 +1,8 @@
 {
-  "name": "schedule",
+  "name": "@first-lego-league/tournament",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:FirstLegoLeagueIL/schedule.git",
+  "repository": "git@github.com:FirstLegoLeague/tournament.git",
   "author": "Tal Taub <taltaub22@gmail.com>",
   "license": "MIT",
   "scripts": {
