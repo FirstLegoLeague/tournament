@@ -197,9 +197,9 @@
     on-finished "^2.3.0"
     on-headers "^1.0.1"
 
-"@first-lego-league/user-interface@^1.2.3":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@first-lego-league/user-interface/-/user-interface-1.2.4.tgz#220a74008a772adfe88890ea720c06a9861ce13d"
+"@first-lego-league/user-interface@^1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/user-interface/-/user-interface-1.2.8.tgz#ea419eadd000e1d9e1f806396b93f122a5bbf371"
   dependencies:
     hamburgers "^0.9.3"
 
@@ -4480,6 +4480,12 @@ neo-async@^2.5.0:
 next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
+
+ngx-file-drop@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/ngx-file-drop/-/ngx-file-drop-4.0.6.tgz#a7da98eb4c268b40759057597ba496f16cde19fc"
+  dependencies:
+    tslib "^1.9.0"
 
 no-case@^2.2.0:
   version "2.3.2"

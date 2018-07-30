@@ -1,11 +1,18 @@
-
-<app-navigation></app-navigation>
-
 <base href="/">
-
-<div style="width: 90%; margin: 0 auto; padding: 1%;">
-
-  <router-outlet></router-outlet>
-
+<div class="top-bar">
+  <div class="top-bar-left">
+    <app-navigation></app-navigation>
+  </div>
+  <div class="top-bar-right">
+    <global-actions></global-actions>
+  </div>
 </div>
-
+<div class="top-bar-page">
+  <div class="grid-x grid-padding-x grid-padding-y">
+    <div class="large-10 large-offset-1 cell">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<teams-upload></teams-upload>
+<tournament-data-upload></tournament-data-upload>

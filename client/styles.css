@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+
+body {
+	background: url('/design/img/background_tile.jpg');
+}
+
+.drop-zone {
+	border: none !important;
+}
+
+.drop-zone .content {
+	color: inherit !important;
+}
