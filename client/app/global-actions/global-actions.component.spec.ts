@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GlobalAction } from './global-actions.component';
+import { GlobalActions } from './global-actions.component';
 
-describe('GlobalAction', () => {
-  let component: GlobalAction;
-  let fixture: ComponentFixture<GlobalAction>;
+describe('GlobalActions', () => {
+  let component: GlobalActions;
+  let fixture: ComponentFixture<GlobalActions>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GlobalAction ]
+      declarations: [ GlobalActions ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GlobalAction);
+    fixture = TestBed.createComponent(GlobalActions);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

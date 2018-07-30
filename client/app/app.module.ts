@@ -6,7 +6,7 @@ import { FileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
-import { GlobalAction } from './global-actions/global-actions.component';
+import { GlobalActions } from './global-actions/global-actions.component';
 import { TeamsComponent } from './pages/teams/teams.component';
 import { MatchesComponent } from './pages/matches/matches.component';
 
@@ -23,7 +23,7 @@ const appRoutes = [
   declarations: [
     AppComponent,
     NavigationComponent,
-    GlobalAction,
+    GlobalActions,
     TeamsComponent,
     MatchesComponent,
     TeamsUpload,

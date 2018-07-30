@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './global-actions.component.html',
   styleUrls: ['./global-actions.component.css']
 })
-export class GlobalAction implements OnInit {
+export class GlobalActions implements OnInit {
 
   constructor() {
   }
