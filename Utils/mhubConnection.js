@@ -1,3 +1,4 @@
+'use strict'
 const domain = require('domain')
 const {MClient} = require('mhub')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
@@ -26,7 +27,7 @@ function publishUpdateMsg(nameSpace) {
   })
 }
 
-exports = {
+module.exports = {
   publishUpdateMsg: publishUpdateMsg,
   MHUB_NODES
 }
