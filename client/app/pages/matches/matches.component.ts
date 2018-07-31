@@ -22,6 +22,7 @@ export class MatchesComponent implements OnInit {
     this.requests.get('/table/all').subscribe((data: any) =>{
       this.tables = data;
     });
+
   }
 
 }

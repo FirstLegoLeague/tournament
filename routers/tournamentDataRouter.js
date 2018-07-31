@@ -11,13 +11,13 @@ const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const tournamentDataParser = require('../logic/tournamentDataParser')
 
-router.get('/', (req, res) => {
+router.get('/parse', (req, res) => {
   if (!req.query.tourData) {
-    res.status(400).send('Please provide data..')
+    return res.status(400).send('Please provide data..')
   }
 
   if (!req.query.delimiter) {
-    res.status(400).send('Please provide delimiter..')
+    return res.status(400).send('Please provide delimiter..')
   }
 
   res.send(tournamentDataParser.parse(req.query.tourData, req.query.delimiter))
@@ -53,6 +53,7 @@ router.post('/', adminAction, (req, res) => {
     mhubConnection.publishUpdateMsg('teams')
 
 
+
     if(data.practiceMatches) {
       conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
         MsLogger.info('practice matches saved successfully to collection matches')
@@ -79,7 +80,6 @@ router.post('/', adminAction, (req, res) => {
     console.log(err)
     res.sendStatus(500)
   })
-
 })
 
 module.exports = router

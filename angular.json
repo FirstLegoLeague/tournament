@@ -76,7 +76,6 @@
             ],
             "scripts": [],
             "assets": [
-              "client/favicon.ico",
               "client/assets"
             ]
           }

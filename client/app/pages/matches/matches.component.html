@@ -1,12 +1,12 @@
 <table>
-  <tr style="font-weight: bold;">
-    <td>Id</td>
-    <td>Stage</td>
-    <td>Start Time</td>
-    <td>End Time</td>
-    <td *ngFor="let tale of tables">
-      {{tale.tableName}}
-    </td>
+  <tr>
+    <th>Id</th>
+    <th>Stage</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th *ngFor="let table of tables">
+      {{table.tableName}}
+    </th>
   </tr>
   <tr *ngFor="let match of matches">
     <td>{{match.matchId}}</td>

@@ -1,0 +1,5 @@
+#data-grid {
+  height: calc(100vh - 25em);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
