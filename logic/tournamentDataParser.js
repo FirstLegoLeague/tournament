@@ -20,7 +20,7 @@ const PRACTICE_MATCH_HEADER_LINE_AMOUNT = 6
 
 const TABLE_NAMES_START = 3
 
-function parse (data, delimiter) {
+function parse(data, delimiter) {
   const dataLines = data.split('\n')
 
   const lines = []
@@ -41,33 +41,46 @@ function parse (data, delimiter) {
   const numOfTeams = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1]
   const teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeams[1]))
 
-  const numRankingOfMatches = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 1]
-  const rankingMatchesRaw = lines.slice(blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
-    RANKING_MATCH_HEADER_LINE_AMOUNT,
-  blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
-    RANKING_MATCH_HEADER_LINE_AMOUNT +
-    Math.ceil(parseFloat(numRankingOfMatches[1])))
+  let rankingMatchesRaw, numOfActualFields, tablesRaw;
+  if (doesSectionExsits(blocks, RANKING_MATCH_SCHEDULE_ID)) {
+    const numRankingOfMatches = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 1]
+    rankingMatchesRaw = lines.slice(blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
+      RANKING_MATCH_HEADER_LINE_AMOUNT,
+      blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
+      RANKING_MATCH_HEADER_LINE_AMOUNT +
+      Math.ceil(parseFloat(numRankingOfMatches[1])))
 
-  const numOfPracticeMatches = lines[blocks.find(x => x.blockId == PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
-  const practiceMatchesRaw = lines.slice(blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
-    PRACTICE_MATCH_HEADER_LINE_AMOUNT,
-  blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
-    PRACTICE_MATCH_HEADER_LINE_AMOUNT +
-    Math.ceil(parseFloat(numOfPracticeMatches[1])))
+    const numOfTables = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 2][1]
+    const numOfTeamsPerTable = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 3][1]
+    numOfActualFields = parseInt(numOfTables) * parseInt(numOfTeamsPerTable)
+    tablesRaw = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
+  }
 
-  const numOfTables = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 2][1]
-  const numOfTeamsPerTable = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 3][1]
-  const numOfActualFields = parseInt(numOfTables) * parseInt(numOfTeamsPerTable)
-  const tablesRaw = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
+  let practiceMatchesRaw;
+  if (doesSectionExsits(blocks, PRACTICE_MATCH_SCHEDULE_ID)) {
+    const numOfPracticeMatches = lines[blocks.find(x => x.blockId == PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
+    practiceMatchesRaw = lines.slice(blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
+      PRACTICE_MATCH_HEADER_LINE_AMOUNT,
+      blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
+      PRACTICE_MATCH_HEADER_LINE_AMOUNT +
+      Math.ceil(parseFloat(numOfPracticeMatches[1])))
+  }
+
 
   const tables = []
   for (let i = 0; i < numOfActualFields; i++) {
     tables.push(new Table(i, tablesRaw[i + TABLE_NAMES_START]))
   }
 
+  let practiceMatches, rankingMatches
   const teams = teamsRaw.map(objectDataParser.deserializeTeam)
-  const rankingMatches = rankingMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'ranking'))
-  const practiceMatches = practiceMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'practice'))
+  if (rankingMatchesRaw) {
+    rankingMatches = rankingMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'ranking'))
+  }
+  if (practiceMatchesRaw) {
+    practiceMatches = practiceMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'practice'))
+  }
+
 
   return {
     'teams': teams,
@@ -79,4 +92,9 @@ function parse (data, delimiter) {
 
 module.exports = {
   'parse': parse
+}
+
+
+function doesSectionExsits(blocks, sectionId) {
+  return blocks.find(x => x.blockId == sectionId) != undefined
 }
