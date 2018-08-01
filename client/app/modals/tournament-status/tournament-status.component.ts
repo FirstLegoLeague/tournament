@@ -36,7 +36,7 @@ export class TournamentStatusComponent implements OnInit {
         this._matchChangeTime = Date.now()
       }
       this._matchHasChanged = false
-    }, 5000)
+    }, 1000)
   }
 
   private matchChanged(match){
@@ -48,7 +48,6 @@ export class TournamentStatusComponent implements OnInit {
   timeUntilMatch(){
     if(typeof this._secondsUntilMatchOnChange === 'number'){
       this._stringTimeUntilMatch = ''
-      console.log(this._secondsUntilMatchOnChange)
       let secondsUntilMatch = this._secondsUntilMatchOnChange + Math.floor((this._matchChangeTime-Date.now())/1000)
       if(secondsUntilMatch<0){
         this._stringTimeUntilMatch = '-'
@@ -56,6 +55,6 @@ export class TournamentStatusComponent implements OnInit {
       }
       this._stringTimeUntilMatch += `${Math.floor(secondsUntilMatch/3600)}:${Math.floor(secondsUntilMatch/60) % 60}:${secondsUntilMatch % 60}`
     }
-    return this._stringTimeUntilMatch
+    return this._stringTimeUntilMatch + ''
   }
 }
