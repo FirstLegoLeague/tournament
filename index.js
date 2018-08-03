@@ -10,6 +10,7 @@ const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
 const crudRouter = require('./routers/crudRouter').getRouter
+const { initImagesFolder } = require('./logic/imagesLogic')
 
 const Team = require('./models/Team')
 const Match = require('./models/Match')
@@ -21,7 +22,7 @@ logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}))
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
@@ -30,10 +31,14 @@ const {getSettingsRouter, setDefaultSettings} = require('./routers/generalSettin
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
+const { imagesRouter } = require('./routers/imagesRouter')
 
 setDefaultSettings()
+initImagesFolder()
 
 app.use('/settings', getSettingsRouter())
+app.use('/image', imagesRouter)
+
 
 if (process.env.DEV) {
   app.post(authenticationDevMiddleware())
