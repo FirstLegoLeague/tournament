@@ -10,5 +10,9 @@ exports.getRouter = function () {
     res.send(getMatchLogic.getCurrentMatch())
   })
 
+  router.get('/upcomingMatches', (req, res) => {
+    res.send(getMatchLogic.getNextMatches())
+  })
+
   return router
 }
