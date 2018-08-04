@@ -4,9 +4,9 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const {correlationMiddleware} = require('@first-lego-league/ms-correlation')
-const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-lego-league/ms-auth')
-const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
+const { correlationMiddleware } = require('@first-lego-league/ms-correlation')
+const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
+const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
 const crudRouter = require('./routers/crudRouter').getRouter
@@ -16,34 +16,29 @@ const Match = require('./models/Match')
 const Table = require('./models/Table')
 
 const appPort = process.env.PORT || 3001
+const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddleware() : authenticationMiddleware
 
 logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const {getSettingsRouter, setDefaultSettings} = require('./routers/generalSettingsRouter')
+const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
 
 setDefaultSettings()
 
-app.use('/settings', getSettingsRouter())
+app.post(authenticationMiddlewareToUse)
+app.put(authenticationMiddlewareToUse)
+app.delete(authenticationMiddlewareToUse)
 
-if (process.env.DEV) {
-  app.post(authenticationDevMiddleware())
-  app.put(authenticationDevMiddleware())
-  app.delete(authenticationDevMiddleware())
-} else {
-  app.post(authenticationMiddleware)
-  app.put(authenticationMiddleware)
-  app.delete(authenticationMiddleware)
-}
+app.use('/settings', getSettingsRouter())
 
 app.use('/tournamentData', tournamentDataRouter)
 
@@ -70,6 +65,8 @@ app.use('/table', crudRouter({
   'IdField': Table.IdField,
   'mhubNamespace': 'tables'
 }))
+
+app.use(authenticationMiddlewareToUse)
 
 app.use(express.static(path.join(__dirname, 'dist/client')))
 // Design files
