@@ -1,22 +1,24 @@
-import {Injectable} from '@angular/core';
-import {RequestService} from './request.service';
-import {Observable} from 'rxjs';
-import {Team} from '../models/team';
+import { Injectable } from '@angular/core';
+import { RequestService } from './request.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TeamsService {
 
-  constructor(private request: RequestService) {
-  }
+  constructor(private requests: RequestService) { }
 
   getAllTeams() : Observable<any>{
-    return this.request.get('/team/all')
+    return this.requests.get('/team/all');
   }
 
   uploadBatch(data: string) : Observable<any>{
-    return this.request.post('/team/batch', { delimiter: ',', teamsData: data }, {})
+    return this.requests.post('/team/batch', { delimiter: ',', teamsData: data }, {});
+  }
+
+  delete(teamNumber: number) {
+    return this.requests.delete(`/team/${teamNumber}`, { responseType: 'text' });
   }
 
 }

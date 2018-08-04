@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {RequestService} from './request.service';
-import {Observable} from 'rxjs';
+import { RequestService } from './request.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,10 @@ export class MatchesService {
 
   getAllMatches() : Observable<any>{
     return this.requests.get('/match/all');
+  }
+
+  delete(machId: number) {
+    return this.requests.delete(`/match/${machId}`, { responseType: 'text' });
   }
 
 }

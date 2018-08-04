@@ -19,4 +19,8 @@ export class RequestService {
     return this.http.post(endpoint, data, headers);
   }
 
+  delete(endpoint: string, headers: any) {
+    return this.http.delete(endpoint, headers);
+  }
+
 }

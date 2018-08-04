@@ -1,13 +1,22 @@
-<table class="centralized">
+<table id="teams" class="centralized">
   <tr>
   	<th>Number</th>
   	<th>Name</th>
   	<th *ngIf="showAffiliation">Affiliation</th>
+    <th></th>
   </tr>
   <tr *ngFor="let team of teams">
     <td>{{team.number}}</td>
     <td>{{team.name}}</td>
     <td *ngIf="showAffiliation">{{team.affiliation}}</td>
+    <td class="actions">
+      <div class="button" data-open="model-edit" (click)="setEditModel(team)">
+          <i class="fa fa-edit"></i>
+      </div>
+      <div class="alert button" data-open="model-delete" (click)="setDeleteModel(team)">
+          <i class="fa fa-trash-alt"></i>
+      </div>
+    </td>
   </tr>
 </table>
 

@@ -1,0 +1,12 @@
+<div id="model-delete" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
+  <h4 *ngIf="model()">Do you really want to delete {{model().title()}}?</h4>
+  <div class="subheader">This operation is ireversable!</div>
+  <div class="dimmer">
+  	<div class="loader"></div>
+  </div>
+  
+  <div class="grid-x align-center button-group">
+    <div class="button" data-close>No, I think I'll pass...</div>
+    <div class="alert button" (click)="delete()">Yes, just do it!</div>
+  </div>
+</div>

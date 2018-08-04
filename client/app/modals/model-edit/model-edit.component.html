@@ -1,0 +1,10 @@
+<div id="model-edit" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
+  <h2 *ngIf="model()">Edit {{model().title()}}</h2>
+  <div class="dimmer">
+  	<div class="big loader"></div>
+  </div>
+
+  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
