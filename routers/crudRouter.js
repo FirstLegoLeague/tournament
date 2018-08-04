@@ -40,7 +40,7 @@ exports.getRouter = function (options) {
 
   router.put('/:id', adminAction, (req, res) => {
     let validationResult = true
-    if (options.validationMethods.put) {
+    if (options.validationMethods && options.validationMethods.put) {
       validationResult = options.validationMethods.put(req.params)
     }
 
@@ -63,7 +63,7 @@ exports.getRouter = function (options) {
 
   router.post('/', adminAction, (req, res) => {
     let validationResult = true
-    if (options.validationMethods.post) {
+    if (options.validationMethods && options.validationMethods.post) {
       validationResult = options.validationMethods.post(req.params)
     }
 
@@ -92,7 +92,7 @@ exports.getRouter = function (options) {
 
   router.delete('/:id', adminAction, (req, res) => {
     let validationResult = true
-    if (options.validationMethods.delete) {
+    if (options.validationMethods && options.validationMethods.delete) {
       validationResult = options.validationMethods.delete(req.params)
     }
 
