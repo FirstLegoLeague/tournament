@@ -20,11 +20,18 @@ export class ModelDelete {
     this.loading = true;
     this.modelModalsService.service(this.model()).delete(this.model().id()).subscribe(() => {
       this.reload();
+      this.close();
+      this.loading = false;
     });
   }
 
+  close() {
+    let closeButton: HTMLElement = document.querySelector('#model-delete [data-close]');
+    closeButton.click();
+  }
+
   reload() {
-    document.location.href = document.location.href
+    this.modelModalsService.service(this.model()).reload();
   }
 
 }

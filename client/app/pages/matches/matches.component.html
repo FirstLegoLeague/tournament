@@ -9,7 +9,7 @@
     </th>
     <th></th>
   </tr>
-  <tr *ngFor="let match of matches">
+  <tr *ngFor="let match of matches()">
     <td>{{match.matchId}}</td>
     <td>{{match.stage}}</td>
     <td>{{match.startTime | date : 'shortTime'}}</td>
