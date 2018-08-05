@@ -4,6 +4,10 @@ const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const MONGU_URI = process.env.MONGO_URI
 
+const { MClient } = require('mhub')
+
+const mhubClient = new MClient(process.env.MHUB_URI)
+
 const MATCH = 0
 const UPCOMING_MATCHES_TO_GET = 2
 
@@ -24,7 +28,10 @@ function getNextMatches () {
     }
   }
 
-  return retMatches
+  if (retMatches.length > 0) {
+    return retMatches
+  }
+  return null
 }
 
 const getMatch = function (matchNumber) {
