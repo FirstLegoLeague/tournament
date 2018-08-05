@@ -30,6 +30,7 @@ const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSett
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
+const tournamentStatusRouter = require('./routers/tournamentStatusRouter')
 
 setDefaultSettings()
 
@@ -49,7 +50,7 @@ app.use('/team', crudRouter({
   'collectionName': 'teams',
   'IdField': Team.IdField,
   'mhubNamespace': 'teams',
-  'extraRouters': [teamsBatchUploadRouter.getRouter(), matchTeamRouter.getRouter()],
+  'extraRouters': [teamsBatchUploadRouter.getRouter(), matchTeamRouter.getRouter(), tournamentStatusRouter.getRouter()],
   'validationMethods': {
     'delete': teamLogic.deleteValidation
   }
