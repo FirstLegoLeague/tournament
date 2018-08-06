@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ModalModel, ModalModelService } from '../../models/interfaces/modal-model';
 import { ModelModalsService } from '../../services/model-modals.service';
 
 @Component({
@@ -18,7 +19,9 @@ export class ModelDelete {
 
   delete() {
     this.loading = true;
-    this.modelModalsService.service(this.model()).delete(this.model().id()).subscribe(() => {
+    const model: ModalModel = this.model();
+    const service: ModalModelService = this.modelModalsService.service(model);
+    service.delete(model.id()).subscribe(() => {
       this.reload();
       this.close();
       this.loading = false;

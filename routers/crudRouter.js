@@ -49,7 +49,7 @@ exports.getRouter = function (options) {
     }
 
     MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
+      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), { $set: req.body }).then(dbResponse => {
         if (dbResponse.ok === 1) {
           mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(204)

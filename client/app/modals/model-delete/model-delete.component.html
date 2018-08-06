@@ -6,7 +6,11 @@
   </div>
   
   <div class="grid-x align-center button-group">
-    <div class="button" data-close>No, I think I'll pass...</div>
+    <div class="button" (click)="close()">No, I think I'll pass...</div>
     <div class="alert button" (click)="delete()">Yes, just do it!</div>
   </div>
+
+  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>

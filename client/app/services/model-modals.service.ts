@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ModalModel } from '../models/interfaces/modal-model'
 import { TeamsService } from './teams.service'
 import { MatchesService } from './matches.service'
 
@@ -7,8 +8,8 @@ import { MatchesService } from './matches.service'
 })
 export class ModelModalsService {
 
-	private editModel: any;
-	private deleteModel: any;
+	private editModel: ModalModel;
+	private deleteModel: ModalModel;
 
 	constructor(private teamsService: TeamsService, private matchesServices: MatchesService) { }
 

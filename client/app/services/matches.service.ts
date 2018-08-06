@@ -6,9 +6,10 @@ import { Match } from '../models/match';
 @Injectable({
   providedIn: 'root'
 })
+
 export class MatchesService {
 
-  public matches: Match[];
+  public matches: Match[] = [];
 
   constructor(private requests: RequestService) { }
 
@@ -16,8 +17,13 @@ export class MatchesService {
   	return this.matches;
   }
 
-  delete(machId: number) {
+  delete(machId: number) : Observable<any>{
     return this.requests.delete(`/match/${machId}`, { responseType: 'text' });
+  }
+
+  save(match: Match) : Observable<any>{
+    const method = match.id() ? 'put' : 'post';
+    return this.requests[method](`/match/${match.id()}`, match.body())
   }
 
   reload() {
