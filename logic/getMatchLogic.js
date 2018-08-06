@@ -8,7 +8,7 @@ const { MClient } = require('mhub')
 
 const mhubClient = new MClient(process.env.MHUB_URI)
 
-const MATCH = 0
+const MATCH = 3
 const UPCOMING_MATCHES_TO_GET = 2
 
 function getCurrentMatch () {
@@ -36,7 +36,7 @@ function getNextMatches () {
 
 const getMatch = function (matchNumber) {
   MongoClient.connect(MONGU_URI).then(connection => {
-    const level = connection.db().collection('settings').find({})[0].tournamentLevel
+    const level = connection.db().collection('settings').findOne({}).then(dbResponse => dbResponse.tournamentLevel)
     const dbMatch = connection.db().collection('matches').findOne({ 'matchId': matchNumber }, { 'stage': level })
 
     if (dbMatch) {
