@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 const mhubConnection = require('../Utils/mhubConnection')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
@@ -34,7 +34,7 @@ router.post('/', adminAction, (req, res) => {
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   MongoClient.connect(process.env.MONGO_URI).then(conn => {
-    if(data.tables) {
+    if (data.tables) {
       conn.db().collection('tables').insertMany(data.tables).then(() => {
         MsLogger.info('Data saved successfully to collection tables')
       }).catch(err => {
@@ -52,9 +52,7 @@ router.post('/', adminAction, (req, res) => {
 
     mhubConnection.publishUpdateMsg('teams')
 
-
-
-    if(data.practiceMatches) {
+    if (data.practiceMatches) {
       conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
         MsLogger.info('practice matches saved successfully to collection matches')
       }).catch(err => {
@@ -62,7 +60,7 @@ router.post('/', adminAction, (req, res) => {
       })
     }
 
-    if(data.rankingMatches) {
+    if (data.rankingMatches) {
       conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
         MsLogger.info('ranking matches successfully to collection ranking-matches')
       }).catch(err => {
@@ -70,7 +68,7 @@ router.post('/', adminAction, (req, res) => {
       })
     }
 
-    if(data.rankingMatches || data.practiceMatches){
+    if (data.rankingMatches || data.practiceMatches) {
       mhubConnection.publishUpdateMsg('matches')
     }
 
