@@ -21,7 +21,7 @@ export class Team implements ModalModel, Deserializable {
   }
 
   title() {
-    return `Team #${this.number} ${this.name}`;
+    return this.id() ? `Team #${this.number} ${this.name}` : 'New Team';
   }
 
   fields() {

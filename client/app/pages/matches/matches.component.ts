@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModelModalsService } from '../../services/model-modals.service';
 import { MatchesService } from '../../services/matches.service';
-import { RequestService } from '../../services/request.service';
+import { TablesService } from '../../services/tables.service';
+import { Match } from '../../models/match';
+import { Table } from '../../models/table';
 
 @Component({
   selector: 'app-matches',
@@ -10,20 +12,19 @@ import { RequestService } from '../../services/request.service';
 })
 export class MatchesComponent implements OnInit {
 
-  tables = [];
-
-  constructor(private matchesService: MatchesService, private requests: RequestService, private modelModalsService: ModelModalsService) { }
+  constructor(private matchesService: MatchesService, private tablesService: TablesService, private modelModalsService: ModelModalsService) { }
 
   ngOnInit() {
     this.matchesService.reload();
+    this.tablesService.reload();
+  }
 
-    this.requests.get('/table/all').subscribe((data: any) =>{
-      this.tables = data;
-    });
+  tables() {
+    return this.tablesService.tables;
   }
 
   matches() {
-    return this.matchesService.getAllMatches();
+    return this.matchesService.matches;
   }
 
   setEditModel(match) {
@@ -32,6 +33,16 @@ export class MatchesComponent implements OnInit {
 
   setDeleteModel(match) {
     this.modelModalsService.setDeleteModel(match);
+  }
+
+  newTable() {
+    return new Table()
+  }
+
+  newMatch() {
+    const match = new Match()
+    match.matchTeams = this.tables().map(table => ({ tableId: table.tableId, teamNumber: null }));
+    return match;
   }
 
 }

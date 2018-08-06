@@ -13,17 +13,14 @@ export class MatchesService {
 
   constructor(private requests: RequestService) { }
 
-  getAllMatches() : Match[]{
-  	return this.matches;
-  }
-
-  delete(machId: number) : Observable<any>{
-    return this.requests.delete(`/match/${machId}`, { responseType: 'text' });
+  delete(matchId: number) : Observable<any>{
+    return this.requests.delete(`/match/${matchId}`, { responseType: 'text' });
   }
 
   save(match: Match) : Observable<any>{
     const method = match.id() ? 'put' : 'post';
-    return this.requests[method](`/match/${match.id()}`, match.body())
+    const url = match.id() ? `/match/${match.id()}` : '/match/';
+    return this.requests[method](url, match.body());
   }
 
   reload() {

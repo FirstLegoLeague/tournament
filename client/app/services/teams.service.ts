@@ -13,17 +13,14 @@ export class TeamsService {
 
   constructor(private requests: RequestService) { }
 
-  getAllTeams() : Team[]{
-    return this.teams;
-  }
-
   delete(teamNumber: number) : Observable<any>{
     return this.requests.delete(`/team/${teamNumber}`, { responseType: 'text' });
   }
 
   save(team: Team) : Observable<any>{
     const method = team.id() ? 'put' : 'post';
-    return this.requests[method](`/team/${team.id()}`, team.body())
+    const url = team.id() ? `/team/${team.id()}` : '/team/';
+    return this.requests[method](url, team.body());
   }
 
   reload() {

@@ -21,7 +21,7 @@ export class TeamsComponent implements OnInit {
   }
 
   teams() {
-     return this.teamsService.getAllTeams();
+     return this.teamsService.teams;
   }
 
   setEditModel(team) {

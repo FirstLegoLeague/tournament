@@ -16,7 +16,7 @@ export class Match implements ModalModel, Deserializable {
   }
 
   title() {
-    return `Match ${this.stage} #${this.matchId}`;
+    return this.id() ? `Match ${this.stage} #${this.matchId}` : 'New Match';
   }
 
   timeInputValueFromField(timeFieldValue) {
@@ -25,7 +25,7 @@ export class Match implements ModalModel, Deserializable {
 
   setTimeFieldFromInput(timeFieldName, timeInputValue) {
     const [hours, minutes] = timeInputValue.split(':');
-    const date = new Date(this[timeFieldName]);
+    const date = this[timeFieldName] ? new Date(this[timeFieldName]) : new Date();
     date.setHours(hours);
     date.setMinutes(minutes);
     this[timeFieldName] = date.toISOString()
