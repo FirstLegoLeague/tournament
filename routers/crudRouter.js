@@ -11,6 +11,12 @@ const MONGU_URI = process.env.MONGO_URI
 exports.getRouter = function (options) {
   const router = express.Router()
 
+  if (options.extraRouters) {
+    for (const extraRouter of options.extraRouters) {
+      router.use(extraRouter)
+    }
+  }
+
   router.get('/all', (req, res) => {
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).find().toArray().then(data => {
@@ -111,12 +117,6 @@ exports.getRouter = function (options) {
       res.sendStatus(500)
     })
   })
-
-  if (options.extraRouters) {
-    for (const extraRouter of options.extraRouters) {
-      router.use(extraRouter)
-    }
-  }
 
   return router
 }
