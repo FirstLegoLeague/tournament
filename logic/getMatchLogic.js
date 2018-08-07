@@ -19,13 +19,7 @@ function getNextMatches () {
   const retMatches = []
 
   for (let i = 1; i <= UPCOMING_MATCHES_TO_GET; i++) {
-    const tempMatch = getMatch(MATCH + i)
-
-    if (tempMatch) {
-      retMatches.push(tempMatch)
-    } else { // stops if final match is reached/match does not exist in DB
-      break
-    }
+    retMatches.push(getMatch(MATCH + i))
   }
 
   if (retMatches.length > 0) {
@@ -33,7 +27,7 @@ function getNextMatches () {
   }
   return null
 }
-// TODO: properly handle match not in DB
+
 const getMatch = function (matchNumber) {
   return MongoClient.connect(MONGU_URI).then(connection => {
     const dbMatch = connection.db().collection('settings').findOne({}).then(tournamentSettings => {
