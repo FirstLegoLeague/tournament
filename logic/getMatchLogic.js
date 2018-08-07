@@ -8,7 +8,7 @@ const { MClient } = require('mhub')
 
 const mhubClient = new MClient(process.env.MHUB_URI)
 
-const MATCH = 3
+const MATCH = 0
 const UPCOMING_MATCHES_TO_GET = 2
 
 function getCurrentMatch () {
@@ -33,23 +33,28 @@ function getNextMatches () {
   }
   return null
 }
-
+// TODO: properly handle match not in DB
 const getMatch = function (matchNumber) {
-  MongoClient.connect(MONGU_URI).then(connection => {
-    const level = connection.db().collection('settings').findOne({}).then(dbResponse => dbResponse.tournamentLevel)
-    const dbMatch = connection.db().collection('matches').findOne({ 'matchId': matchNumber }, { 'stage': level })
+  return MongoClient.connect(MONGU_URI).then(connection => {
+    const dbMatch = connection.db().collection('settings').findOne({}).then(tournamentSettings => {
+      return connection.db().collection('matches').findOne({ 'stage': tournamentSettings.tournamentLevel, 'matchId': matchNumber })
+        .then(resolvedMatch => {
+          return {
+            'match': resolvedMatch.matchId,
+            'startTime': resolvedMatch.startTime,
+            'endTime': resolvedMatch.endTime
+          }
+        })
+    })
 
     if (dbMatch) {
-      return {
-        'match': dbMatch.matchId,
-        'startTime': dbMatch.startTime,
-        'endTime': dbMatch.endTime
-      }
+      return dbMatch
+    } else {
+      return null // happens if match does not exist in DB
     }
-    return null // happens if match does not exist in DB
   }).catch(err => {
     MsLogger.error(err)
-    throw err
+    return null
   })
 }
 

@@ -6,12 +6,16 @@ const getMatchLogic = require('../logic/getMatchLogic')
 exports.getRouter = function () {
   const router = express.Router()
 
-  router.get('/currentMatch', (req, res) => {
-    res.send(getMatchLogic.getCurrentMatch())
+  router.get('/current', (req, res) => {
+    getMatchLogic.getCurrentMatch().then(data => {
+      res.send(data)
+    })
   })
 
-  router.get('/upcomingMatches', (req, res) => {
-    res.send(getMatchLogic.getNextMatches())
+  router.get('/upcoming', (req, res) => {
+    Promise.all(getMatchLogic.getNextMatches()).then(data => {
+      res.send(data)
+    })
   })
 
   return router
