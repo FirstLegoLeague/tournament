@@ -1,8 +1,8 @@
 'use strict'
 const domain = require('domain')
-const {MClient} = require('mhub')
+const { MClient } = require('mhub')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const {getCorrelationId, correlateSession} = require('@first-lego-league/ms-correlation')
+const { getCorrelationId, correlateSession } = require('@first-lego-league/ms-correlation')
 
 const MHUB_NODES = {
   PUBLIC: 'public',
@@ -18,9 +18,9 @@ mhubClient.on('error', msg => {
   MsLogger.error('Unable to connect to mhub, other modules won\'t be notified changes \n ' + msg)
 })
 
-function publishUpdateMsg(nameSpace) {
+function publishUpdateMsg (nameSpace, data = '') {
   mhubClient.connect().then(() => {
-    mhubClient.publish(MHUB_NODES.PROTECTED, `${nameSpace}:reload`, '', {
+    mhubClient.publish(MHUB_NODES.PROTECTED, `${nameSpace}:reload`, data, {
       'client-id': MHUB_CLIENT_ID,
       'correlation-id': getCorrelationId()
     })
