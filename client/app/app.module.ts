@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import { FileDropModule } from 'ngx-file-drop';
@@ -14,6 +15,7 @@ import { TeamsUpload } from './modals/teams-upload/teams-upload.component';
 import { TournamentDataUpload } from './modals/tournament-data-upload/tournament-data-upload.component';
 import { ModelEdit } from './modals/model-edit/model-edit.component';
 import { ModelDelete } from './modals/model-delete/model-delete.component';
+import { Tables } from './modals/tables/tables.component';
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
@@ -31,9 +33,11 @@ const appRoutes = [
     TeamsUpload,
     TournamentDataUpload,
     ModelEdit,
-    ModelDelete
+    ModelDelete,
+    Tables
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),

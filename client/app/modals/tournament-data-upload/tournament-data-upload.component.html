@@ -52,7 +52,9 @@
 
   </div>
 
-  <button class="button" *ngIf="data" (click)="upload($event)" >Upload</button>
+  <div class="grid-x align-center button-group">
+    <button class="button" *ngIf="data" (click)="upload($event)" >Upload</button>
+  </div>
 
   <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>

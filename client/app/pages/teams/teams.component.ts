@@ -13,7 +13,7 @@ export class TeamsComponent implements OnInit {
   constructor(private teamsService: TeamsService, private modelModalsService: ModelModalsService) { }
 
   ngOnInit() {
-    this.teamsService.reload();
+    this.teamsService.init();
   }
 
   showAffiliation() {
@@ -21,7 +21,7 @@ export class TeamsComponent implements OnInit {
   }
 
   teams() {
-     return this.teamsService.teams;
+    return this.teamsService.teams;
   }
 
   setEditModel(team) {
@@ -30,6 +30,10 @@ export class TeamsComponent implements OnInit {
 
   setDeleteModel(team) {
     this.modelModalsService.setDeleteModel(team);
+  }
+
+  newTeam() {
+    return new Team()
   }
 
 }

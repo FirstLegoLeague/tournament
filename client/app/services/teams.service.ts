@@ -9,9 +9,17 @@ import { Team } from '../models/team';
 
 export class TeamsService {
 
+  private initStarted: boolean = false;
   public teams: Team[] = [];
 
   constructor(private requests: RequestService) { }
+
+  init() {
+    if(!this.initStarted) {
+      this.initStarted = true;
+      this.reload();
+    }
+  }
 
   delete(teamNumber: number) : Observable<any>{
     return this.requests.delete(`/team/${teamNumber}`, { responseType: 'text' });

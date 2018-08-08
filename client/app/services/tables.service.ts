@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { RequestService } from './request.service';
 import { Table } from '../models/table';
 
@@ -9,24 +10,37 @@ import { Table } from '../models/table';
 
 export class TablesService {
 
+  private initStarted: boolean = false;
   public tables: Table[] = [];
+  public editingTables: Table[] = [];
 
   constructor(private requests: RequestService) { }
 
-  delete(tableId: number) : Observable<any>{
-    return this.requests.delete(`/table/${tableId}`, { responseType: 'text' });
-  }
-
-  save(table: Table) : Observable<any>{
-    const method = table.id() ? 'put' : 'post';
-    const url = table.id() ? `/table/${table.id()}` : '/table/';
-    return this.requests[method](url, table.body());
+  init() {
+    if(!this.initStarted) {
+      this.initStarted = true;
+      this.reload();
+    }
   }
 
   reload() {
     return this.requests.get('/table/all').subscribe((tables: Table[]) => {
     	this.tables = tables.map(table => new Table().deserialize(table));
+      this.editingTables = tables.map(table => new Table().deserialize(table));
     });
+  }
+
+  save() : Observable<any>{
+    const tablesToDelete = this.tables.filter(table => this.editingTables.every(editingTable => editingTable.tableId !== table.tableId));
+    const tablesToCreate = this.editingTables.filter(table => isNaN(table.tableId));
+    const tablesToUpdate = this.editingTables.filter(editingTable => 
+      editingTable.tableId && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
+
+    const tablesToDeleteObservables = tablesToDelete.map(table => this.requests.delete(`/table/${table.id()}`, { responseType: 'text' }))
+    const tablesToCreateObservables = tablesToCreate.map(table => this.requests.post('/table/', table.body()))
+    const tablesToUpdateObservables = tablesToUpdate.map(table => this.requests.put(`/table/${table.id()}`, table.body()))
+
+    return forkJoin(tablesToDeleteObservables.concat(tablesToCreateObservables).concat(tablesToUpdateObservables))
   }
 
 }

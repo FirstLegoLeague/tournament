@@ -15,8 +15,8 @@ export class MatchesComponent implements OnInit {
   constructor(private matchesService: MatchesService, private tablesService: TablesService, private modelModalsService: ModelModalsService) { }
 
   ngOnInit() {
-    this.matchesService.reload();
-    this.tablesService.reload();
+    this.matchesService.init();
+    this.tablesService.init();
   }
 
   tables() {

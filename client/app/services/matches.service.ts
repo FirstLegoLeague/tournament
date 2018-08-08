@@ -9,9 +9,17 @@ import { Match } from '../models/match';
 
 export class MatchesService {
 
+  private initStarted: boolean = false;
   public matches: Match[] = [];
 
   constructor(private requests: RequestService) { }
+
+  init() {
+    if(!this.initStarted) {
+      this.initStarted = true;
+      this.reload();
+    }
+  }
 
   delete(matchId: number) : Observable<any>{
     return this.requests.delete(`/match/${matchId}`, { responseType: 'text' });
