@@ -8,18 +8,26 @@ const { MClient } = require('mhub')
 
 const mhubClient = new MClient(process.env.MHUB_URI)
 
-const MATCH = 0
+if (process.env.DEV) {
+  mhubClient.login('default', '')
+} else {
+  mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
+}
+
+let match = 0
 const UPCOMING_MATCHES_TO_GET = 2
 
+mhubClient.on('clock:start', msg => { match++; console.log(msg) })
+
 function getCurrentMatch () {
-  return getMatch(MATCH)
+  return getMatch(match)
 }
 
 function getNextMatches () {
   const retMatches = []
 
   for (let i = 1; i <= UPCOMING_MATCHES_TO_GET; i++) {
-    retMatches.push(getMatch(MATCH + i))
+    retMatches.push(getMatch(match + i))
   }
 
   if (retMatches.length > 0) {
