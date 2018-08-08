@@ -5,6 +5,7 @@ export type MatchTeam = { teamNumber: number, tableId: number }
 
 export class Match implements ModalModel, Deserializable {
 
+  _id: string;
   matchId: number;
   stage: string;
   startTime: string;
@@ -60,6 +61,10 @@ export class Match implements ModalModel, Deserializable {
   deserialize(input: any) {
     Object.assign(this, input);
     return this;
+  }
+
+  savedInDB() {
+    return !!this._id;
   }
 
 }

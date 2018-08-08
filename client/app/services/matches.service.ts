@@ -26,8 +26,8 @@ export class MatchesService {
   }
 
   save(match: Match) : Observable<any>{
-    const method = match.id() ? 'put' : 'post';
-    const url = match.id() ? `/match/${match.id()}` : '/match/';
+    const method = match.savedInDB() ? 'put' : 'post';
+    const url = match.savedInDB() ? `/match/${match.id()}` : '/match/';
     return this.requests[method](url, match.body());
   }
 

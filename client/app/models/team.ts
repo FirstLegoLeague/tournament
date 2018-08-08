@@ -53,4 +53,8 @@ export class Team implements ModalModel, Deserializable {
     return this;
   }
 
+  savedInDB() {
+    return !!this._id;
+  }
+
 }

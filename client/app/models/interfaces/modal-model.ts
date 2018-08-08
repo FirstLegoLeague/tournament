@@ -4,6 +4,7 @@ export type ModalModelField = { display: string, type: string, get: () => any, s
 
 export interface ModalModel {
   id(): number;
+  savedInDB(): boolean;
   fields(): ModalModelField[];
   body(): any;
   title(): string;

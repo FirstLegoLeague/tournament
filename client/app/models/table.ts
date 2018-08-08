@@ -3,6 +3,7 @@ import { Deserializable } from './interfaces/deserializable'
 
 export class Table implements ModalModel, Deserializable {
 
+  _id: string;
   tableId: number;
   tableName: string;
 
@@ -27,6 +28,10 @@ export class Table implements ModalModel, Deserializable {
   deserialize(input: any) {
     Object.assign(this, input);
     return this;
+  }
+
+  savedInDB() {
+    return !!this._id;
   }
 
 }
