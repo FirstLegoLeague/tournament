@@ -49,7 +49,7 @@ if (process.env.DEV) {
 app.use('/tournamentData', tournamentDataRouter)
 
 const teamLogic = require('./logic/teamLogic')
-// TODO: put TSR under /match
+
 app.use('/team', crudRouter({
   'collectionName': 'teams',
   'IdField': Team.IdField,
