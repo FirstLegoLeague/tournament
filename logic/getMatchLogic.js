@@ -57,6 +57,14 @@ function getNextMatches () {
   return null
 }
 
+function getMatchNumber () {
+  return match
+}
+
+function setMatchNumber (newMatch) {
+  match = newMatch
+}
+
 const getMatch = function (matchNumber) {
   return MongoClient.connect(MONGU_URI).then(connection => {
     const dbMatch = connection.db().collection('settings').findOne({}).then(tournamentSettings => {
@@ -83,5 +91,7 @@ const getMatch = function (matchNumber) {
 
 module.exports = {
   'getCurrentMatch': getCurrentMatch,
-  'getNextMatches': getNextMatches
+  'getNextMatches': getNextMatches,
+  'getMatch': getMatchNumber,
+  'setMatch': setMatchNumber
 }
