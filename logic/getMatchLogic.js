@@ -16,7 +16,7 @@ if (process.env.DEV) {
 
 let match = 0
 const UPCOMING_MATCHES_TO_GET = 2
-let canUpdateMatch = false
+let canUpdateMatch = true
 
 mhubClient.connect().then(() => {
   if (process.env.DEV) {
