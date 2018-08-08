@@ -16,8 +16,29 @@ if (process.env.DEV) {
 
 let match = 0
 const UPCOMING_MATCHES_TO_GET = 2
+let canUpdateMatch = false
 
-mhubClient.on('clock:start', msg => { match++; console.log(msg) })
+mhubClient.connect().then(() => {
+  if (process.env.DEV) {
+    mhubClient.subscribe('default')
+  } else {
+    mhubClient.subscribe('protected-client')
+  }
+})
+
+mhubClient.on('message', msg => {
+  switch (msg.topic) {
+    case 'clock:start':
+      if (canUpdateMatch) {
+        match++
+        canUpdateMatch = false
+      }
+      break
+    case 'clock:end':
+      canUpdateMatch = true
+      break
+  }
+})
 
 function getCurrentMatch () {
   return getMatch(match)
