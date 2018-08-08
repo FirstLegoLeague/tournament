@@ -78,11 +78,7 @@ const getMatch = function (matchNumber) {
         })
     })
 
-    if (dbMatch) {
-      return dbMatch
-    } else {
-      return null // happens if match does not exist in DB
-    }
+    return dbMatch
   }).catch(err => {
     MsLogger.error(err)
     return null
