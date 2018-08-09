@@ -47,6 +47,16 @@ function saveImageFromBase64 (name, data) {
   })
 }
 
+function saveImageToImagePath(imageTempPath, imageName){
+  return getAllImagesNames().then(images => {
+    const image = images.find(x => x === imageName)
+    if (image) {
+      throw new Error('Image with that name already exists')
+    }
+    return fs.rename(imageTempPath, path.resolve(IMAGES_DIR, imageName))
+  })
+}
+
 function deleteImage (name) {
   return fs.unlink(path.resolve(IMAGES_DIR, name))
 }
@@ -73,5 +83,6 @@ module.exports = {
   getAllImages,
   getImage,
   deleteImage,
-  saveImageFromBase64
+  saveImageFromBase64,
+  saveImageToImagePath
 }

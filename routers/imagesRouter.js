@@ -2,8 +2,9 @@
 const express = require('express')
 const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 const {Logger} = require('@first-lego-league/ms-logger')
+const formidable = require('formidable')
 
-const {getAllImages, getImage, saveImageFromBase64, deleteImage, initImagesFolder} = require('../logic/imagesLogic')
+const {getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder} = require('../logic/imagesLogic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 const logger = Logger()
@@ -32,12 +33,16 @@ router.get('/:imageName', (req, res) => {
 })
 
 router.post('/', adminAction, (req, res) => {
-  saveImageFromBase64(req.body.name, req.body.image).then(() => {
-    res.sendStatus(201)
-  }).catch(e => {
-    logger.error(`An error has occurred ${err}`)
-    res.status(500)
-    res.send(e.message)
+  let form = formidable.IncomingForm()
+  form.parse(req, (err, fields, files) => {
+    let tmpFilePath = files.filetoupload.path
+    let imageName = files.filetoupload.name
+
+    saveImageToImagePath(tmpFilePath, imageName).then(() => {
+      res.status(201).send()
+    }).catch(err => {
+      res.status(500).send(err.message)
+    })
   })
 })
 
