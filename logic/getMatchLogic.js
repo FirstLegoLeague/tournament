@@ -85,7 +85,6 @@ function setMatchNumber (newMatch) {
 module.exports = {
   'getCurrentMatch': getCurrentMatch,
   'getNextMatches': getNextMatches,
-  'getSpecificMatch': getMatch,
   'getMatch': getMatchNumber,
   'setMatch': setMatchNumber
 }
