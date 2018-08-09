@@ -9,10 +9,11 @@ const IMAGES_DIR = path.resolve(process.env.DATA_DIR, 'images')
 const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 
 function initImagesFolder () {
-  if (!fs.existsSync(IMAGES_DIR)) {
-    MsLogger.info(`Created images folder at: ${IMAGES_DIR}`)
-    fs.mkdirSync(IMAGES_DIR)
-  }
+  fs.exists(IMAGES_DIR).then(exist => {
+    if (!exist) {
+      fs.mkdir(IMAGES_DIR)
+    }
+  })
 }
 
 function getAllImagesNames () {
@@ -21,11 +22,7 @@ function getAllImagesNames () {
 
 function getAllImages () {
   return getAllImagesNames().then(names => {
-    let namesFilterd = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.')[1]))
-    let images = []
-    for (let image of namesFilterd) {
-      images.push(createReturnObject(image))
-    }
+    let images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop())).map(createReturnObject)
     return Promise.all(images)
   })
 }
@@ -55,14 +52,19 @@ function deleteImage (name) {
 }
 
 function createReturnObject (imageName) {
-  return new Promise((resolve) => {
-    base64(path.resolve(IMAGES_DIR, imageName)).then(data => {
-      let imageData = {
-        name: imageName,
-        image: data
-      }
-      resolve(imageData)
-    })
+  return new Promise((resolve, reject) => {
+    try {
+      base64(path.resolve(IMAGES_DIR, imageName)).then(data => {
+        let imageData = {
+          name: imageName,
+          image: data
+        }
+        resolve(imageData)
+      })
+    }
+    catch (e) {
+      reject(e)
+    }
   })
 }
 

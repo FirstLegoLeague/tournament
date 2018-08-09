@@ -22,8 +22,7 @@
     "fs-extra": "^7.0.0",
     "mhub": "^0.9.1",
     "moment": "^2.22.1",
-    "mongodb": "^3.1.0-beta4",
-    "promisify": "^0.0.3"
+    "mongodb": "^3.1.0-beta4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.8",

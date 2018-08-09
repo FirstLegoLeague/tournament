@@ -2,11 +2,14 @@
 const express = require('express')
 const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 
-const {getAllImages, getImage, saveImageFromBase64, deleteImage} = require('../logic/imagesLogic')
+const {getAllImages, getImage, saveImageFromBase64, deleteImage, initImagesFolder} = require('../logic/imagesLogic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const router = express.Router()
+
+initImagesFolder()
+
 
 router.get('/all', (req, res) => {
   getAllImages().then(images => {

@@ -34,7 +34,6 @@ const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
 const { imagesRouter } = require('./routers/imagesRouter')
 
 setDefaultSettings()
-initImagesFolder()
 
 app.use('/settings', getSettingsRouter())
 app.use('/image', imagesRouter)
