@@ -9,11 +9,7 @@ function getMatch (matchNumber) {
     const dbMatch = connection.db().collection('settings').findOne({}).then(tournamentSettings => {
       return connection.db().collection('matches').findOne({ 'stage': tournamentSettings.tournamentLevel, 'matchId': matchNumber })
         .then(resolvedMatch => {
-          return {
-            'match': resolvedMatch.matchId,
-            'startTime': resolvedMatch.startTime,
-            'endTime': resolvedMatch.endTime
-          }
+          return resolvedMatch
         })
     })
 
