@@ -2,7 +2,7 @@
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 const mhubConnection = require('../Utils/mhubConnection')
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -76,6 +76,7 @@ exports.getRouter = function (options) {
     if (!validationResult) {
       res.sendStatus(400)
     }
+
     MongoClient.connect(MONGU_URI).then(connection => {
       connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, req.body[options.IdField])).then(data => {
         if (data) {
@@ -83,7 +84,7 @@ exports.getRouter = function (options) {
           res.send('Object already exists')
           return
         }
-        connection.db.collection(options.collectionName).insertOne(req.body).then(a => {
+        connection.db().collection(options.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
             mhubConnection.publishUpdateMsg(options.mhubNamespace)
             res.sendStatus(201)
