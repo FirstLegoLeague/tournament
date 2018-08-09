@@ -27,7 +27,9 @@ function setStatus(secondsUntilMatch){
 }
 
 export class TournamentStatusService{
-  constructor(private requests: RequestService) { }
+  secondsUntilMatch = 0
+
+  constructor(private requests: RequestService) {}
 
   getCurrentMatch(): Observable<any>{
     return this.requests.get('/match/current')
@@ -38,15 +40,13 @@ export class TournamentStatusService{
   }
 
   secondsUntilNextMatch(){
-    let secondsUntilMatch
     this.getCurrentMatch().subscribe(data =>{
-      secondsUntilMatch = Math.floor((Date.now() - (new Date(data.startTime)).getTime())/1000)
+      this.secondsUntilMatch = Math.floor((Date.now() - (new Date(data.startTime)).getTime())/1000)
     })
-    return secondsUntilMatch
   }
 
   getTournamentStatus(){
-    return setStatus(this.secondsUntilNextMatch())
+    return setStatus(this.secondsUntilMatch)
   }
 
   setMatch(match){
