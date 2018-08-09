@@ -37,9 +37,9 @@ exports.getRouter = function () {
     res.send(getMatchLogic.getMatch().toString())
   })
 
-  router.get('/setMatchNumber/:matchNumber', (req, res) => {
-    if (parseInt(req.params.matchNumber)) {
-      getMatchLogic.setMatch(parseInt(req.params.matchNumber))
+  router.post('/current/set', adminAction, (req, res) => {
+    if (parseInt(req.body)) {
+      getMatchLogic.setMatch(parseInt(req.body))
       res.sendStatus(200)
     } else {
       res.sendStatus(415)
