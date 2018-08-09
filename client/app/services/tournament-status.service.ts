@@ -45,18 +45,6 @@ export class TournamentStatusService{
     return secondsUntilMatch
   }
 
-  timeUntilNextMatch(){
-    let secondsUntilMatch = this.secondsUntilNextMatch()
-    let retTime = ''
-      if(secondsUntilMatch <0){
-        secondsUntilMatch *=-1
-        retTime ='-'
-      }
-
-      retTime += `${Math.floor(secondsUntilMatch/(60*60))}:${Math.floor(secondsUntilMatch/60 % 60)}:${secondsUntilMatch % 60}`
-      return retTime
-  }
-
   getTournamentStatus(){
     return setStatus(this.secondsUntilNextMatch())
   }
