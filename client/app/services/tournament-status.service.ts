@@ -43,6 +43,7 @@ export class TournamentStatusService{
     this.getCurrentMatch().subscribe(data =>{
       this.secondsUntilMatch = Math.floor((Date.now() - (new Date(data.startTime)).getTime())/1000)
     })
+    return this.secondsUntilMatch
   }
 
   getTournamentStatus(){
