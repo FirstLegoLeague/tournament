@@ -16,7 +16,17 @@ export class TournamentStatusService{
   }
 
   timeUntilNextMatch(){
-    return Date.now()
+    this.getCurrentMatch().subscribe(data =>{
+      let secondsUntilMatch = Math.floor((Date.now() - (new Date(data.startTime)).getTime())/1000)
+      let retTime = ''
+      if(secondsUntilMatch <0){
+        secondsUntilMatch *=-1
+        retTime ='-'
+      }
+
+      retTime += `${Math.floor(secondsUntilMatch/(60*60))}:${Math.floor(secondsUntilMatch/60)}:${secondsUntilMatch}`
+      return retTime
+    })
   }
 
   setMatch(match){
