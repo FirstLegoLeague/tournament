@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TablesService } from '../../services/tables.service';
+import { Notifications } from '../../services/notifications.service';
 import { Table } from '../../models/table';
 
 @Component({
@@ -12,7 +13,7 @@ export class Tables implements OnInit {
   public loading: boolean;
   public newTable: Table;
 
-  constructor(private tablesService: TablesService) {
+  constructor(private tablesService: TablesService, private notifications: Notifications) {
     this.newTable = new Table()
   }
 
@@ -42,9 +43,13 @@ export class Tables implements OnInit {
   save() {
     this.loading = true;
     this.tablesService.save().subscribe(() => {
+      this.notifications.success('Changes saved');
       this.tablesService.reload();
-      this.loading = false;
       this.close();
+    }, error => {
+      this.notifications.error('Change failed');
+    }, () => {
+      this.loading = false;
     })
   }
 

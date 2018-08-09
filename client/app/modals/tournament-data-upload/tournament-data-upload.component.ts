@@ -3,6 +3,7 @@ import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 
 import { ParserService } from '../../services/parser.service';
 import { TournamentDataService } from '../../services/tournament-data.service';
+import { Notifications } from '../../services/notifications.service';
 
 @Component({
   selector: 'tournament-data-upload',
@@ -17,8 +18,7 @@ export class TournamentDataUpload {
   public loading: Boolean;
   public data: any;
 
-  constructor(private parser: ParserService, private tournamentDataService: TournamentDataService) {
-  }
+  constructor(private parser: ParserService, private tournamentDataService: TournamentDataService, private notifications: Notifications) { }
 
   public dropped(event: UploadEvent) {
     this.file = event.files[0]
@@ -29,8 +29,11 @@ export class TournamentDataUpload {
         const fileReader = new FileReader();
         fileReader.onload = (e) => {
           this.content = fileReader.result
-          this.parser.parseTournamentData(this.content).subscribe((data: any) =>{
+          this.parser.parseTournamentData(this.content).subscribe((data: any) => {
             this.data = data;
+          }, error => {
+            this.notifications.error('Tournament data parsing failed');
+          }, () => {
             this.loading = false;
           });
         }
@@ -47,8 +50,13 @@ export class TournamentDataUpload {
 
   public upload(event) {
     this.loading = true
-    this.tournamentDataService.upload(this.content).subscribe(() =>{
+    this.tournamentDataService.upload(this.content).subscribe(() => {
+      this.notifications.success('Tournament data uploaded');
       this.reload();
+    }, error => {
+      this.notifications.error('Tournament data upload failed');
+    }, () => {
+      this.loading = false;
     });
   }
   
