@@ -11,7 +11,7 @@ const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 function initImagesFolder () {
   fs.exists(IMAGES_DIR).then(exist => {
     if (!exist) {
-      fs.mkdir(IMAGES_DIR)
+      return fs.mkdir(IMAGES_DIR)
     }
   })
 }

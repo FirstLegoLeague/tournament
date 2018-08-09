@@ -10,7 +10,9 @@ const adminAction = authroizationMiddlware(['admin', 'development'])
 const logger = Logger()
 const router = express.Router()
 
-initImagesFolder()
+initImagesFolder().catch(err=>{
+  logger.error(`Could not init image folder: ${err}`)
+})
 
 router.get('/all', (req, res) => {
   getAllImages().then(images => {
