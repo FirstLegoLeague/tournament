@@ -10,7 +10,6 @@ const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
 const crudRouter = require('./routers/crudRouter').getRouter
-const { initImagesFolder } = require('./logic/imagesLogic')
 
 const Team = require('./models/Team')
 const Match = require('./models/Match')
