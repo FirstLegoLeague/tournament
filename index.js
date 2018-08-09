@@ -40,9 +40,9 @@ if (process.env.DEV) {
   app.put(authenticationDevMiddleware())
   app.delete(authenticationDevMiddleware())
 } else {
-  app.post(authenticationMiddleware)
-  app.put(authenticationMiddleware)
-  app.delete(authenticationMiddleware)
+  app.post(authenticationMiddleware())
+  app.put(authenticationMiddleware())
+  app.delete(authenticationMiddleware())
 }
 
 app.use('/tournamentData', tournamentDataRouter)

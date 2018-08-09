@@ -11,10 +11,10 @@
     "build": "ng build"
   },
   "dependencies": {
-    "@first-lego-league/ms-auth": "^1.1.1",
-    "@first-lego-league/ms-correlation": "^0.0.3",
-    "@first-lego-league/ms-logger": "^1.0.1",
-    "@first-lego-league/user-interface": "^1.2.8",
+    "@first-lego-league/ms-auth": ">=1.1.1",
+    "@first-lego-league/ms-correlation": ">=0.0.3",
+    "@first-lego-league/ms-logger": ">=1.0.1",
+    "@first-lego-league/user-interface": ">=1.2.8",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
