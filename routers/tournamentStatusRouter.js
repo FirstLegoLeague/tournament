@@ -4,6 +4,10 @@ const express = require('express')
 const mhubConnection = require('../Utils/mhubConnection')
 const getMatchLogic = require('../logic/getMatchLogic')
 
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+
+const adminAction = authroizationMiddlware(['admin', 'development'])
+
 exports.getRouter = function () {
   const router = express.Router()
 
@@ -29,5 +33,25 @@ exports.getRouter = function () {
     })
   })
 
+  router.get('/matchNumber', (req, res) => {
+    res.send(getMatchLogic.getMatch().toString())
+  })
+
+  router.get('/match/:matchNumber', (req, res) => {
+    if (parseInt(req.params.matchNumber)) {
+      res.send(getMatchLogic.getSpecificMatch(parseInt(req.params.matchNumber)))
+    } else {
+      res.sendStatus(415)
+    }
+  })
+
+  router.get('/setMatchNumber/:matchNumber', (req, res) => {
+    if (parseInt(req.params.matchNumber)) {
+      getMatchLogic.setMatch(parseInt(req.params.matchNumber))
+      res.sendStatus(200)
+    } else {
+      res.sendStatus(415)
+    }
+  })
   return router
 }

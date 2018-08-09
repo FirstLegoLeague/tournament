@@ -1,6 +1,8 @@
 import {RequestService} from './request.service';
 import { Observable } from "../../../node_modules/rxjs";
-import {getMatch, setMatch} from "../../../logic/getmatchLogic"
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+
+const adminAction = authroizationMiddlware(['admin', 'development'])
 
 export class TournamentStatusService{
   constructor(private requests: RequestService) { }
@@ -14,14 +16,14 @@ export class TournamentStatusService{
   }
 
   timeUntilNextMatch(){
-    
+    return Date.now()
   }
 
   setMatch(match){
-    setMatch(match)
+    this.requests.get(`/match/setMatchNumber/${match}`)
   }
 
   getMatch(){
-    return getMatch()
+    return this.requests.get('/match/matchNumber')
   }
 }
