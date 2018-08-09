@@ -36,9 +36,9 @@ setDefaultSettings()
 app.use('/settings', getSettingsRouter())
 
 if (process.env.DEV) {
-  app.post(authenticationDevMiddleware())
-  app.put(authenticationDevMiddleware())
-  app.delete(authenticationDevMiddleware())
+  app.post(authenticationDevMiddleware)
+  app.put(authenticationDevMiddleware)
+  app.delete(authenticationDevMiddleware)
 } else {
   app.post(authenticationMiddleware)
   app.put(authenticationMiddleware)

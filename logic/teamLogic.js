@@ -14,15 +14,8 @@ module.exports.deleteValidation = function (params) {
 
 function deleteMatchesForTeam (teamNumber) {
   MongoClient.connect(MONGU_URI).then(connection => {
-    connection.db().collection('matches').updateOne({ 'matchTeams.teamNumber': teamNumber },
-      { $set: { 'matchTeams.$.teamNumber': 'null' } },
-      {
-        'arrayFilters':
-          [{
-            'arrayFilter':
-              { 'elem.teamNumber': { '$eq': teamNumber } }
-          }]
-      }
+    connection.db().collection('matches').updateMany({ 'matchTeams.teamNumber': teamNumber },
+      { $set: { 'matchTeams.$.teamNumber': 'null' } }
     )
       .then(dbResponse => {
         if (dbResponse.modifiedCount > 0) {
