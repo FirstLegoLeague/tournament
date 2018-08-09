@@ -5,7 +5,7 @@ const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const STATUS = {
-  GOOD: {'text': 'Running on time!', 'color': '#ADFF2F'},
+  GOOD: {'text': 'Ahead of time!', 'color': '#ADFF2F'},
   MEDIOCRE: {'text': 'Right on time!', 'color':'#FFFF00'},
   BAD: {'text':'Running late!', 'color':'#FF4500'}
 }
