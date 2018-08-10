@@ -14,7 +14,7 @@ function deserializeMatch (rawMatch, stage) {
   newMatch.stage = stage
   newMatch.matchTeams = []
 
-  const matchTeamsRaw = rawMatch.slice(2, rawMatch.length)
+  const matchTeamsRaw = rawMatch.slice(3, rawMatch.length)
   for (let i = 0; i < matchTeamsRaw.length; i++) {
     newMatch.matchTeams.push(new MatchTeam(parseFloatOrUndefined(matchTeamsRaw[i]), i))
   }

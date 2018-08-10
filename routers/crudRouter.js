@@ -6,7 +6,7 @@ const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 const mhubConnection = require('../Utils/mhubConnection')
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
-const MONGU_URI = process.env.MONGO_URI
+const MONGO_URI = process.env.MONGO_URI
 
 exports.getRouter = function (options) {
   const router = express.Router()
@@ -18,7 +18,7 @@ exports.getRouter = function (options) {
   }
 
   router.get('/all', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
+    MongoClient.connect(MONGO_URI).then(connection => {
       connection.db().collection(options.collectionName).find().toArray().then(data => {
         res.send(data)
       })
@@ -29,7 +29,7 @@ exports.getRouter = function (options) {
   })
 
   router.get('/:id', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
+    MongoClient.connect(MONGO_URI).then(connection => {
       connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, parseInt(req.params.id))).then(data => {
         if (!data) {
           res.sendStatus(404)
@@ -46,7 +46,7 @@ exports.getRouter = function (options) {
 
   router.put('/:id', adminAction, (req, res) => {
     let validationResult = true
-    if (options.validationMethods.put) {
+    if (options.validationMethods && options.validationMethods.put) {
       validationResult = options.validationMethods.put(req.params)
     }
 
@@ -54,8 +54,8 @@ exports.getRouter = function (options) {
       res.sendStatus(400)
     }
 
-    MongoClient.connect(MONGU_URI).then(connection => {
-      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), req.body).then(dbResponse => {
+    MongoClient.connect(MONGO_URI).then(connection => {
+      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), { $set: req.body }).then(dbResponse => {
         if (dbResponse.ok === 1) {
           mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(204)
@@ -69,7 +69,7 @@ exports.getRouter = function (options) {
 
   router.post('/', adminAction, (req, res) => {
     let validationResult = true
-    if (options.validationMethods.post) {
+    if (options.validationMethods && options.validationMethods.post) {
       validationResult = options.validationMethods.post(req.params)
     }
 
@@ -77,7 +77,7 @@ exports.getRouter = function (options) {
       res.sendStatus(400)
     }
 
-    MongoClient.connect(MONGU_URI).then(connection => {
+    MongoClient.connect(MONGO_URI).then(connection => {
       connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, req.body[options.IdField])).then(data => {
         if (data) {
           res.status(400)
@@ -99,14 +99,14 @@ exports.getRouter = function (options) {
 
   router.delete('/:id', adminAction, (req, res) => {
     let validationResult = true
-    if (options.validationMethods.delete) {
+    if (options.validationMethods && options.validationMethods.delete) {
       validationResult = options.validationMethods.delete(req.params)
     }
 
     if (!validationResult) {
       res.sendStatus(400)
     }
-    MongoClient.connect(MONGU_URI).then(connection => {
+    MongoClient.connect(MONGO_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, parseInt(req.params.id))).then(dbResponse => {
         if (dbResponse.ok === 1) {
           mhubConnection.publishUpdateMsg(options.mhubNamespace)

@@ -18,7 +18,7 @@ const JUDJING_INFO_HEADER_LINE_AMOUNT = 6
 const PRACTICE_MATCH_SCHEDULE_ID = 4
 const PRACTICE_MATCH_HEADER_LINE_AMOUNT = 6
 
-const TABLE_NAMES_START = 3
+const TABLE_NAMES_START = 1
 
 function parse (data, delimiter) {
   const dataLines = data.split('\n')
