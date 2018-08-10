@@ -26,13 +26,12 @@ app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const {getSettingsRouter, setDefaultSettings} = require('./routers/generalSettingsRouter')
+const {getSettingsRouter} = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
 const { imagesRouter } = require('./routers/imagesRouter')
 
-setDefaultSettings()
 
 app.use('/settings', getSettingsRouter())
 app.use('/image', imagesRouter)
