@@ -1,16 +1,16 @@
 'use strict'
 const express = require('express')
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
-const {Logger} = require('@first-lego-league/ms-logger')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const { Logger } = require('@first-lego-league/ms-logger')
 const formidable = require('formidable')
 
-const {getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder} = require('../logic/imagesLogic')
+const { getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder } = require('../logic/imagesLogic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 const logger = Logger()
 const router = express.Router()
 
-initImagesFolder().catch(err=>{
+initImagesFolder().catch(err => {
   logger.error(`Could not init image folder: ${err}`)
 })
 
@@ -35,10 +35,10 @@ router.get('/:imageName', (req, res) => {
 })
 
 router.post('/', adminAction, (req, res) => {
-  let form = formidable.IncomingForm()
+  const form = formidable.IncomingForm()
   form.parse(req, (err, fields, files) => {
-    let tmpFilePath = files.filetoupload.path
-    let imageName = files.filetoupload.name
+    const tmpFilePath = files.filetoupload.path
+    const imageName = files.filetoupload.name
 
     saveImageToImagePath(tmpFilePath, imageName).then(() => {
       res.status(201).send()
@@ -58,4 +58,4 @@ router.delete('/:imageName', adminAction, (req, res) => {
   })
 })
 
-module.exports = {imagesRouter: router}
+module.exports = { imagesRouter: router }

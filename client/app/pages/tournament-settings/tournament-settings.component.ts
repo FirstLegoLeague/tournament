@@ -9,12 +9,14 @@ import {TournamentSettingsService} from "../../services/tournament-settings.serv
 export class TournamentSettingsComponent implements OnInit {
 
    public settings: object;
+   public loading: boolean = true;
 
   constructor(private tournamentSettingsService: TournamentSettingsService) { }
 
   ngOnInit() {
       this.tournamentSettingsService.getAllSettings().subscribe((settings: object)=>{
           this.settings = settings;
+          this.loading = false;
       });
   }
 

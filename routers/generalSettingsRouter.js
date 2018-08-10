@@ -2,9 +2,9 @@
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const {getSetting, getAllSettings, updateSetting, setDefaultSettings} = require('../logic/tournamentSettingsLogic')
+const { getSetting, getAllSettings, updateSetting, setDefaultSettings } = require('../logic/tournamentSettingsLogic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -14,7 +14,7 @@ exports.getSettingsRouter = function () {
   const router = express.Router()
 
   router.get('/all', (req, res) => {
-    getAllSettings().then((settings) => {
+    getAllSettings().then(settings => {
       res.json(settings)
     }).catch(err => {
       MsLogger.error(err)

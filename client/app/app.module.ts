@@ -37,7 +37,7 @@ const appRoutes = [
     TournamentDataUpload,
     ModelEdit,
     ModelDelete,
-    Tables
+    Tables,
     TournamentSettingsComponent,
     SettingEditComponent
   ],
