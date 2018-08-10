@@ -20,13 +20,7 @@ mhubClient.on('error', msg => {
 function publishUpdateMsg (nameSpace) {
   let connectedNode = loginToMhub(MHUB_NODES.PROTECTED)
 
-
-  mhubClient.connect().then(() => {
-    mhubClient.publish(connectedNode, `${nameSpace}:reload`, '', {
-      'client-id': MHUB_CLIENT_ID,
-      'correlation-id': getCorrelationId()
-    })
-  })
+  publishMsg(connectedNode, `${nameSpace}:reload`)
 }
 
 function publishMsg (node, topic, data = '') {

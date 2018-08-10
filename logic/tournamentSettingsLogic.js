@@ -7,7 +7,7 @@ const SETTING_COLLECTION_NAME = 'settings'
 
 function setDefaultSettings () {
   const defaultSettings = {
-    'tournamentLevel': 'practice',
+    'tournamentStage': 'practice',
     'tournamentTitle': 'World Festival 2018'
   }
   MongoClient.connect(MONGU_URI).then(connection => {
@@ -41,11 +41,7 @@ function updateSetting (settingName, value) {
       .findOneAndUpdate({}, {$set: setDocument})
       .then(dbResponse => {
         if (dbResponse.ok == 1) {
-
-          if(settingName == 'tournamentLevel'){
-            publishMsg(MHUB_NODES.PROTECTED, 'stage:updated', {value})
-          }
-
+          publishMsg(MHUB_NODES.PROTECTED, `${settingName}:updated`, {value})
           return true
         }
       })
