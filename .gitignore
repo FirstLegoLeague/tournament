@@ -1,6 +1,6 @@
 .idea/
 dist/
-
+data/
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
