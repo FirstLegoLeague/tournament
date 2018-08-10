@@ -51,7 +51,7 @@ export class TournamentStatusService{
   }
 
   setMatch(match){
-    this.requests.get(`/match/setMatchNumber/${match}`)
+    this.requests.post(`/match/current/set`,match,'')
   }
 
   getMatch(){
