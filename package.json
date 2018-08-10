@@ -7,14 +7,14 @@
   "license": "MIT",
   "scripts": {
     "prepack": "ng build --prod",
-    "start": "ng build && node index.js",
+    "start": "set DEV=true && start mhub-server && start mongod && set DATA_DIR=C:/workspace/flltools/tournament/data&& set MHUB_URI=ws://localhost:13900&& set MONGO_URI=mongodb://127.0.0.1:27017/local&& node index.js",
     "build": "ng build"
   },
   "dependencies": {
     "@first-lego-league/ms-auth": "^1.2.4",
     "@first-lego-league/ms-correlation": "^0.0.3",
     "@first-lego-league/ms-logger": "^1.0.1",
-    "@first-lego-league/user-interface": "^1.2.9",
+    "@first-lego-league/user-interface": "^1.2.10",
     "base64-img-promise": "^1.0.5",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
