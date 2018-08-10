@@ -15,12 +15,16 @@ export class RequestService {
     return this.http.get(endpoint);
   }
 
-  post(endpoint: string, data: any, headers: any) {
+  post(endpoint: string, data: any, headers = {}) {
     return this.http.post(endpoint, data, headers);
   }
 
-  put(endpoint: string, data: any, headers: any = {}){
-      return this.http.put(endpoint,data, headers);
+  put(endpoint: string, data: any, headers = {}) {
+    return this.http.put(endpoint, data, headers);
+  }
+
+  delete(endpoint: string, headers = {}) {
+    return this.http.delete(endpoint, headers);
   }
 
 }

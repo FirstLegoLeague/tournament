@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import { FileDropModule } from 'ngx-file-drop';
@@ -12,9 +13,11 @@ import { MatchesComponent } from './pages/matches/matches.component';
 
 import { TeamsUpload } from './modals/teams-upload/teams-upload.component';
 import { TournamentDataUpload } from './modals/tournament-data-upload/tournament-data-upload.component';
+import { ModelEdit } from './modals/model-edit/model-edit.component';
+import { ModelDelete } from './modals/model-delete/model-delete.component';
+import { Tables } from './modals/tables/tables.component';
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
 import { SettingEditComponent } from './pages/tournament-settings/setting-edit/setting-edit.component';
-import {FormsModule} from "@angular/forms";
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
@@ -32,15 +35,18 @@ const appRoutes = [
     MatchesComponent,
     TeamsUpload,
     TournamentDataUpload,
+    ModelEdit,
+    ModelDelete,
+    Tables
     TournamentSettingsComponent,
     SettingEditComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    FileDropModule,
-    FormsModule
+    FileDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

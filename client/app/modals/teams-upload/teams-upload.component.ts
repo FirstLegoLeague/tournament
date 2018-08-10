@@ -3,6 +3,7 @@ import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
 
 import { ParserService } from '../../services/parser.service';
 import { TeamsService } from '../../services/teams.service';
+import { Notifications } from '../../services/notifications.service';
 import { Team } from '../../models/team';
 
 @Component({
@@ -18,7 +19,7 @@ export class TeamsUpload {
   public loading: Boolean;
   public teams: Array<Team>;
 
-  constructor(private parser: ParserService, private teamsService: TeamsService) {
+  constructor(private parser: ParserService, private teamsService: TeamsService, private notifications: Notifications) {
   }
 
   public dropped(event: UploadEvent) {
@@ -32,6 +33,9 @@ export class TeamsUpload {
           this.content = fileReader.result
           this.parser.parseTeams(this.content).subscribe((data: any) =>{
             this.teams = data;
+          }, error => {
+            this.notifications.error('Teams parsing failed');
+          }, () => {
             this.loading = false;
           });
         }
@@ -45,24 +49,27 @@ export class TeamsUpload {
   public upload(event) {
     this.loading = true
     this.teamsService.uploadBatch(this.content).subscribe(() => {
-      this.reload();
+      this.notifications.success('Teams uploaded');
+      this.close();
+      this.loading = false;
+      this.teamsService.reload();
+    }, error => {
+      this.notifications.error('Teams upload failed');
+      this.close();
+      this.loading = false;
     });
   }
   
   public fileOver(event) {
-    this.fileHovering = true
+    this.fileHovering = true;
   }
  
   public fileLeave(event) {
-    this.fileHovering = false
+    this.fileHovering = false;
   }
 
   public close() {
     document.getElementById('teams-close-button').click();
-  }
-
-  public reload(){
-    document.location.href = document.location.href
   }
 
 }
