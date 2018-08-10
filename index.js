@@ -21,29 +21,29 @@ logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '50mb' }))
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const { getSettingsRouter, setDefaultSettings } = require('./routers/generalSettingsRouter')
+const { getSettingsRouter } = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
 const tournamentStatusRouter = require('./routers/tournamentStatusRouter')
-
-setDefaultSettings()
+const { imagesRouter } = require('./routers/imagesRouter')
 
 app.use('/settings', getSettingsRouter())
+app.use('/image', imagesRouter)
 
 if (process.env.DEV) {
   app.post(authenticationDevMiddleware())
   app.put(authenticationDevMiddleware())
   app.delete(authenticationDevMiddleware())
 } else {
-  app.post(authenticationMiddleware)
-  app.put(authenticationMiddleware)
-  app.delete(authenticationMiddleware)
+  app.post(authenticationMiddleware())
+  app.put(authenticationMiddleware())
+  app.delete(authenticationMiddleware())
 }
 
 app.use('/tournamentData', tournamentDataRouter)

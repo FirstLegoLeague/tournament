@@ -12,22 +12,42 @@ const MHUB_NODES = {
 const MHUB_CLIENT_ID = 'cl-schedule'
 
 const mhubClient = new MClient(process.env.MHUB_URI)
-mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
 
 mhubClient.on('error', msg => {
   MsLogger.error('Unable to connect to mhub, other modules won\'t be notified changes \n ' + msg)
 })
 
 function publishUpdateMsg (nameSpace, data = '') {
+  const connectedNode = loginToMhub(MHUB_NODES.PROTECTED)
+
+  publishMsg(connectedNode, `${nameSpace}:reload`, data)
+}
+
+function publishMsg (node, topic, data = '') {
+  const connectedNode = loginToMhub(node)
+
   mhubClient.connect().then(() => {
-    mhubClient.publish(MHUB_NODES.PROTECTED, `${nameSpace}:reload`, data, {
+    mhubClient.publish(connectedNode, topic, data, {
       'client-id': MHUB_CLIENT_ID,
       'correlation-id': getCorrelationId()
     })
   })
 }
 
+function loginToMhub (node) {
+  if (process.env.DEV) {
+    mhubClient.login('default', '')
+    return 'default'
+  }
+
+  if (node == MHUB_NODES.PROTECTED) {
+    mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
+    return MHUB_NODES.PROTECTED
+  }
+}
+
 module.exports = {
-  publishUpdateMsg: publishUpdateMsg,
+  publishUpdateMsg,
+  publishMsg,
   MHUB_NODES
 }
