@@ -28,7 +28,7 @@ export class TeamsService {
   save(team: Team) : Observable<any>{
     const method = team.savedInDB() ? 'put' : 'post';
     const url = team.savedInDB() ? `/team/${team.id()}` : '/team/';
-    return this.requests[method](url, team.body());
+    return this.requests[method](url, team.body(), { responseType: 'text' });
   }
 
   reload() {

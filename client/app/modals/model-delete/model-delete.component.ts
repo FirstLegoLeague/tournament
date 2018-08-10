@@ -24,12 +24,13 @@ export class ModelDelete {
     const service: ModalModelService = this.modelModalsService.service(model);
     service.delete(model.id()).subscribe(() => {
       this.notifications.success(`${model.title()} deleted successfully`);
-      this.reload();
+      this.loading = false;
       this.close();
+      this.reload();
     }, error => {
       this.notifications.error('Deletion failed');
-    }, () => {
       this.loading = false;
+      this.close();
     });
   }
 

@@ -36,8 +36,12 @@ export class TablesService {
     const tablesToUpdate = this.editingTables.filter(editingTable => 
       editingTable.tableId && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
 
+    // Add numbers to new tables
+    let lastTableId = Math.max.apply(null, this.tables.map(table => table.tableId))
+    tablesToCreate.forEach((table, index) => { table.tableId = (lastTableId + 1 + index) })
+
     const tablesToDeleteObservables = tablesToDelete.map(table => this.requests.delete(`/table/${table.id()}`, { responseType: 'text' }))
-    const tablesToCreateObservables = tablesToCreate.map(table => this.requests.post('/table/', table.body()))
+    const tablesToCreateObservables = tablesToCreate.map(table => this.requests.post('/table/', table.body(), { responseType: 'text' }))
     const tablesToUpdateObservables = tablesToUpdate.map(table => this.requests.put(`/table/${table.id()}`, table.body()))
 
     return forkJoin(tablesToDeleteObservables.concat(tablesToCreateObservables).concat(tablesToUpdateObservables))

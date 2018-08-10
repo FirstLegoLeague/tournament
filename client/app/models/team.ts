@@ -7,11 +7,11 @@ export class Team implements ModalModel, Deserializable {
   name: string;
   number: number;
   affiliation: string;
-  cityState: number;
+  cityState: string;
   coach1: string;
   coach2: string;
   country: string;
-  judginGroup: number;
+  judginGroup: string;
   pitLocation: string;
   pitNumber: number;
   translationNeeded: boolean;
@@ -39,7 +39,7 @@ export class Team implements ModalModel, Deserializable {
   body() {
     return {
       name: this.name,
-      number: this.number,
+      number: Number(this.number),
       affiliation: this.affiliation,
       cityState: this.cityState,
       coach1: this.coach1,

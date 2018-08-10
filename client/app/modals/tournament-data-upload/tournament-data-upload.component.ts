@@ -52,10 +52,12 @@ export class TournamentDataUpload {
     this.loading = true
     this.tournamentDataService.upload(this.content).subscribe(() => {
       this.notifications.success('Tournament data uploaded');
-      this.reload();
+      this.close();
+      this.loading = false;
+      this.tournamentDataService.reload();
     }, error => {
       this.notifications.error('Tournament data upload failed');
-    }, () => {
+      this.close();
       this.loading = false;
     });
   }
@@ -68,8 +70,8 @@ export class TournamentDataUpload {
     this.fileHovering = false
   }
 
-  public reload(){
-    document.location.href = document.location.href
+  public close() {
+    document.getElementById('teams-close-button').click();
   }
 
 }

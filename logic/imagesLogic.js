@@ -9,7 +9,7 @@ const IMAGES_DIR = path.resolve(process.env.DATA_DIR, 'images')
 const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 
 function initImagesFolder () {
-  fs.exists(IMAGES_DIR).then(exist => {
+  return fs.exists(IMAGES_DIR).then(exist => {
     if (!exist) {
       return fs.mkdir(IMAGES_DIR)
     }

@@ -46,9 +46,10 @@ export class Tables implements OnInit {
       this.notifications.success('Changes saved');
       this.tablesService.reload();
       this.close();
+      this.loading = false;
     }, error => {
       this.notifications.error('Change failed');
-    }, () => {
+      this.close();
       this.loading = false;
     })
   }

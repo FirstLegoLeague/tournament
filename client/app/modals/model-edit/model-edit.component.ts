@@ -27,9 +27,10 @@ export class ModelEdit {
       this.notifications.success(model.savedInDB() ? 'Changes saved' : `${model.title()} saved`);
       this.reload();
       this.close();
+      this.loading = false;
     }, error => {
       this.notifications.error(model.savedInDB() ? 'Changes failed' : `${model.title()} creation failed`);
-    }, () => {
+      this.close();
       this.loading = false;
     });
   }

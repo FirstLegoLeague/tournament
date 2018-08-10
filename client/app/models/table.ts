@@ -22,6 +22,7 @@ export class Table implements ModalModel, Deserializable {
   body() {
     return {
       tableName: this.tableName,
+      tableId: Number(this.tableId)
     };
   }
 

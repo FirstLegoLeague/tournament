@@ -50,28 +50,26 @@ export class TeamsUpload {
     this.loading = true
     this.teamsService.uploadBatch(this.content).subscribe(() => {
       this.notifications.success('Teams uploaded');
-      this.reload();
+      this.close();
+      this.loading = false;
+      this.teamsService.reload();
     }, error => {
       this.notifications.error('Teams upload failed');
-    }, () => {
+      this.close();
       this.loading = false;
     });
   }
   
   public fileOver(event) {
-    this.fileHovering = true
+    this.fileHovering = true;
   }
  
   public fileLeave(event) {
-    this.fileHovering = false
+    this.fileHovering = false;
   }
 
   public close() {
     document.getElementById('teams-close-button').click();
-  }
-
-  public reload(){
-    document.location.href = document.location.href
   }
 
 }
