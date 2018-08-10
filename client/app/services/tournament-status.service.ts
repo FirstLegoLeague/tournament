@@ -1,8 +1,5 @@
 import {RequestService} from './request.service';
 import { Observable } from "../../../node_modules/rxjs";
-const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
-
-const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const STATUS = {
   GOOD: {'text': 'Ahead of time!', 'color': '#ADFF2F'},

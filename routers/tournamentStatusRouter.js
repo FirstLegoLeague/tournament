@@ -34,7 +34,7 @@ exports.getRouter = function () {
   })
 
   router.get('/matchNumber', (req, res) => {
-    res.send(getMatchLogic.getMatch().toString())
+    res.json(getMatchLogic.getMatch())
   })
 
   router.post('/current/set', adminAction, (req, res) => {

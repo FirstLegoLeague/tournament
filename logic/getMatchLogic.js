@@ -40,12 +40,7 @@ mhubClient.on('message', msg => {
 function getCurrentMatch () {
   return getMatch(match).then(data => {
     if (data) {
-      return {
-        'match': data.matchId,
-        'startTime': data.startTime,
-        'endTime': data.endTime,
-        'teams': data.matchTeams
-      }
+      return data
     }
     return null
   })
@@ -57,12 +52,7 @@ function getNextMatches () {
   for (let i = 1; i <= UPCOMING_MATCHES_TO_GET; i++) {
     retMatches.push(getMatch(match + i).then(data => {
       if (data) {
-        return {
-          'match': data.matchId,
-          'startTime': data.startTime,
-          'endTime': data.endTime,
-          'teams': data.matchTeams
-        }
+        return data
       }
       return null
     }))
