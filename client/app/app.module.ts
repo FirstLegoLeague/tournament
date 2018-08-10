@@ -12,10 +12,14 @@ import { MatchesComponent } from './pages/matches/matches.component';
 
 import { TeamsUpload } from './modals/teams-upload/teams-upload.component';
 import { TournamentDataUpload } from './modals/tournament-data-upload/tournament-data-upload.component';
+import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
+import { SettingEditComponent } from './pages/tournament-settings/setting-edit/setting-edit.component';
+import {FormsModule} from "@angular/forms";
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
-  {path: 'matches', component: MatchesComponent}
+  {path: 'matches', component: MatchesComponent},
+  {path: 'settings', component: TournamentSettingsComponent}
 ]
 
 
@@ -27,13 +31,16 @@ const appRoutes = [
     TeamsComponent,
     MatchesComponent,
     TeamsUpload,
-    TournamentDataUpload
+    TournamentDataUpload,
+    TournamentSettingsComponent,
+    SettingEditComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    FileDropModule
+    FileDropModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

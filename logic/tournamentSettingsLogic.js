@@ -19,18 +19,27 @@ function setDefaultSettings () {
   })
 }
 
-function getSetting (settingName) {
+function getAllSettings () {
   return MongoClient.connect(MONGU_URI).then(connection => {
     return connection.db().collection(SETTING_COLLECTION_NAME)
       .findOne({})
       .then(data => {
-        if (!data) {
-          return data
-        }
-
-        return data[settingName]
+        let settings = data
+        delete settings._id
+        return settings
       })
   })
+}
+
+function getSetting (settingName) {
+  return getAllSettings()
+    .then(data => {
+      if (!data) {
+        return data
+      }
+
+      return data[settingName]
+    })
 }
 
 function updateSetting (settingName, value) {
@@ -50,6 +59,7 @@ function updateSetting (settingName, value) {
 
 module.exports = {
   'getSetting': getSetting,
+  'getAllSettings': getAllSettings,
   'updateSetting': updateSetting,
   'setDefaultSettings': setDefaultSettings
 }

@@ -19,4 +19,8 @@ export class RequestService {
     return this.http.post(endpoint, data, headers);
   }
 
+  put(endpoint: string, data: any, headers: any = {}){
+      return this.http.put(endpoint,data, headers);
+  }
+
 }
