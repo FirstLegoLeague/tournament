@@ -190,17 +190,18 @@
     tslib "^1.9.0"
 
 "@first-lego-league/ms-auth@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-auth/-/ms-auth-1.2.4.tgz#b5fdf3070f83320f5ef1a63a69e7d84cd09e6c4d"
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-auth/-/ms-auth-1.2.5.tgz#8f5aab663a811df38301181f3546e9b45b56afa4"
   dependencies:
     cookie-parser "^1.4.3"
     express "^4.16.3"
     jsonwebtoken "^8.2.0"
 
-"@first-lego-league/ms-correlation@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-correlation/-/ms-correlation-0.0.3.tgz#a8b674fd7b401a4dc86cf8605030255c152ab5eb"
+"@first-lego-league/ms-correlation@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-correlation/-/ms-correlation-0.0.4.tgz#ee52ab48cb06bc01a38995b2033d3651f44529f3"
   dependencies:
+    cookie "^0.3.1"
     jsonwebtoken "^8.2.1"
     randomatic "^3.0.0"
 
@@ -1542,7 +1543,7 @@ cookie-signature@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
 
-cookie@0.3.1:
+cookie@0.3.1, cookie@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
 
