@@ -50,7 +50,7 @@ export class TournamentStatusComponent implements OnInit {
 
   tournamentStatus(){
     this._tournamentStatus = this.tournamentStatusService.getTournamentStatus(this.realSecondsUntilMatch())
-    return this._tournamentStatus.text
+    return this._tournamentStatus
   }
 
   private realSecondsUntilMatch(){
