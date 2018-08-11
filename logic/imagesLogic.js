@@ -3,7 +3,7 @@
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const path = require('path')
 const fs = require('fs-extra')
-const {base64, img} = require('base64-img-promise')
+const { base64, img } = require('base64-img-promise')
 
 const IMAGES_DIR = path.resolve(process.env.DATA_DIR, 'images')
 const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
@@ -22,7 +22,7 @@ function getAllImagesNames () {
 
 function getAllImages () {
   return getAllImagesNames().then(names => {
-    let images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop())).map(createReturnObject)
+    const images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop())).map(createReturnObject)
     return Promise.all(images)
   })
 }
@@ -47,7 +47,7 @@ function saveImageFromBase64 (name, data) {
   })
 }
 
-function saveImageToImagePath(imageTempPath, imageName){
+function saveImageToImagePath (imageTempPath, imageName) {
   return getAllImagesNames().then(images => {
     const image = images.find(x => x === imageName)
     if (image) {
@@ -65,14 +65,13 @@ function createReturnObject (imageName) {
   return new Promise((resolve, reject) => {
     try {
       base64(path.resolve(IMAGES_DIR, imageName)).then(data => {
-        let imageData = {
+        const imageData = {
           name: imageName,
           image: data
         }
         resolve(imageData)
       })
-    }
-    catch (e) {
+    } catch (e) {
       reject(e)
     }
   })

@@ -1,8 +1,7 @@
 'use strict'
-const domain = require('domain')
 const { MClient } = require('mhub')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const { getCorrelationId, correlateSession } = require('@first-lego-league/ms-correlation')
+const { getCorrelationId } = require('@first-lego-league/ms-correlation')
 
 const MHUB_NODES = {
   PUBLIC: 'public',

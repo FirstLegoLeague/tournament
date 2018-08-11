@@ -22,7 +22,7 @@ logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.json({ limit: '50mb' }))
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())

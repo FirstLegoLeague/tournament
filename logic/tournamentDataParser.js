@@ -46,7 +46,7 @@ function parse (data, delimiter) {
     const numRankingOfMatches = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 1]
     rankingMatchesRaw = lines.slice(blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
       RANKING_MATCH_HEADER_LINE_AMOUNT,
-      blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
+    blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
       RANKING_MATCH_HEADER_LINE_AMOUNT +
       Math.ceil(parseFloat(numRankingOfMatches[1])))
 
@@ -61,7 +61,7 @@ function parse (data, delimiter) {
     const numOfPracticeMatches = lines[blocks.find(x => x.blockId == PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
     practiceMatchesRaw = lines.slice(blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
       PRACTICE_MATCH_HEADER_LINE_AMOUNT,
-      blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
+    blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
       PRACTICE_MATCH_HEADER_LINE_AMOUNT +
       Math.ceil(parseFloat(numOfPracticeMatches[1])))
   }

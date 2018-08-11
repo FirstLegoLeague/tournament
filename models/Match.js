@@ -1,7 +1,7 @@
 'use strict'
 
 class Match {
-  constructor(matchId, startTime, endTime, stage, matchTeams) {
+  constructor (matchId, startTime, endTime, stage, matchTeams) {
     this.matchId = matchId
     this.startTime = startTime
     this.endTime = endTime

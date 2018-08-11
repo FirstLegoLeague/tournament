@@ -1,0 +1,26 @@
+<div class="callout">
+    <h3>Settings</h3>
+
+    <div *ngIf="!loading">
+        <fieldset class="fieldset">
+            <legend>Tournament</legend>
+            <app-setting-edit
+                    [setting]="{
+                        display: 'Stage',
+                        name: 'tournamentStage',
+                        value: settings.tournamentStage
+                    }"></app-setting-edit>
+        </fieldset>
+
+        <fieldset class="fieldset">
+            <legend>Display</legend>
+            <app-setting-edit
+                    [setting]="{
+                        display: 'Title',
+                        name: 'tournamentTitle',
+                        value: settings.tournamentTitle
+                        }"></app-setting-edit>
+        </fieldset>
+    </div>
+
+</div>
