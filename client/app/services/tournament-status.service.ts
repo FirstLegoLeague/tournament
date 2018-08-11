@@ -1,3 +1,4 @@
+import {Injectable} from '@angular/core';
 import {RequestService} from './request.service';
 import { Observable } from "../../../node_modules/rxjs";
 
@@ -23,6 +24,9 @@ function setStatus(secondsUntilMatch){
   return STATUS.BAD
 }
 
+@Injectable({
+  providedIn: 'root'
+})
 export class TournamentStatusService{
   secondsUntilMatch = 0
 

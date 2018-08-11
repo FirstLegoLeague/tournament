@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TournamentStatusService } from '../../services/tournament-status.service';
 
 @Component({
   selector: 'tournament-status',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TournamentStatusComponent implements OnInit {
 
-  constructor() { }
+  constructor(private tournamentStatusService: TournamentStatusService) {
+   }
 
   ngOnInit() {
+  }
+
+  timeUntilMatch(){
+    return 'Test'
   }
 
 }
