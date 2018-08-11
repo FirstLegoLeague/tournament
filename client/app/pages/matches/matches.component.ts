@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {MatchesService} from '../../services/matches.service';
-import {RequestService} from '../../services/request.service';
+import { ModelModalsService } from '../../services/model-modals.service';
+import { MatchesService } from '../../services/matches.service';
+import { TablesService } from '../../services/tables.service';
+import { Match } from '../../models/match';
+import { Table } from '../../models/table';
 
 @Component({
   selector: 'app-matches',
@@ -9,20 +12,37 @@ import {RequestService} from '../../services/request.service';
 })
 export class MatchesComponent implements OnInit {
 
-  matches = [];
-  tables = [];
-
-  constructor(private matchesService: MatchesService, private requests: RequestService) { }
+  constructor(private matchesService: MatchesService, private tablesService: TablesService, private modelModalsService: ModelModalsService) { }
 
   ngOnInit() {
-    this.matchesService.getAllMatches().subscribe((date: any) =>{
-      this.matches = date;
-    });
+    this.matchesService.init();
+    this.tablesService.init();
+  }
 
-    this.requests.get('/table/all').subscribe((data: any) =>{
-      this.tables = data;
-    });
+  tables() {
+    return this.tablesService.tables;
+  }
 
+  matches() {
+    return this.matchesService.matches;
+  }
+
+  setEditModel(match) {
+    this.modelModalsService.setEditModel(match);
+  }
+
+  setDeleteModel(match) {
+    this.modelModalsService.setDeleteModel(match);
+  }
+
+  newTable() {
+    return new Table()
+  }
+
+  newMatch() {
+    const match = new Match()
+    match.matchTeams = this.tables().map(table => ({ tableId: table.tableId, teamNumber: null }));
+    return match;
   }
 
 }

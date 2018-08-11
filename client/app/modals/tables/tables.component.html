@@ -1,0 +1,34 @@
+<div id="tables" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
+  <h2>Mange tables</h2>
+  <div class="dimmer">
+    <div class="big loader"></div>
+  </div>
+
+  <div class="grid-x grid-padding-y">
+    <div class="cell grid-x grid-padding-x" *ngFor="let table of tables()">
+      <input class="cell auto" [(ngModel)]="table.tableName">
+      <div class="cell shrink">
+        <div class="alert clear button" (click)="removeTable(table)">
+          <i class="fa fa-times"></i>
+        </div>
+      </div>
+    </div>
+    <div class="cell grid-x grid-padding-x">
+      <input class="cell auto" [(ngModel)]="newTable.tableName">
+      <div class="cell shrink">
+        <div class="clear button" (click)="addTable()">
+          <i class="fa fa-plus"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-x align-center button-group">
+    <div class="secondary button" (click)="cancel()">Cancel</div>
+    <div class="button" (click)="save()">Save changes</div>
+  </div>
+
+  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
