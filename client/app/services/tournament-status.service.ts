@@ -28,7 +28,7 @@ function setStatus(secondsUntilMatch){
   providedIn: 'root'
 })
 export class TournamentStatusService{
-  secondsUntilMatch = 0
+  private secondsUntilMatch = 0
 
   constructor(private requests: RequestService) {}
 
@@ -41,8 +41,8 @@ export class TournamentStatusService{
   }
 
   secondsUntilNextMatch(){
-    this.getCurrentMatch().subscribe(data =>{
-      this.secondsUntilMatch = Math.floor((Date.now() - (new Date(data.startTime)).getTime())/1000)
+    this.getUpcomingMatches().subscribe(data =>{
+      this.secondsUntilMatch = -Math.floor((Date.now() - (new Date(data[0].startTime)).getTime())/1000)
     })
     return this.secondsUntilMatch
   }
