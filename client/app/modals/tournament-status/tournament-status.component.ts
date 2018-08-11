@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Notifications } from '../../services/notifications.service';
 
+import { TournamentStatusService } from '../../services/tournament-status.service';
+
 @Component({
   selector: 'tournament-status',
   templateUrl: './tournament-status.component.html',
@@ -9,7 +11,7 @@ import { Notifications } from '../../services/notifications.service';
 })
 
 export class TournamentStatus implements OnInit{
-  constructor(private notifications: Notifications) {
+  constructor(private notifications: Notifications, private tournamentStatusService: TournamentStatusService) {
   }
 
   ngOnInit() {}
