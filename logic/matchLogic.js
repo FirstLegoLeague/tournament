@@ -7,7 +7,7 @@ const MONGU_URI = process.env.MONGO_URI
 function getMatch (matchNumber) {
   return MongoClient.connect(MONGU_URI).then(connection => {
     const dbMatch = connection.db().collection('settings').findOne({}).then(tournamentSettings => {
-      return connection.db().collection('matches').findOne({ 'stage': tournamentSettings.tournamentLevel, 'matchId': matchNumber })
+      return connection.db().collection('matches').findOne({ 'stage': tournamentSettings.tournamentStage, 'matchId': matchNumber })
         .then(resolvedMatch => {
           return resolvedMatch
         })
