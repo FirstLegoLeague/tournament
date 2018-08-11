@@ -16,10 +16,13 @@ import { TournamentDataUpload } from './modals/tournament-data-upload/tournament
 import { ModelEdit } from './modals/model-edit/model-edit.component';
 import { ModelDelete } from './modals/model-delete/model-delete.component';
 import { Tables } from './modals/tables/tables.component';
+import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
+import { SettingEditComponent } from './pages/tournament-settings/setting-edit/setting-edit.component';
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
-  {path: 'matches', component: MatchesComponent}
+  {path: 'matches', component: MatchesComponent},
+  {path: 'settings', component: TournamentSettingsComponent}
 ]
 
 
@@ -34,7 +37,9 @@ const appRoutes = [
     TournamentDataUpload,
     ModelEdit,
     ModelDelete,
-    Tables
+    Tables,
+    TournamentSettingsComponent,
+    SettingEditComponent
   ],
   imports: [
     FormsModule,
