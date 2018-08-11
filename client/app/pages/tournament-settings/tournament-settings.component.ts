@@ -17,11 +17,11 @@ export class TournamentSettingsComponent implements OnInit {
 
     ngOnInit() {
         this.tournamentSettingsService.getAllSettings().subscribe({
-            next(settings: object) {
+            next: (settings: object) => {
                 this.settings = settings;
                 this.loading = false;
             },
-            error (err) {
+            error: (err) => {
                 this.notification.error("There was a problem getting the settings.")
             }
         });
