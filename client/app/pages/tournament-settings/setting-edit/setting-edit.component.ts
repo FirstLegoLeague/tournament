@@ -9,7 +9,7 @@ import { Notifications } from '../../../services/notifications.service';
 })
 export class SettingEditComponent implements OnInit {
 
-  @Input() setting: object
+  @Input() setting: any
 
   constructor(private tournamentSettingsService: TournamentSettingsService, private notification: Notifications) { }
 
