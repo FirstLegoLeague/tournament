@@ -18,12 +18,12 @@ export class SettingEditComponent implements OnInit {
 
   save(){
     // @ts-ignore
-      this.tournamentSettingsService.saveSetting(this.setting.name, this.setting.value).subscribe(response => {
-        if(response.status === 204){
-            this.notification.success("Setting saved successfully")
-        }else {
-            this.notification.error("Oh no! Something went wrong while trying to save...")
-        }
+      this.tournamentSettingsService.saveSetting(this.setting.name, this.setting.value).subscribe((response,err) => {
+      if(err){
+          this.notification.error("Oh no! Something went wrong while trying to save...")
+      } else{
+          this.notification.success("Setting saved successfully")
+      }
     })
   }
 
