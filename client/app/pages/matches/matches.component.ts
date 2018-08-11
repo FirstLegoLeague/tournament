@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelModalsService } from '../../services/model-modals.service';
 import { MatchesService } from '../../services/matches.service';
 import { TablesService } from '../../services/tables.service';
 import { Match } from '../../models/match';
 import { Table } from '../../models/table';
+import { DeleteService } from '../../services/delete-service.service'
+import { EditService } from '../../services/edit-service.service'
 
 @Component({
   selector: 'app-matches',
@@ -12,7 +13,7 @@ import { Table } from '../../models/table';
 })
 export class MatchesComponent implements OnInit {
 
-  constructor(private matchesService: MatchesService, private tablesService: TablesService, private modelModalsService: ModelModalsService) { }
+  constructor(private matchesService: MatchesService, private tablesService: TablesService, private deleteModalsService: DeleteService, private editModalsService: EditService) { }
 
   ngOnInit() {
     this.matchesService.init();
@@ -28,11 +29,11 @@ export class MatchesComponent implements OnInit {
   }
 
   setEditModel(match) {
-    this.modelModalsService.setEditModel(match);
+    this.editModalsService.setEditModel(match);
   }
 
   setDeleteModel(match) {
-    this.modelModalsService.setDeleteModel(match);
+    this.deleteModalsService.setDeleteModel(match);
   }
 
   newTable() {

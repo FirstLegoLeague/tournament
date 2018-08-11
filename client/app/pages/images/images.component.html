@@ -1,0 +1,26 @@
+<ul class="menu align-right">
+  <li>
+    <div class="button-group">
+      <button class="button" data-open="image-upload"><i class="fas fa-image"></i> Add Image</button>
+    </div>
+  </li>
+</ul>
+
+<div class="grid-x small-up-3">
+  <div *ngFor="let image of images()" class="cell grid-y">
+    <div class="cell">
+      <div class="card" style="width: 300px;">
+        <div class="card-divider">
+          {{image.name}}
+        </div>
+        <img src="{{image.image}}">
+        <div class="card-section">
+          <button class="button" style="float: right" data-open="model-delete" (click)="setDeleteModel(image)"><i
+            class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
