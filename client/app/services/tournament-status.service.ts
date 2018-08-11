@@ -41,10 +41,9 @@ export class TournamentStatusService{
   }
 
   secondsUntilNextMatch(){
-    this.getUpcomingMatches().subscribe(data =>{
-      this.secondsUntilMatch = -Math.floor((Date.now() - (new Date(data[0].startTime)).getTime())/1000)
+    return this.getUpcomingMatches().toPromise().then(data =>{
+      return -Math.floor((Date.now() - (new Date(data[0].startTime)).getTime())/1000)
     })
-    return this.secondsUntilMatch
   }
 
   getTournamentStatus(){
