@@ -13,7 +13,6 @@ export class TournamentStatusComponent implements OnInit {
   private _matchHasChanged = false
   private _stringTimeUntilMatch = 'Waiting for data'
   private _tournamentStatus
-  private _tournamentTextColor
 
   constructor(private tournamentStatusService: TournamentStatusService) {
    }
@@ -50,7 +49,6 @@ export class TournamentStatusComponent implements OnInit {
 
   tournamentStatus(){
     this._tournamentStatus = this.tournamentStatusService.getTournamentStatus(this.realSecondsUntilMatch())
-    this._tournamentTextColor = this._tournamentStatus.color
     return this._tournamentStatus.text
   }
 
@@ -63,7 +61,7 @@ export class TournamentStatusComponent implements OnInit {
       this._stringTimeUntilMatch = ''
       let secondsUntilMatch = this.realSecondsUntilMatch()
       if(secondsUntilMatch<0){
-        this._stringTimeUntilMatch = '-'
+        this._stringTimeUntilMatch = '−'
         secondsUntilMatch *=-1
       }
       this._stringTimeUntilMatch += `${Math.floor(secondsUntilMatch/3600)}:${Math.floor(secondsUntilMatch/60) % 60}:${secondsUntilMatch % 60}`
