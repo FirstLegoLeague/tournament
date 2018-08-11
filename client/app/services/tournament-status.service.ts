@@ -28,7 +28,6 @@ function setStatus(secondsUntilMatch){
   providedIn: 'root'
 })
 export class TournamentStatusService{
-  private secondsUntilMatch = 0
 
   constructor(private requests: RequestService) {}
 
@@ -46,8 +45,8 @@ export class TournamentStatusService{
     })
   }
 
-  getTournamentStatus(){
-    return setStatus(this.secondsUntilMatch)
+  getTournamentStatus(secondsUntilMatch){
+    return setStatus(secondsUntilMatch)
   }
 
   setMatch(match){

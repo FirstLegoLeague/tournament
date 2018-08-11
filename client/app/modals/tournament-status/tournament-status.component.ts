@@ -12,6 +12,8 @@ export class TournamentStatusComponent implements OnInit {
   private _secondsUntilMatchOnChange
   private _matchHasChanged = false
   private _stringTimeUntilMatch = 'Waiting for data'
+  private _tournamentStatus
+  private _tournamentTextColor
 
   constructor(private tournamentStatusService: TournamentStatusService) {
    }
@@ -21,6 +23,7 @@ export class TournamentStatusComponent implements OnInit {
 
     this.tournamentStatusService.secondsUntilNextMatch().then(data =>{
       this._secondsUntilMatchOnChange = data
+      this._tournamentStatus = this.tournamentStatusService.getTournamentStatus(data)
     })
     this._matchChangeTime = Date.now()
     
@@ -29,9 +32,9 @@ export class TournamentStatusComponent implements OnInit {
       if(this._matchHasChanged){
         currentMatchNumber = this.tournamentStatusService.getMatch()
 
-        
         this.tournamentStatusService.secondsUntilNextMatch().then(data =>{
           this._secondsUntilMatchOnChange = data
+          this._tournamentStatus = this.tournamentStatusService.getTournamentStatus(data)
         })
         this._matchChangeTime = Date.now()
       }
@@ -45,10 +48,20 @@ export class TournamentStatusComponent implements OnInit {
     })
   }
 
+  tournamentStatus(){
+    this._tournamentStatus = this.tournamentStatusService.getTournamentStatus(this.realSecondsUntilMatch())
+    this._tournamentTextColor = this._tournamentStatus.color
+    return this._tournamentStatus.text
+  }
+
+  private realSecondsUntilMatch(){
+    return this._secondsUntilMatchOnChange + Math.floor((this._matchChangeTime-Date.now())/1000)
+  }
+
   timeUntilMatch(){
     if(typeof this._secondsUntilMatchOnChange === 'number'){
       this._stringTimeUntilMatch = ''
-      let secondsUntilMatch = this._secondsUntilMatchOnChange + Math.floor((this._matchChangeTime-Date.now())/1000)
+      let secondsUntilMatch = this.realSecondsUntilMatch()
       if(secondsUntilMatch<0){
         this._stringTimeUntilMatch = '-'
         secondsUntilMatch *=-1
