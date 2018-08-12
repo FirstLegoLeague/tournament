@@ -27,6 +27,11 @@ export class SettingEditComponent implements OnInit {
   }
 
   matchSave(){
+    if(isNaN(this.setting.value) || this.setting.value < 0 || this.setting.value > 5000){
+      this.notification.error("Please enter a legitimate number!")
+      return
+    }
+
     // @ts-ignore
     this.tournamentStatusService.setMatch(this.setting.value).subscribe((response,err) => {
       if(err){

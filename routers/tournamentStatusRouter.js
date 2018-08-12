@@ -38,9 +38,8 @@ exports.getRouter = function () {
   })
 
   router.put('/current/set', adminAction, (req, res) => {
-    console.log('In the post request', req)
-    if (parseInt(req.body.match)) {
-      getMatchLogic.setMatch(parseInt(req.body.match))
+    if (parseInt(req.body.match) || req.body.match === '0') {
+      getMatchLogic.setMatch(parseInt(req.body.match) || 0)
       res.sendStatus(200)
     } else {
       res.sendStatus(415)
