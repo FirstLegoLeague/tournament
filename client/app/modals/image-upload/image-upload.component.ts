@@ -66,9 +66,6 @@ export class ImageUploadComponent {
   //     this.loading = false;
   //   });
   // }
-  public alert (thing) {
-    alert(thing)
-  }
 
   public fileOver (event) {
     this.fileHovering = true
