@@ -24,8 +24,9 @@ exports.getSettingsRouter = function () {
 
   router.get('/stages', (req, res) => {
     getAllStages().then(data => {
-      if (!data) {
+      if (data.length === 0 || !data) {
         res.status(404).send()
+        return
       }
 
       res.send(data)
