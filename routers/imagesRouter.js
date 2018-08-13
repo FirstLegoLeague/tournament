@@ -34,6 +34,21 @@ router.get('/:imageName', (req, res) => {
   })
 })
 
+router.post('/upload', adminAction, (req, res) => {
+  const form = formidable.IncomingForm()
+  form.on('file', (field, file) => {
+    const tmpFilePath = file.path
+    const imageName = file.name
+    console.log(`tmpPath: ${tmpFilePath}, name: ${imageName}`)
+    saveImageToImagePath(tmpFilePath, imageName).then(() => {
+      res.status(201).send()
+    }).catch(err => {
+      res.status(500).send(err.message)
+    })
+  })
+  form.parse(req)
+})
+
 router.post('/', adminAction, (req, res) => {
   const form = formidable.IncomingForm()
   form.parse(req, (err, fields, files) => {

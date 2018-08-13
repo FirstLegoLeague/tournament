@@ -32,8 +32,7 @@ export class ImagesService implements DeletableModalService {
     return this.requests.delete(`/image/${name}`, { responseType: 'text' })
   }
 
-  upload (file: File) {
-    return this.requests.post('/image/upload', { file: file })
-
+  upload (formData: FormData) : Observable<any>{
+    return this.requests.post('/image/upload', formData)
   }
 }

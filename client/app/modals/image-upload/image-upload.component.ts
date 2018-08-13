@@ -5,6 +5,7 @@ import { ParserService } from '../../services/parser.service'
 import { ImagesService } from '../../services/images.service'
 import { Notifications } from '../../services/notifications.service'
 import { Image } from '../../models/image'
+import { HttpHeaders } from '@angular/common/http'
 
 @Component({
   selector: 'image-upload',
@@ -32,23 +33,20 @@ export class ImageUploadComponent {
     if (this.file.fileEntry.isFile) {
       const fileEntry = this.file.fileEntry as FileSystemFileEntry
       fileEntry.file((file: File) => {
-        const fileReader = new FileReader()
+        const formData = new FormData()
         const name = file.name
-        const image = new Image()
-        fileReader.onload = (e) => {
-          image.name = name
-          image.image = fileReader.result
-          this.content = image.image
-
-          if (/*Not*/!this.imagesService.images.find((tempImg: Image) => tempImg.name === name)) {
-            this.loading = false
-            this.close()
-            this.imagesService.images.push(image)
-            debugger;
-          }
-          //TODO: Error handling
-        }
-        fileReader.readAsText(file, 'UTF-8')
+        formData.append('imageFile', file, name)
+        this.imagesService.upload(formData).subscribe(()=>{
+          debugger;
+          this.notifications.success('Image uploaded');
+          this.close();
+          this.loading = false;
+          this.imagesService.reload();
+        },(error)=>{
+          this.notifications.error('Image upload failed');
+          this.close();
+          this.loading = false;
+        })
       })
     } else {
       this.file = null
@@ -82,7 +80,7 @@ export class ImageUploadComponent {
   }
 
   public close () {
-    document.getElementById('teams-close-button').click()
+    document.getElementById('images-close-button').click()
   }
 
 }

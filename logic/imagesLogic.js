@@ -53,7 +53,7 @@ function saveImageToImagePath (imageTempPath, imageName) {
     if (image) {
       throw new Error('Image with that name already exists')
     }
-    return fs.rename(imageTempPath, path.resolve(IMAGES_DIR, imageName))
+    return fs.move(imageTempPath, path.resolve(IMAGES_DIR, imageName))
   })
 }
 

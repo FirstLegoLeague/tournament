@@ -9,12 +9,12 @@
 <div class="grid-x small-up-3">
   <div *ngFor="let image of images()" class="cell grid-y">
     <div class="cell">
-      <div class="card" style="width: 300px;">
+      <div class="card" style="width: 300px; height: 400px">
         <div class="card-divider">
           {{image.name}}
         </div>
         <img src="{{image.image}}">
-        <div class="card-section">
+        <div class="card-section align-bottom grid-padding-y">
           <button class="button" style="float: right" data-open="model-delete" (click)="setDeleteModel(image)"><i
             class="fas fa-trash"></i></button>
         </div>
