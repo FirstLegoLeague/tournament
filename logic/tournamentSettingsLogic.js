@@ -58,9 +58,16 @@ function updateSetting (settingName, value) {
   })
 }
 
+function getAllStages () {
+  return MongoClient.connect(MONGU_URI).then(connection => {
+    return connection.db().collection('matches').distinct('stage', {})
+  })
+}
+
 module.exports = {
-  'getSetting': getSetting,
-  'getAllSettings': getAllSettings,
-  'updateSetting': updateSetting,
-  'setDefaultSettings': setDefaultSettings
+  getSetting,
+  getAllSettings,
+  updateSetting,
+  setDefaultSettings,
+  getAllStages
 }
