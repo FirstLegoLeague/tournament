@@ -26,16 +26,24 @@ mhubClient.connect().then(() => {
 mhubClient.on('message', msg => {
   switch (msg.topic) {
     case 'clock:start':
-      if (canUpdateMatch) {
-        match++
-        canUpdateMatch = false
-      }
+      clockStartEvent()
       break
     case 'clock:end':
-      canUpdateMatch = true
+      clockEndEvent()
       break
   }
 })
+
+const clockStartEvent = function () {
+  if (canUpdateMatch) {
+    match++
+    canUpdateMatch = false
+  }
+}
+
+const clockEndEvent = function () {
+  canUpdateMatch = true
+}
 
 function getCurrentMatch () {
   return getMatch(match).then(data => {
