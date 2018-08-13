@@ -2,9 +2,9 @@
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 
-const { getSetting, getAllSettings, updateSetting, setDefaultSettings, getAllStages } = require('../logic/tournamentSettingsLogic')
+const {getSetting, getAllSettings, updateSetting, setDefaultSettings, getAllStages} = require('../logic/tournamentSettingsLogic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -22,10 +22,10 @@ exports.getSettingsRouter = function () {
     })
   })
 
-  router.get('/:setting', (req, res) => {
-    getSetting(req.params.setting).then(data => {
+  router.get('/stages', (req, res) => {
+    getAllStages().then(data => {
       if (!data) {
-        res.sendStatus(404)
+        res.status(404).send()
       }
 
       res.send(data)
@@ -35,10 +35,10 @@ exports.getSettingsRouter = function () {
     })
   })
 
-  router.get('/stages', (req, res) => {
-    getAllStages().then(data => {
+  router.get('/:setting', (req, res) => {
+    getSetting(req.params.setting).then(data => {
       if (!data) {
-        res.status(404).send()
+        res.sendStatus(404)
       }
 
       res.send(data)
