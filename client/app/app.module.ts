@@ -18,9 +18,7 @@ import { ModelEdit } from './modals/model-edit/model-edit.component';
 import { ModelDelete } from './modals/model-delete/model-delete.component';
 import { Tables } from './modals/tables/tables.component';
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
-import { SettingEditComponent } from './pages/tournament-settings/setting-edit/setting-edit.component';
 import { ImagesComponent } from './pages/images/images.component';
-
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
@@ -44,7 +42,6 @@ const appRoutes = [
     ModelDelete,
     Tables,
     TournamentSettingsComponent,
-    SettingEditComponent,
     ImagesComponent
   ],
   imports: [
