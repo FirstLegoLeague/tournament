@@ -63,15 +63,16 @@ export class TournamentSettingsComponent implements OnInit {
     save(setting: string) {
         if(setting === 'tournamentMatch'){
             // @ts-ignore
-            this.tournamentStatusService.setMatch(this.currentMatch).subscribe(
-                response => {
+            this.tournamentStatusService.setMatch(this.currentMatch).subscribe((response,err) => {
+                if(err){
+                    this.notification.error("Oh no! Something went wrong while trying to save match.")
+                } else{
                     this.loading = false;
                     this.notification.success("Match saved successfully")
-                },
-                err => {
-                    this.notification.error("Oh no! Something went wrong while trying to save match.")
-                })
-        }else{
+                }
+              })
+        }else
+        {
             this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
                 response => {
                     this.loading = false;
