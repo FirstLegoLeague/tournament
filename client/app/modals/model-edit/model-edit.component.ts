@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { ModalModel, ModalModelService } from '../../models/interfaces/modal-model';
+import { Editable, EditableModalService } from '../../models/interfaces/modal-model';
 import { ModelModalsService } from '../../services/model-modals.service';
 import { Notifications } from '../../services/notifications.service';
+import { EditService } from '../../services/edit-service.service'
 
 @Component({
   selector: 'model-edit',
@@ -13,16 +14,16 @@ export class ModelEdit {
 
   loading: boolean;
 
-  constructor(private modelModalsService: ModelModalsService, private notifications: Notifications) { }
-  
+  constructor(private editModalsService: EditService, private notifications: Notifications) { }
+
   model() {
-    return this.modelModalsService.getEditModel();
+    return this.editModalsService.getEditModel();
   }
 
   save() {
     this.loading = true;
-    const model: ModalModel = this.model();
-    const service: ModalModelService = this.modelModalsService.service(model);
+    const model: Editable = this.model();
+    const service: EditableModalService = this.editModalsService.service(model);
     service.save(model).subscribe(() => {
       this.notifications.success(model.savedInDB() ? 'Changes saved' : `${model.title()} saved`);
       this.reload();
@@ -41,7 +42,7 @@ export class ModelEdit {
   }
 
   reload() {
-    this.modelModalsService.service(this.model()).reload();
+    this.editModalsService.service(this.model()).reload();
   }
 
 }

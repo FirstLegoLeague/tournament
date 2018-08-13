@@ -59,11 +59,11 @@ export class TeamsUpload {
       this.loading = false;
     });
   }
-  
+
   public fileOver(event) {
     this.fileHovering = true;
   }
- 
+
   public fileLeave(event) {
     this.fileHovering = false;
   }

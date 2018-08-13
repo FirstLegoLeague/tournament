@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModelModalsService } from '../../services/model-modals.service';
 import { TeamsService } from '../../services/teams.service';
 import { Team } from '../../models/team';
+import { TablesService } from '../../services/tables.service'
+import { DeleteService } from '../../services/delete-service.service'
+import { EditService } from '../../services/edit-service.service'
 
 @Component({
   selector: 'app-teams',
@@ -9,8 +11,8 @@ import { Team } from '../../models/team';
   styleUrls: ['./teams.component.css']
 })
 export class TeamsComponent implements OnInit {
-  
-  constructor(private teamsService: TeamsService, private modelModalsService: ModelModalsService) { }
+
+  constructor(private teamsService: TeamsService, private deleteModalsService: DeleteService, private editModalsService: EditService) { }
 
   ngOnInit() {
     this.teamsService.init();
@@ -25,11 +27,11 @@ export class TeamsComponent implements OnInit {
   }
 
   setEditModel(team) {
-    this.modelModalsService.setEditModel(team);
+    this.editModalsService.setEditModel(team);
   }
 
   setDeleteModel(team) {
-    this.modelModalsService.setDeleteModel(team);
+    this.deleteModalsService.setDeleteModel(team);
   }
 
   newTeam() {

@@ -34,6 +34,30 @@ router.get('/:imageName', (req, res) => {
   })
 })
 
+/**
+ * A handler for post requests to /images/upload.
+ */
+router.post('/upload', adminAction, (req, res) => {
+  const form = formidable.IncomingForm()
+  /*
+   * Adding a listener for handling forms with a "file" field.
+   * This doesn't assume the name of the input field of the form.
+   */
+  form.on('file', (field, file) => {
+    // this form has a file field.
+    // the `path` prop is the local path of the file.
+    // the `name` prop is the name of the file.
+    const tmpFilePath = file.path
+    const imageName = file.name
+    saveImageToImagePath(tmpFilePath, imageName).then(() => {
+      res.status(201).send()
+    }).catch(err => {
+      res.status(500).send(err.message)
+    })
+  })
+  form.parse(req)
+})
+
 router.post('/', adminAction, (req, res) => {
   const form = formidable.IncomingForm()
   form.parse(req, (err, fields, files) => {
