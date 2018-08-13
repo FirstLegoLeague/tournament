@@ -6,15 +6,17 @@
   </li>
 </ul>
 
-<div class="grid-x small-up-3">
+<div class="grid-x small-1 medium-up-3">
   <div *ngFor="let image of images()" class="cell grid-y">
     <div class="cell">
-      <div class="card" style="width: 300px; height: 400px">
-        <div class="card-divider">
+      <div class="card grid-y" style="width: 300px; height: 400px">
+        <div class="card-divider cell shrink">
           {{image.name}}
         </div>
-        <img src="{{image.image}}">
-        <div class="card-section align-bottom grid-padding-y">
+        <div class="cell auto align-center">
+          <img src="{{image.image}}">
+        </div>
+        <div class="card-section cell shrink">
           <button class="button" style="float: right" data-open="model-delete" (click)="setDeleteModel(image)"><i
             class="fas fa-trash"></i></button>
         </div>

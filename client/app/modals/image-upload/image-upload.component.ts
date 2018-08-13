@@ -37,8 +37,7 @@ export class ImageUploadComponent {
         const name = file.name
         formData.append('imageFile', file, name)
         this.imagesService.upload(formData).subscribe(()=>{
-          debugger;
-          this.notifications.success('Image uploaded');
+          this.notifications.success('Image upload succeeded');
           this.close();
           this.loading = false;
           this.imagesService.reload();
