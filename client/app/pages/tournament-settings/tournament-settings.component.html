@@ -2,24 +2,33 @@
     <h3>Settings</h3>
 
     <div *ngIf="!loading">
+
         <fieldset class="fieldset">
             <legend>Tournament</legend>
-            <app-setting-edit
-                    [setting]="{
-                        display: 'Stage',
-                        name: 'tournamentStage',
-                        value: settings.tournamentStage
-                    }"></app-setting-edit>
+            <h5>{{settings['tournamentStage'].display}}</h5>
+            <div class="input-group">
+                <select class="input-group-field" [(ngModel)]="settings['tournamentStage'].value"
+                        [disabled]="settings['tournamentStage'].options == undefined">
+                    <option *ngFor="let option of settings['tournamentStage'].options" value="{{option}}">{{option}}
+                    </option>
+                </select>
+                <div class="input-group-button">
+                    <button class="button" (click)="save('tournamentStage')"
+                            [disabled]="settings['tournamentStage'].options == undefined"><i class="fa fa-save"></i>
+                    </button>
+                </div>
+            </div>
         </fieldset>
 
         <fieldset class="fieldset">
             <legend>Display</legend>
-            <app-setting-edit
-                    [setting]="{
-                        display: 'Title',
-                        name: 'tournamentTitle',
-                        value: settings.tournamentTitle
-                        }"></app-setting-edit>
+            <h5>{{settings['tournamentTitle'].display}}</h5>
+            <div class="input-group">
+                <input type="text" [(ngModel)]="settings['tournamentTitle'].value" class="input-group-field">
+                <div class="input-group-button">
+                    <button class="button" (click)="save('tournamentTitle')"><i class="fa fa-save"></i></button>
+                </div>
+            </div>
         </fieldset>
     </div>
 

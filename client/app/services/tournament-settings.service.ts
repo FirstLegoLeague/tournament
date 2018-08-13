@@ -13,6 +13,10 @@ export class TournamentSettingsService {
       return this.request.get('/settings/all');
   }
 
+  getStages(): Observable<any>{
+      return this.request.get('/settings/stages');
+  }
+
   saveSetting(settingName, value): Observable<any>{
       let data = {};
       data[settingName] = value;
