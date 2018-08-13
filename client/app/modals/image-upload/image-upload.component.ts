@@ -52,21 +52,6 @@ export class ImageUploadComponent {
     }
   }
 
-  //
-  // public upload(event) {
-  //   this.loading = true
-  //   this.teamsService.uploadBatch(this.content).subscribe(() => {
-  //     this.notifications.success('Teams uploaded');
-  //     this.close();
-  //     this.loading = false;
-  //     this.teamsService.reload();
-  //   }, error => {
-  //     this.notifications.error('Teams upload failed');
-  //     this.close();
-  //     this.loading = false;
-  //   });
-  // }
-
   public fileOver (event) {
     this.fileHovering = true
   }

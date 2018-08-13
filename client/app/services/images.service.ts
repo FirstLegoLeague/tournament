@@ -24,7 +24,10 @@ export class ImagesService implements DeletableModalService {
   reload () {
     return this.requests.get('/image/all').subscribe((images: Image[]) => {
       this.images = images.map(image => new Image().deserialize(image))
-      //TODO: Add error handling
+    },(error)=>{
+      console.error(`Error getting all images: ${error}!`)
+    },()=>{
+      console.debug(`Received all images successfully`)
     })
   }
 
