@@ -33,12 +33,22 @@ export class TournamentStatusComponent implements OnInit {
   private matchChanged(match){
     forkJoin(match, this.tournamentStatusService.getMatch()).subscribe(data =>{
       this._matchHasChanged = data[0] !== data[1]
+    }, err =>{
+      if(err.status === 404 && match){
+        this._matchHasChanged = true
+      }else{
+        this._matchHasChanged = false
+      }
     })
   }
 
   private updateVariables(){
     this._currentMatch = this.tournamentStatusService.getMatch().toPromise().then(match =>{
       this._currentMatchNumber = match
+    }).catch(err =>{
+      if(err.status === 404){
+        this._currentMatchNumber = null
+      }
     })
 
     this.tournamentStatusService.secondsUntilNextMatch().then(data =>{
