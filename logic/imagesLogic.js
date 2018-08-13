@@ -22,7 +22,7 @@ function getAllImagesNames () {
 
 function getAllImages () {
   return getAllImagesNames().then(names => {
-    const images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop())).map(createReturnObject)
+    const images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop().toLowerCase())).map(createReturnObject)
     return Promise.all(images)
   })
 }
