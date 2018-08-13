@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {RequestService} from './request.service';
-import { Observable } from "../../../node_modules/rxjs";
+import { Observable, throwError } from "../../../node_modules/rxjs";
 
 const STATUS = {
   GOOD: {'text': 'Ahead of time!', 'color': '#ADFF2F'},
@@ -50,6 +50,9 @@ export class TournamentStatusService{
   }
 
   setMatch(match){
+    if(isNaN(match) || match<0 || match > 500){
+      return throwError
+    }
     return this.requests.put(`/match/current/set`,{'match': match},{ observe: 'response' })
   }
 
