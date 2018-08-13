@@ -37,7 +37,7 @@ export class TablesService {
       editingTable.tableId && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
 
     // Add numbers to new tables
-    let lastTableId = Math.max.apply(null, this.tables.map(table => table.tableId))
+    let lastTableId = Math.max.apply(null, this.tables.map(table => table.tableId)) || 0;
     tablesToCreate.forEach((table, index) => { table.tableId = (lastTableId + 1 + index) })
 
     const tablesToDeleteObservables = tablesToDelete.map(table => this.requests.delete(`/table/${table.id()}`, { responseType: 'text' }))

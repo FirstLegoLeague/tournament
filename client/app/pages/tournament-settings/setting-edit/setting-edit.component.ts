@@ -9,7 +9,8 @@ import { Notifications } from '../../../services/notifications.service';
 })
 export class SettingEditComponent implements OnInit {
 
-  @Input() setting: object
+  @Input() setting: any
+    public loading: boolean = true;
 
   constructor(private tournamentSettingsService: TournamentSettingsService, private notification: Notifications) { }
 
@@ -22,6 +23,7 @@ export class SettingEditComponent implements OnInit {
       if(err){
           this.notification.error("Oh no! Something went wrong while trying to save...")
       } else{
+          this.loading = false;
           this.notification.success("Setting saved successfully")
       }
     })

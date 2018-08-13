@@ -1,9 +1,26 @@
 <div class="dropdown menu" data-dropdown-menu>
-  <li>
-    <a>Upload</a>
-    <ul class="menu">
-      <li><a data-open="teams-upload">Upload teams</a></li>
-      <li><a data-open="tournament-data-upload">Upload tournament data</a></li>
-    </ul>
-  </li>
+    <li>
+        <a>Upload</a>
+        <ul class="menu">
+            <li class="grid-x grid-padding-x">
+                <div class="cell small-2" style="align-items: center;">
+                    <span data-tooltip class="top" tabindex="2"
+                          title="Load schedule file created by Brian Lee's tournament scheduler"><i
+                            class="far fa-question-circle"></i></span>
+                </div>
+                <div class="cell small-10">
+                    <a data-open="tournament-data-upload">Load tournament schedule file</a>
+                </div>
+            </li>
+            <li class="grid-x grid-padding-x">
+                <div class="cell small-2" style="align-items: center;">
+                <span data-tooltip class="top" tabindex="2" title="CSV file with team number and name columns"><i
+                        class="far fa-question-circle"></i></span>
+                </div>
+                <div class="cell small-10">
+                    <a data-open="teams-upload">Load team list</a>
+                </div>
+            </li>
+        </ul>
+    </li>
 </div>
