@@ -2,6 +2,7 @@
 const { MClient } = require('mhub')
 
 const mhubClient = new MClient(process.env.MHUB_URI)
+const mhubConnection = require('../Utils/mhubConnection')
 
 const { getMatch } = require('./matchLogic')
 
@@ -38,11 +39,17 @@ const clockStartEvent = function () {
   if (canUpdateMatch) {
     match++
     canUpdateMatch = false
+    sendMhubMessages()
   }
 }
 
 const clockEndEvent = function () {
   canUpdateMatch = true
+}
+
+const sendMhubMessages = function () {
+  mhubConnection.publishUpdateMsg('CurrentMatches')
+  mhubConnection.publishUpdateMsg('UpcomingMatches')
 }
 
 function getCurrentMatch () {
@@ -78,6 +85,7 @@ function getMatchNumber () {
 
 function setMatchNumber (newMatch) {
   match = newMatch
+  sendMhubMessages()
 }
 
 module.exports = {

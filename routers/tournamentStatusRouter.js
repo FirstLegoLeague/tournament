@@ -1,7 +1,6 @@
 'use strict'
 const express = require('express')
 
-const mhubConnection = require('../Utils/mhubConnection')
 const getMatchLogic = require('../logic/getMatchLogic')
 
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
@@ -14,7 +13,6 @@ exports.getRouter = function () {
   router.get('/current', (req, res) => {
     getMatchLogic.getCurrentMatch().then(data => {
       if (data) {
-        mhubConnection.publishUpdateMsg('CurrentMatches', data)
         res.send(data)
       } else {
         res.sendStatus(404)
@@ -25,7 +23,6 @@ exports.getRouter = function () {
   router.get('/upcoming', (req, res) => {
     Promise.all(getMatchLogic.getNextMatches()).then(data => data.filter(data => data)).then(data => {
       if (data && data.length > 0) {
-        mhubConnection.publishUpdateMsg('UpcomingMatches', data)
         res.send(data)
       } else {
         res.sendStatus(404)
