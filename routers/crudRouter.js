@@ -22,7 +22,7 @@ exports.getRouter = function (options) {
   router.get('/all', (req, res) => {
     MongoClient.connect(MONGO_URI).then(connection => {
       connection.db().collection(options.collectionName).find().toArray().then(data => {
-        res.status(403).send(data)
+        res.send(data)
       })
     }).catch(err => {
       MsLogger.error(err)
