@@ -29,7 +29,11 @@ export class ModelDelete {
       this.close()
       this.reload()
     }, error => {
-      this.notifications.error('Deletion failed')
+      if (!service.deleteErrorText()) {
+          this.notifications.error('Deletion failed')
+      } else{
+          this.notifications.error(service.deleteErrorText())
+      }
       this.loading = false
       this.close()
     })

@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {TournamentSettingsService} from "../../services/tournament-settings.service";
 import {Notifications} from "../../services/notifications.service";
 import {st} from "../../../../node_modules/@angular/core/src/render3";
+import {DeleteService} from "../../services/delete-service.service";
+import {TournamentDataService} from "../../services/tournament-data.service";
 
 @Component({
     selector: 'app-tournament-settings',
@@ -13,7 +15,10 @@ export class TournamentSettingsComponent implements OnInit {
     public settings: object;
     public loading: boolean = true;
 
-    constructor(private tournamentSettingsService: TournamentSettingsService, private notification: Notifications) {
+    constructor(private tournamentSettingsService: TournamentSettingsService,
+                public tournamentDataService: TournamentDataService,
+                private notification: Notifications,
+                private deleteModalsService: DeleteService) {
     }
 
     ngOnInit() {
@@ -59,4 +64,9 @@ export class TournamentSettingsComponent implements OnInit {
             })
     }
 
+    setDeleteModel(model){
+        this.deleteModalsService.setDeleteModel(model);
+    }
 }
+
+
