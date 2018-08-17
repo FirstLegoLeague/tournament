@@ -1,10 +1,11 @@
 'use strict'
 const express = require('express')
+const requestify = require('requestify')
 
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
 const mhubConnection = require('../Utils/mhubConnection')
 
@@ -81,7 +82,29 @@ router.post('/', adminAction, (req, res) => {
 })
 
 router.delete('/', (req, res) => {
+  requestify.get(`${process.env.MODULE_SCORING_URL}/scores/count`).then(res => {
+    const body = res.getBody()
+    if (!body.count || body.count <= 0) {
+      res.status(405).send()
+    }
 
+    MongoClient.connect(process.env.MONGO_URI).then(conn => {
+      const matchesDelete = conn.db().collection('matches').drop()
+      const teamDelete = conn.db().collection('teams').drop()
+      const tablesDelete = conn.db().collection('tables').drop()
+
+      Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
+        mhubConnection.publishUpdateMsg('matches')
+        mhubConnection.publishUpdateMsg('teams')
+        mhubConnection.publishUpdateMsg('tables')
+        res.status(200).send()
+      }).catch(error => {
+        MsLogger.error(`Error deleting data: \n ${error}`)
+        res.status(500).send('There was an error deleting data')
+      })
+
+    })
+  })
 })
 
 module.exports = router
