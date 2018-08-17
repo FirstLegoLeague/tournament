@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
-import {HttpClientModule, HttpClient} from '@angular/common/http';
+import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { FileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
@@ -19,6 +19,7 @@ import { ModelDelete } from './modals/model-delete/model-delete.component';
 import { Tables } from './modals/tables/tables.component';
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
 import { ImagesComponent } from './pages/images/images.component';
+import {RequestInterceptor} from "./services/request-interceptor";
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
@@ -51,7 +52,13 @@ const appRoutes = [
     RouterModule.forRoot(appRoutes),
     FileDropModule
   ],
-  providers: [],
+  providers: [
+      {
+          provide: HTTP_INTERCEPTORS,
+          useClass: RequestInterceptor,
+          multi: true
+      }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

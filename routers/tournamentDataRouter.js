@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
+const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 
 const mhubConnection = require('../Utils/mhubConnection')
 
@@ -78,6 +78,10 @@ router.post('/', adminAction, (req, res) => {
     console.log(err)
     res.sendStatus(500)
   })
+})
+
+router.delete('/', (req, res) => {
+
 })
 
 module.exports = router
