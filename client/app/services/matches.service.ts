@@ -39,4 +39,8 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     })
   }
 
+    deleteErrorText(): string {
+        return '';
+    };
+
 }

@@ -43,4 +43,7 @@ export class TeamsService implements EditableModalService, DeletableModalService
     return this.requests.post('/team/batch', { delimiter: ',', teamsData: data })
   }
 
+    deleteErrorText(): string {
+        return '';
+    };
 }

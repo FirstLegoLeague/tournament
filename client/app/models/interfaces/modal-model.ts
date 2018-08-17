@@ -21,6 +21,6 @@ export interface EditableModalService {
 
 export interface DeletableModalService {
   delete: (id: any) => Observable<any>
-
+  deleteErrorText: () => string
 }
 
