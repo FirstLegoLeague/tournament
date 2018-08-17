@@ -6,10 +6,11 @@
 
   <div *ngIf="model()">
     <div *ngFor="let field of model().fields()">
-      <input type="{{field.type}}"
-        placeholder="{{field.display}}"
-        value="{{field.get()}}"
-        (change)="field.set($event.target.value)"/>
+      <label>{{field.display}}
+        <input type="{{field.type}}"
+          value="{{field.get()}}"
+          (change)="field.set($event.target.value)"/>
+      </label>
     </div>
   </div>
 
