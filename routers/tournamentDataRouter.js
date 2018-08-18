@@ -82,10 +82,12 @@ router.post('/', adminAction, (req, res) => {
 })
 
 router.delete('/', adminAction, (req, res) => {
-  requestify.get(`${process.env.MODULE_SCORING_URL}/scores/count`).then(res => {
-    const body = res.getBody()
-    if (!body.count || body.count <= 0) {
+  requestify.get(`${process.env.MODULE_SCORING_URL}/scores/count`).then(response => {
+    const body = response.getBody()
+    if (body.count > 0) {
+      MsLogger.error(`There are ${body.count} matches. Cant delete data.`)
       res.status(405).send()
+      return
     }
 
     MongoClient.connect(process.env.MONGO_URI).then(conn => {
