@@ -34,7 +34,7 @@ export class TablesService {
     const tablesToDelete = this.tables.filter(table => this.editingTables.every(editingTable => editingTable.tableId !== table.tableId));
     const tablesToCreate = this.editingTables.filter(table => isNaN(table.tableId));
     const tablesToUpdate = this.editingTables.filter(editingTable =>
-      editingTable.tableId && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
+      isFinite(editingTable.tableId) && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
 
     // Add numbers to new tables
     let lastTableId = Math.max.apply(null, this.tables.map(table => table.tableId)) || 0;
