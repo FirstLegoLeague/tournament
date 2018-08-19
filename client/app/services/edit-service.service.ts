@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 import { Editable } from '../models/interfaces/modal-model'
 import { TeamsService } from './teams.service'
 import { MatchesService } from './matches.service'
+import { Match } from '../models/match'
+import { Team } from '../models/team'
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +23,10 @@ export class EditService {
   }
 
   service (model) {
-    switch (model.constructor.name) {
-      case 'Team':
+    switch (model.constructor) {
+      case Team:
         return this.teamsService
-      case 'Match':
+      case Match:
         return this.matchesServices
       default:
         return null
