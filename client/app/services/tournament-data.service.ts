@@ -31,20 +31,16 @@ export class TournamentDataService implements DeletableModalService {
     }
 
     reload() {
-        return new Observable(obs=>{
-            forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).subscribe({
-                next: (data)=>{
-                    obs.next();
-                },
-                error: (err)=>{
-                    obs.error(err);
-                },
-                complete: () => {
-                    obs.complete()
-                    this.dataReload.emit();
-                }
-            });
-        })
+        forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).subscribe(
+            (data) => {
+                this.dataReload.emit();
+            },
+            () =>{
+            },
+            ()=>{
+                this.dataReload.emit();
+            }
+        );
 
 
     }

@@ -1,6 +1,5 @@
-<div class="dropdown menu" data-dropdown-menu>
-    <span *ngIf="!hasData">
-    <li>
+<ul class="dropdown menu" data-dropdown-menu>
+    <li [hidden]="hasData">
         <a>Import</a>
         <ul class="menu">
             <li class="grid-x grid-padding-x">
@@ -23,9 +22,9 @@
             </li>
         </ul>
     </li>
-    </span>
+
     <li>
         <a href="/logout">Logout</a>
     </li>
-</div>
+</ul>
 
