@@ -3,8 +3,9 @@ import {Deletable} from '../models/interfaces/modal-model'
 import {TeamsService} from './teams.service'
 import {MatchesService} from './matches.service'
 import {ImagesService} from './images.service'
-import {TournamentSettingsService} from "./tournament-settings.service";
 import {TournamentDataService} from "./tournament-data.service";
+import {Match} from "../models/match";
+import {Team} from "../models/team";
 
 @Injectable({
     providedIn: 'root'
@@ -24,14 +25,14 @@ export class DeleteService {
     }
 
     service(model) {
-        switch (model.constructor.name) {
-            case 'Team':
+        switch (model.constructor) {
+            case Team:
                 return this.teamsService
-            case 'Match':
+            case Match:
                 return this.matchesServices
-            case 'Image':
+            case Image:
                 return this.imagesService
-            case 'TournamentDataService':
+            case TournamentDataService:
                 return this.tournamentDataService
             default:
                 return null

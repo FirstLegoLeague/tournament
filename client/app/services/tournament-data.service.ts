@@ -39,3 +39,4 @@ export class TournamentDataService implements DeletableModalService {
         return 'Error deleting data! \n There are probably scores left in scoring..';
     };
 }
+
