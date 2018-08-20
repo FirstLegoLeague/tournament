@@ -3,6 +3,7 @@ import { Observable } from 'rxjs'
 import { RequestService } from './request.service'
 import { EditableModalService, DeletableModalService } from '../models/interfaces/modal-model'
 import { Team } from '../models/team'
+import {Match} from "../models/match";
 
 @Injectable({
   providedIn: 'root'
@@ -33,10 +34,23 @@ export class TeamsService implements EditableModalService, DeletableModalService
     return this.requests[method](url, team.body(), { responseType: 'text' })
   }
 
+  requestAll(){
+      return this.requests.get('/team/all');
+  }
+
   reload () {
-    return this.requests.get('/team/all').subscribe((teams: Team[]) => {
-      this.teams = teams.map(team => new Team().deserialize(team))
-    })
+      return new Observable(obs => {
+          this.requestAll().subscribe((teams: Team[]) => {
+                  this.teams = teams.map(team => new Team().deserialize(team))
+                  obs.complete();
+              },
+              error => {
+                  obs.error(error)
+              },
+              () => {
+                  obs.complete();
+              })
+      })
   }
 
   uploadBatch (data: string): Observable<any> {
