@@ -61,17 +61,17 @@ export class TournamentDataUpload {
       this.loading = false;
     });
   }
-  
+
   public fileOver(event){
     this.fileHovering = true
   }
- 
+
   public fileLeave(event){
     this.fileHovering = false
   }
 
   public close() {
-    document.getElementById('teams-close-button').click();
+    document.getElementById('tournament-data-close-button').click();
   }
 
 }
