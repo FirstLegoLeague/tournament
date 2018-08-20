@@ -4,7 +4,11 @@
   	<div class="big loader"></div>
   </div>
 
-  <file-drop class="expanded button" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Tournament CSV file here</file-drop>
+  <file-drop class="expanded button" *ngIf="!data" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Tournament CSV file here</file-drop>
+
+  <div class="grid-x align-center button-group">
+    <button class="button" *ngIf="data" (click)="upload($event)" >Upload</button>
+  </div>
 
   <div class="grid-x" *ngIf="data">
 
@@ -50,10 +54,6 @@
       </table>
     </div>
 
-  </div>
-
-  <div class="grid-x align-center button-group">
-    <button class="button" *ngIf="data" (click)="upload($event)" >Upload</button>
   </div>
 
   <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">

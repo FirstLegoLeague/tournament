@@ -5,12 +5,15 @@ import {TeamsService} from './teams.service';
 import {TablesService} from './tables.service';
 import {Observable} from 'rxjs';
 import {forkJoin} from 'rxjs/observable/forkJoin';
-import {Deletable, DeletableModalService} from "../models/interfaces/modal-model";
+import {DeletableModalService} from "../models/interfaces/modal-model";
+import {EventEmitter} from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TournamentDataService implements DeletableModalService {
+
+    public dataReload: EventEmitter<any> = new EventEmitter();
 
     constructor(private request: RequestService, private matches: MatchesService, private teams: TeamsService, private tables: TablesService) {
     }
@@ -28,7 +31,18 @@ export class TournamentDataService implements DeletableModalService {
     }
 
     reload() {
-        return forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]);
+        forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).subscribe(
+            (data) => {
+                this.dataReload.emit();
+            },
+            () =>{
+            },
+            ()=>{
+                this.dataReload.emit();
+            }
+        );
+
+
     }
 
     delete() {

@@ -1,12 +1,11 @@
-<div class="dropdown menu" data-dropdown-menu>
-    <li>
+<ul class="dropdown menu" data-dropdown-menu>
+    <li [hidden]="hasData">
         <a>Import</a>
         <ul class="menu">
             <li class="grid-x grid-padding-x">
                 <div class="cell small-2" style="align-items: center;">
                     <span data-tooltip class="top" tabindex="2"
-                          title="Load schedule file created by Brian Lee's tournament scheduler"><i
-                            class="far fa-question-circle"></i></span>
+                          title="Load schedule file created by Brian Lee's tournament scheduler"><i class="far fa-question-circle"></i></span>
                 </div>
                 <div class="cell small-10">
                     <a data-open="tournament-data-upload">Load tournament schedule file</a>
@@ -23,7 +22,9 @@
             </li>
         </ul>
     </li>
+
     <li>
         <a href="/logout">Logout</a>
     </li>
-</div>
+</ul>
+
