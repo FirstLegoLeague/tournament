@@ -26,8 +26,8 @@ export class Team implements Editable,Deletable, Deserializable {
 
   fields() {
     return [
-      { display: 'Name', type: 'text', get: () => this.name, set: (value) => { this.name = value } },
       { display: 'Number', type: 'text', get: () => this.number, set: (value) => { this.number = value } },
+      { display: 'Name', type: 'text', get: () => this.name, set: (value) => { this.name = value } },
       { display: 'Affiliation', type: 'text', get: () => this.affiliation, set: (value) => { this.affiliation = value } },
     ];
   }
