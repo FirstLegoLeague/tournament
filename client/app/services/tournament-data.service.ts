@@ -35,14 +35,10 @@ export class TournamentDataService implements DeletableModalService {
             (data) => {
                 this.dataReload.emit();
             },
-            () =>{
-            },
-            ()=>{
-                this.dataReload.emit();
+            (err) =>{
+                console.error(err)
             }
         );
-
-
     }
 
     delete() {

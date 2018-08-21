@@ -4,6 +4,7 @@ import {forkJoin} from 'rxjs/observable/forkJoin';
 import {RequestService} from './request.service';
 import {Table} from '../models/table';
 import {Team} from "../models/team";
+import {map} from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -21,24 +22,16 @@ export class TablesService {
     init() {
         if (!this.initStarted) {
             this.initStarted = true;
-            this.reload();
+            this.reload().subscribe();
         }
     }
 
     reload() {
-        return new Observable(obs => {
-            this.requests.get('/table/all').subscribe((tables: Table[]) => {
-                    this.tables = tables.map(table => new Table().deserialize(table));
-                    this.editingTables = tables.map(table => new Table().deserialize(table));
-                    obs.complete();
-                },
-                error => {
-                    obs.error(error)
-                },
-                () => {
-                    obs.complete();
-                })
-        })
+        return this.requests.get('/table/all').pipe(map((tables: Table[]) => {
+            this.tables = tables.map(table => new Table().deserialize(table));
+            this.editingTables = tables.map(table => new Table().deserialize(table));
+            return this.tables;
+        }))
     }
 
     save(): Observable<any> {

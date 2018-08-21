@@ -3,6 +3,7 @@ import {Observable} from 'rxjs'
 import {RequestService} from './request.service'
 import {Match} from '../models/match'
 import {EditableModalService, DeletableModalService} from '../models/interfaces/modal-model'
+import {map} from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     init() {
         if (!this.initStarted) {
             this.initStarted = true
-            this.reload()
+            this.reload().subscribe()
         }
     }
 
@@ -38,18 +39,10 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     }
 
     reload() {
-        return new Observable(obs => {
-            this.requestAll().subscribe((matches: Match[]) => {
-                    this.matches = matches.map(match => new Match().deserialize(match))
-                    obs.complete();
-                },
-                error => {
-                    obs.error(error)
-                },
-                () => {
-                    obs.complete();
-                })
-        })
+        return this.requestAll().pipe(map((matches: Match[]) => {
+            this.matches = matches.map(match => new Match().deserialize(match))
+            return this.matches;
+        }))
     }
 
     deleteErrorText(): string {

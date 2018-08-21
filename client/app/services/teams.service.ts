@@ -1,61 +1,54 @@
-import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
-import { RequestService } from './request.service'
-import { EditableModalService, DeletableModalService } from '../models/interfaces/modal-model'
-import { Team } from '../models/team'
+import {Injectable} from '@angular/core'
+import {Observable, of} from 'rxjs'
+import {RequestService} from './request.service'
+import {EditableModalService, DeletableModalService} from '../models/interfaces/modal-model'
+import {Team} from '../models/team'
 import {Match} from "../models/match";
+import {flatMap, map} from "rxjs/operators";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 
 export class TeamsService implements EditableModalService, DeletableModalService {
 
-  private initStarted: boolean = false
-  public teams: Team[] = []
+    private initStarted: boolean = false
+    public teams: Team[] = []
 
-  constructor (private requests: RequestService) {
-  }
-
-  init () {
-    if (!this.initStarted) {
-      this.initStarted = true
-      this.reload()
+    constructor(private requests: RequestService) {
     }
-  }
 
-  delete (teamNumber: number): Observable<any> {
-    return this.requests.delete(`/team/${teamNumber}`, { responseType: 'text' })
-  }
+    init() {
+        if (!this.initStarted) {
+            this.initStarted = true
+            this.reload().subscribe()
+        }
+    }
 
-  save (team: Team): Observable<any> {
-    const method = team.savedInDB() ? 'put' : 'post'
-    const url = team.savedInDB() ? `/team/${team.id()}` : '/team/'
-    return this.requests[method](url, team.body(), { responseType: 'text' })
-  }
+    delete(teamNumber: number): Observable<any> {
+        return this.requests.delete(`/team/${teamNumber}`, {responseType: 'text'})
+    }
 
-  requestAll(){
-      return this.requests.get('/team/all');
-  }
+    save(team: Team): Observable<any> {
+        const method = team.savedInDB() ? 'put' : 'post'
+        const url = team.savedInDB() ? `/team/${team.id()}` : '/team/'
+        return this.requests[method](url, team.body(), {responseType: 'text'})
+    }
 
-  reload () {
-      return new Observable(obs => {
-          this.requestAll().subscribe((teams: Team[]) => {
-                  this.teams = teams.map(team => new Team().deserialize(team))
-                  obs.complete();
-              },
-              error => {
-                  obs.error(error)
-              },
-              () => {
-                  obs.complete();
-              })
-      })
-  }
+    requestAll() {
+        return this.requests.get('/team/all');
+    }
 
-  uploadBatch (data: string): Observable<any> {
-    return this.requests.post('/team/batch', { delimiter: ',', teamsData: data })
-  }
+    reload() {
+        return this.requestAll().pipe(map((teams: Team[]) => {
+            this.teams = teams.map(team => new Team().deserialize(team))
+            return this.teams
+        }))
+    }
+
+    uploadBatch(data: string): Observable<any> {
+        return this.requests.post('/team/batch', {delimiter: ',', teamsData: data})
+    }
 
     deleteErrorText(): string {
         return '';
