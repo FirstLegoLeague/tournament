@@ -8,7 +8,7 @@ export interface Deletable {
 }
 
 export interface Editable {
-  id (): number;
+  id (): string;
   savedInDB (): boolean;
   fields (): ModalModelField[];
   body (): any;

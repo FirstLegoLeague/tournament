@@ -13,7 +13,7 @@ export class Match implements Editable, Deletable, Deserializable {
   matchTeams: MatchTeam[];
 
   id() {
-    return this.matchId;
+    return this._id;
   }
 
   title() {

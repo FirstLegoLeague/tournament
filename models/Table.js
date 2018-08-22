@@ -4,5 +4,5 @@ class Table {
     this.tableName = tableName
   }
 }
-Table.IdField = 'tableId'
+Table.IdField = '_id'
 module.exports = Table

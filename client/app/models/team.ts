@@ -17,7 +17,7 @@ export class Team implements Editable,Deletable, Deserializable {
   translationNeeded: boolean;
 
   id() {
-    return this.number;
+    return this._id;
   }
 
   title() {
