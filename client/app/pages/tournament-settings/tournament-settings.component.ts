@@ -26,7 +26,7 @@ export class TournamentSettingsComponent implements OnInit {
             next: (settings: object) => {
                 this.settings = {
                     tournamentTitle: {
-                        display: 'tournamentTitle',
+                        display: 'Tournament Title',
                         value: settings['tournamentTitle'],
                         name: 'tournamentTitle'
                     },

@@ -16,7 +16,7 @@
     <th *ngFor="let table of tables()">
       {{table.tableName}}
     </th>
-    <th></th>
+    <th>Action</th>
   </tr>
   <tr *ngFor="let match of matches()">
     <td>{{match.matchId}}</td>
@@ -26,6 +26,7 @@
     <td *ngFor="let matchTeam of match.matchTeams">
     {{matchTeam.teamNumber}}
     </td>
+    <td *ngFor="let field of missingFieldsArray()"></td>
     <td class="actions">
       <div class="button" data-open="model-edit" (click)="setEditModel(match)">
           <i class="fa fa-edit"></i>

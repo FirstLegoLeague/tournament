@@ -46,4 +46,23 @@ export class MatchesComponent implements OnInit {
     return match;
   }
 
+  amountOfMissingFields(){
+      let tablesAmount = this.tables().length;
+      let matchTableAmount = 0;
+      for (let match of this.matches()){
+          if (match.matchTeams.length > matchTableAmount){
+              matchTableAmount = match.matchTeams.length
+          }
+      }
+      return tablesAmount - matchTableAmount
+  }
+
+  missingFieldsArray(){
+      let arr = []
+      for (let i = 0; i < this.amountOfMissingFields(); i++) {
+          arr.push(i)
+      }
+      return arr
+  }
+
 }
