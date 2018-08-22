@@ -6,6 +6,7 @@ import {ImagesService} from './images.service'
 import {TournamentDataService} from "./tournament-data.service";
 import {Match} from "../models/match";
 import {Team} from "../models/team";
+import {Image} from "../models/image";
 
 @Injectable({
     providedIn: 'root'

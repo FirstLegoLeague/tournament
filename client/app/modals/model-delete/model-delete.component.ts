@@ -45,7 +45,8 @@ export class ModelDelete {
   }
 
   reload () {
-    this.deleteService.service(this.model()).reload()
+    // @ts-ignore
+      this.deleteService.service(this.model()).reload().subscribe()
   }
 
 }
