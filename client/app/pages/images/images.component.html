@@ -1,28 +1,36 @@
-<ul class="menu align-right">
-  <li>
-    <div class="button-group">
-      <button class="button" data-open="image-upload"><i class="fas fa-image"></i> Add Image</button>
-    </div>
-  </li>
-</ul>
+<div id="wrapper" [ngClass]="{'loading':loading}">
 
-<div class="grid-x small-1 medium-up-3">
-  <div *ngFor="let image of images()" class="cell grid-y">
-    <div class="cell">
-      <div class="card grid-y image-container">
-        <div class="card-divider cell shrink">
-          {{image.name}}
-        </div>
-        <div class="cell auto align-center">
-          <img src="{{image.image}}">
-        </div>
-        <div class="card-section cell shrink">
-          <button class="button trash-button" data-open="model-delete" (click)="setDeleteModel(image)"><i
-            class="fas fa-trash"></i></button>
-        </div>
-      </div>
+    <div class="dimmer">
+        <div class="big loader"></div>
     </div>
-  </div>
+
+    <div [ngClass]="{'hide':loading}">
+        <ul class="menu align-right">
+            <li>
+                <div class="button-group">
+                    <button class="button" data-open="image-upload"><i class="fas fa-image"></i> Add Image</button>
+                </div>
+            </li>
+        </ul>
+
+        <div class="grid-x small-1 medium-up-3">
+            <div *ngFor="let image of images()" class="cell grid-y">
+                <div class="cell">
+                    <div class="card grid-y image-container">
+                        <div class="card-divider cell shrink">
+                            {{image.name}}
+                        </div>
+                        <div class="cell auto align-center">
+                            <img src="{{image.image}}">
+                        </div>
+                        <div class="card-section cell shrink">
+                            <button class="button trash-button" data-open="model-delete"
+                                    (click)="setDeleteModel(image)"><i
+                                    class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-

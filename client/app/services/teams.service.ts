@@ -21,7 +21,7 @@ export class TeamsService implements EditableModalService, DeletableModalService
     init() {
         if (!this.initStarted) {
             this.initStarted = true
-            this.reload().subscribe()
+            return this.reload()
         }
     }
 

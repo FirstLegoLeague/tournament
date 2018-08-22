@@ -10,10 +10,13 @@ import { DeleteService } from '../../services/delete-service.service'
 })
 export class ImagesComponent implements OnInit {
 
+    public loading:boolean = true;
   constructor(private imageService: ImagesService, private modelModalsService: DeleteService) { }
 
   ngOnInit() {
-    this.imageService.init();
+    this.imageService.init().subscribe(()=>{
+        this.loading = false;
+    });
   }
 
   images() {

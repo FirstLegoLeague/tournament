@@ -1,39 +1,49 @@
-<ul class="menu align-right">
-  <li>
-    <div class="button-group">
-      <button class="button" data-open="tables"><i class="fas fa-table"></i> Manage tables</button>
-      <button class="button" data-open="model-edit" (click)="setEditModel(newMatch())"><i class="fas fa-plus-square"></i> Match</button>
-    </div>
-  </li>
-</ul>
+<div id="wrapper" [ngClass]="{'loading':loading}">
 
-<table id="matches" class="centralized">
-  <tr>
-    <th>Id</th>
-    <th>Stage</th>
-    <th>Start Time</th>
-    <th>End Time</th>
-    <th *ngFor="let table of tables()">
-      {{table.tableName}}
-    </th>
-    <th>Action</th>
-  </tr>
-  <tr *ngFor="let match of matches()">
-    <td>{{match.matchId}}</td>
-    <td>{{match.stage}}</td>
-    <td>{{match.startTime | date : 'shortTime'}}</td>
-    <td>{{match.endTime | date : 'shortTime'}}</td>
-    <td *ngFor="let matchTeam of match.matchTeams">
-    {{matchTeam.teamNumber}}
-    </td>
-    <td *ngFor="let field of missingFieldsArray()"></td>
-    <td class="actions">
-      <div class="button" data-open="model-edit" (click)="setEditModel(match)">
-          <i class="fa fa-edit"></i>
-      </div>
-      <div class="alert button" data-open="model-delete" (click)="setDeleteModel(match)">
-          <i class="fa fa-trash-alt"></i>
-      </div>
-    </td>
-  </tr>
-</table>
+    <div class="dimmer">
+        <div class="big loader"></div>
+    </div>
+    <div [ngClass]="{'hide':loading}">
+        <ul class="menu align-right">
+            <li>
+                <div class="button-group">
+                    <button class="button" data-open="tables"><i class="fas fa-table"></i> Manage tables</button>
+                    <button class="button" data-open="model-edit" (click)="setEditModel(newMatch())"><i
+                            class="fas fa-plus-square"></i> Match
+                    </button>
+                </div>
+            </li>
+        </ul>
+
+        <table id="matches" class="centralized">
+            <tr>
+                <th>Id</th>
+                <th>Stage</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th *ngFor="let table of tables()">
+                    {{table.tableName}}
+                </th>
+                <th>Action</th>
+            </tr>
+            <tr *ngFor="let match of matches()">
+                <td>{{match.matchId}}</td>
+                <td>{{match.stage}}</td>
+                <td>{{match.startTime | date : 'shortTime'}}</td>
+                <td>{{match.endTime | date : 'shortTime'}}</td>
+                <td *ngFor="let matchTeam of match.matchTeams">
+                    {{matchTeam.teamNumber}}
+                </td>
+                <td *ngFor="let field of missingFieldsArray()"></td>
+                <td class="actions">
+                    <div class="button" data-open="model-edit" (click)="setEditModel(match)">
+                        <i class="fa fa-edit"></i>
+                    </div>
+                    <div class="alert button" data-open="model-delete" (click)="setDeleteModel(match)">
+                        <i class="fa fa-trash-alt"></i>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

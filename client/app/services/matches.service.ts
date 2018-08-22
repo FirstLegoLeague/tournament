@@ -20,7 +20,7 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     init() {
         if (!this.initStarted) {
             this.initStarted = true
-            this.reload().subscribe()
+            return this.reload()
         }
     }
 

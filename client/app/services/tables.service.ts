@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {forkJoin} from 'rxjs/observable/forkJoin';
 import {RequestService} from './request.service';
 import {Table} from '../models/table';
-import {Team} from "../models/team";
 import {map} from "rxjs/operators";
 
 @Injectable({
@@ -20,10 +19,7 @@ export class TablesService {
     }
 
     init() {
-        if (!this.initStarted) {
-            this.initStarted = true;
-            this.reload().subscribe();
-        }
+        return this.reload();
     }
 
     reload() {
