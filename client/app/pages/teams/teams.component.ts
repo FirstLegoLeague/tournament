@@ -37,5 +37,4 @@ export class TeamsComponent implements OnInit {
   newTeam() {
     return new Team()
   }
-
 }
