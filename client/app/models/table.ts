@@ -8,7 +8,7 @@ export class Table implements Editable, Deletable, Deserializable {
   tableName: string;
 
   id() {
-    return this.tableId;
+    return this._id;
   }
 
   title() {
