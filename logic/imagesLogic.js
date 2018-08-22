@@ -11,7 +11,9 @@ const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 function initImagesFolder () {
   return fs.exists(IMAGES_DIR).then(exist => {
     if (!exist) {
-      return fs.mkdir(IMAGES_DIR)
+      const mkdirPromise = fs.mkdir(IMAGES_DIR)
+      const copyImagesPromise = fs.copy('default-data/images', IMAGES_DIR)
+      return Promise.all([mkdirPromise, copyImagesPromise])
     }
   })
 }
