@@ -1,7 +1,7 @@
-import { ModalModel } from './interfaces/modal-model'
+import { Editable,Deletable } from './interfaces/modal-model'
 import { Deserializable } from './interfaces/deserializable'
 
-export class Team implements ModalModel, Deserializable {
+export class Team implements Editable,Deletable, Deserializable {
 
   _id: string;
   name: string;
@@ -17,7 +17,7 @@ export class Team implements ModalModel, Deserializable {
   translationNeeded: boolean;
 
   id() {
-    return this.number;
+    return this._id;
   }
 
   title() {
@@ -26,13 +26,9 @@ export class Team implements ModalModel, Deserializable {
 
   fields() {
     return [
-      { display: 'Name', type: 'text', get: () => this.name, set: (value) => { this.name = value } },
       { display: 'Number', type: 'text', get: () => this.number, set: (value) => { this.number = value } },
+      { display: 'Name', type: 'text', get: () => this.name, set: (value) => { this.name = value } },
       { display: 'Affiliation', type: 'text', get: () => this.affiliation, set: (value) => { this.affiliation = value } },
-      { display: 'City/State', type: 'text', get: () => this.cityState, set: (value) => { this.cityState = value } },
-      { display: 'Coach 1', type: 'text', get: () => this.coach1, set: (value) => { this.coach1 = value } },
-      { display: 'Coach 2', type: 'text', get: () => this.coach2, set: (value) => { this.coach2 = value } },
-      { display: 'Country', type: 'text', get: () => this.country, set: (value) => { this.country = value } }
     ];
   }
 

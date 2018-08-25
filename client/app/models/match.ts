@@ -1,9 +1,9 @@
-import { ModalModel } from './interfaces/modal-model'
+import { Editable, Deletable } from './interfaces/modal-model'
 import { Deserializable } from './interfaces/deserializable'
 
 export type MatchTeam = { teamNumber: number, tableId: number }
 
-export class Match implements ModalModel, Deserializable {
+export class Match implements Editable, Deletable, Deserializable {
 
   _id: string;
   matchId: number;
@@ -13,7 +13,7 @@ export class Match implements ModalModel, Deserializable {
   matchTeams: MatchTeam[];
 
   id() {
-    return this.matchId;
+    return this._id;
   }
 
   title() {

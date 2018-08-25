@@ -1,14 +1,14 @@
-import { ModalModel } from './interfaces/modal-model'
+import { Editable, Deletable } from './interfaces/modal-model'
 import { Deserializable } from './interfaces/deserializable'
 
-export class Table implements ModalModel, Deserializable {
+export class Table implements Editable, Deletable, Deserializable {
 
   _id: string;
   tableId: number;
   tableName: string;
 
   id() {
-    return this.tableId;
+    return this._id;
   }
 
   title() {

@@ -5,21 +5,16 @@
   </div>
 
   <div class="grid-x grid-padding-y">
-    <div class="cell grid-x grid-padding-x" *ngFor="let table of tables()">
-      <input class="cell auto" [(ngModel)]="table.tableName">
-      <div class="cell shrink">
+    <div *ngFor="let table of tables(); index as index" id="table-{{index}}" class="cell grid-x grid-padding-x">
+      <input class="cell small-10" (keyup)="tableChanged(table)" [(ngModel)]="table.tableName">
+      <div class="cell small-2">
         <div class="alert clear button" (click)="removeTable(table)">
           <i class="fa fa-times"></i>
         </div>
       </div>
     </div>
     <div class="cell grid-x grid-padding-x">
-      <input class="cell auto" [(ngModel)]="newTable.tableName">
-      <div class="cell shrink">
-        <div class="clear button" (click)="addTable()">
-          <i class="fa fa-plus"></i>
-        </div>
-      </div>
+      <input class="cell small-10" (keyup)="tableChanged(newTable)" [(ngModel)]="newTable.tableName">
     </div>
   </div>
 

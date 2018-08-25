@@ -11,7 +11,9 @@ const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 function initImagesFolder () {
   return fs.exists(IMAGES_DIR).then(exist => {
     if (!exist) {
-      return fs.mkdir(IMAGES_DIR)
+      const mkdirPromise = fs.mkdir(IMAGES_DIR)
+      const copyImagesPromise = fs.copy('default-data/images', IMAGES_DIR)
+      return Promise.all([mkdirPromise, copyImagesPromise])
     }
   })
 }
@@ -22,7 +24,7 @@ function getAllImagesNames () {
 
 function getAllImages () {
   return getAllImagesNames().then(names => {
-    const images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop())).map(createReturnObject)
+    const images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop().toLowerCase())).map(createReturnObject)
     return Promise.all(images)
   })
 }
@@ -53,7 +55,7 @@ function saveImageToImagePath (imageTempPath, imageName) {
     if (image) {
       throw new Error('Image with that name already exists')
     }
-    return fs.rename(imageTempPath, path.resolve(IMAGES_DIR, imageName))
+    return fs.move(imageTempPath, path.resolve(IMAGES_DIR, imageName))
   })
 }
 

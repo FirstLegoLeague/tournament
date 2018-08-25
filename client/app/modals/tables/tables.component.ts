@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer } from '@angular/core';
 import { TablesService } from '../../services/tables.service';
 import { Notifications } from '../../services/notifications.service';
 import { Table } from '../../models/table';
@@ -13,7 +13,7 @@ export class Tables implements OnInit {
   public loading: boolean;
   public newTable: Table;
 
-  constructor(private tablesService: TablesService, private notifications: Notifications) {
+  constructor(private tablesService: TablesService, private notifications: Notifications, private renderer: Renderer) {
     this.newTable = new Table()
   }
 
@@ -25,9 +25,14 @@ export class Tables implements OnInit {
     return this.tablesService.editingTables;
   }
 
-  addTable() {
-    this.tablesService.editingTables.push(this.newTable)
-    this.newTable = new Table()
+  tableChanged(table) {
+    if (table === this.newTable && table.tableName.length > 0) {
+       this.tablesService.editingTables.push(this.newTable);
+       this.newTable = new Table()
+       setTimeout(() => this.renderer.selectRootElement(`#table-${this.tables().indexOf(table)} input`).focus())
+    } else if (table !== this.newTable && table.tableName.length === 0) {
+      this.removeTable(table)
+    }
   }
 
   removeTable(table) {

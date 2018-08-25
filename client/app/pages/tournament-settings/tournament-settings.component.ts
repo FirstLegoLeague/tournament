@@ -4,6 +4,8 @@ import {Notifications} from "../../services/notifications.service";
 import { TournamentStatusService } from '../../services/tournament-status.service';
 import { Observable } from '../../../../node_modules/rxjs';
 import {st} from "../../../../node_modules/@angular/core/src/render3";
+import {DeleteService} from "../../services/delete-service.service";
+import {TournamentDataService} from "../../services/tournament-data.service";
 
 @Component({
     selector: 'app-tournament-settings',
@@ -16,7 +18,10 @@ export class TournamentSettingsComponent implements OnInit {
     public loading: boolean = true;
     public currentMatch: number;
 
-    constructor(private tournamentSettingsService: TournamentSettingsService, private notification: Notifications, private tournamentStatusService: TournamentStatusService) {
+    constructor(private tournamentSettingsService: TournamentSettingsService,
+                public tournamentDataService: TournamentDataService,
+                private notification: Notifications,
+                private deleteModalsService: DeleteService) {
     }
 
     ngOnInit() {
@@ -24,7 +29,7 @@ export class TournamentSettingsComponent implements OnInit {
             next: (settings: object) => {
                 this.settings = {
                     tournamentTitle: {
-                        display: 'tournamentTitle',
+                        display: 'Tournament Title',
                         value: settings['tournamentTitle'],
                         name: 'tournamentTitle'
                     },
@@ -49,7 +54,7 @@ export class TournamentSettingsComponent implements OnInit {
                 this.notification.error("There was a problem getting the settings.")
             }
         });
-        
+
         this.tournamentStatusService.getMatch().subscribe({
             next: (newMatch: number) =>{
                 this.currentMatch = newMatch
@@ -81,7 +86,12 @@ export class TournamentSettingsComponent implements OnInit {
                 err => {
                     this.notification.error("Oh no! Something went wrong while trying to save...")
                 })
-        }        
+        }
     }
 
+    setDeleteModel(model){
+        this.deleteModalsService.setDeleteModel(model);
+    }
 }
+
+

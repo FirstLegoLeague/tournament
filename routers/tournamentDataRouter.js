@@ -1,5 +1,6 @@
 'use strict'
 const express = require('express')
+const requestify = require('requestify')
 
 const router = express.Router()
 const MongoClient = require('mongodb').MongoClient
@@ -79,5 +80,57 @@ router.post('/', adminAction, (req, res) => {
     res.sendStatus(500)
   })
 })
+
+if (!process.env.DEV) {
+  router.delete('/', adminAction, (req, res) => {
+    requestify.get(`${process.env.MODULE_SCORING_URL}/scores/count`).then(response => {
+      const body = response.getBody()
+      if (body.count > 0) {
+        MsLogger.error(`There are ${body.count} matches. Cant delete data.`)
+        res.status(405).send()
+        return
+      }
+
+      MongoClient.connect(process.env.MONGO_URI).then(conn => {
+        const matchesDelete = conn.db().collection('matches').drop()
+        const teamDelete = conn.db().collection('teams').drop()
+        const tablesDelete = conn.db().collection('tables').drop()
+
+        Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
+          mhubConnection.publishUpdateMsg('matches')
+          mhubConnection.publishUpdateMsg('teams')
+          mhubConnection.publishUpdateMsg('tables')
+          res.status(200).send()
+        }).catch(error => {
+          MsLogger.error(`Error deleting data: \n ${error}`)
+          res.status(500).send('There was an error deleting data')
+        })
+      })
+    }).catch(err => {
+      MsLogger.error(`Error getting the matches count \n ${err}`)
+      res.status(405).send()
+    })
+  })
+}
+
+if (process.env.DEV) {
+  router.delete('/', adminAction, (req, res) => {
+    MongoClient.connect(process.env.MONGO_URI).then(conn => {
+      const matchesDelete = conn.db().collection('matches').drop()
+      const teamDelete = conn.db().collection('teams').drop()
+      const tablesDelete = conn.db().collection('tables').drop()
+
+      Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
+        mhubConnection.publishUpdateMsg('matches')
+        mhubConnection.publishUpdateMsg('teams')
+        mhubConnection.publishUpdateMsg('tables')
+        res.status(200).send()
+      }).catch(error => {
+        MsLogger.error(`Error deleting data: \n ${error}`)
+        res.status(500).send('There was an error deleting data')
+      })
+    })
+  })
+}
 
 module.exports = router

@@ -4,22 +4,49 @@ import {MatchesService} from './matches.service';
 import {TeamsService} from './teams.service';
 import {TablesService} from './tables.service';
 import {Observable} from 'rxjs';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import {forkJoin} from 'rxjs/observable/forkJoin';
+import {DeletableModalService} from "../models/interfaces/modal-model";
+import {EventEmitter} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class TournamentDataService {
+export class TournamentDataService implements DeletableModalService {
 
-  constructor(private request: RequestService, private matches: MatchesService, private teams: TeamsService, private tables: TablesService) {
-  }
+    public dataReload: EventEmitter<any> = new EventEmitter();
 
-  upload(data: string) : Observable<any>{
-    return this.request.post('/tournamentData', { delimiter: ',', tourData: data }, { responseType: 'text' })
-  }
+    constructor(private request: RequestService, private matches: MatchesService, private teams: TeamsService, private tables: TablesService) {
+    }
 
-  reload() {
-    return forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]);
-  }
+    id(): any {
+        return;
+    }
 
+    title(): string {
+        return "Tournament Data";
+    }
+
+    upload(data: string): Observable<any> {
+        return this.request.post('/tournamentData', {delimiter: ',', tourData: data}, {responseType: 'text'})
+    }
+
+    reload() {
+        forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).subscribe(
+            (data) => {
+                this.dataReload.emit();
+            },
+            (err) =>{
+                console.error(err)
+            }
+        );
+    }
+
+    delete() {
+        return this.request.delete('/tournamentData/');
+    }
+
+    deleteErrorText(): string {
+        return 'Error deleting data! \n There are probably scores left in scoring..';
+    };
 }
+
