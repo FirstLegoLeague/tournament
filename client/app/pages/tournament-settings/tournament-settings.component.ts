@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TournamentSettingsService} from "../../services/tournament-settings.service";
 import {Notifications} from "../../services/notifications.service";
-import { TournamentStatusService } from '../../services/tournament-status.service';
-import { Observable } from '../../../../node_modules/rxjs';
+import {TournamentStatusService} from '../../services/tournament-status.service';
+import {Observable} from '../../../../node_modules/rxjs';
 import {st} from "../../../../node_modules/@angular/core/src/render3";
 import {DeleteService} from "../../services/delete-service.service";
 import {TournamentDataService} from "../../services/tournament-data.service";
@@ -21,7 +21,8 @@ export class TournamentSettingsComponent implements OnInit {
     constructor(private tournamentSettingsService: TournamentSettingsService,
                 public tournamentDataService: TournamentDataService,
                 private notification: Notifications,
-                private deleteModalsService: DeleteService) {
+                private deleteModalsService: DeleteService,
+                private tournamentStatusService: TournamentStatusService) {
     }
 
     ngOnInit() {
@@ -56,28 +57,27 @@ export class TournamentSettingsComponent implements OnInit {
         });
 
         this.tournamentStatusService.getMatch().subscribe({
-            next: (newMatch: number) =>{
+            next: (newMatch: number) => {
                 this.currentMatch = newMatch
             },
-            error: (err) =>{
+            error: (err) => {
                 this.notification.error("There was a problem getting the current match number.")
             }
         })
     }
 
     save(setting: string) {
-        if(setting === 'tournamentMatch'){
+        if (setting === 'tournamentMatch') {
             // @ts-ignore
-            this.tournamentStatusService.setMatch(this.currentMatch).subscribe((response,err) => {
-                if(err){
+            this.tournamentStatusService.setMatch(this.currentMatch).subscribe((response, err) => {
+                if (err) {
                     this.notification.error("Oh no! Something went wrong while trying to save match.")
-                } else{
+                } else {
                     this.loading = false;
                     this.notification.success("Match saved successfully")
                 }
-              })
-        }else
-        {
+            })
+        } else {
             this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
                 response => {
                     this.loading = false;
@@ -89,7 +89,7 @@ export class TournamentSettingsComponent implements OnInit {
         }
     }
 
-    setDeleteModel(model){
+    setDeleteModel(model) {
         this.deleteModalsService.setDeleteModel(model);
     }
 }

@@ -1,8 +1,9 @@
 'use strict'
 const express = require('express')
 
-const mhubConnection = require('../Utils/mhubConnection')
-const getMatchLogic = require('../logic/getMatchLogic')
+const { getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber } = require('../logic/tournamentStatusLogic')
+const {Logger} = require('@first-lego-league/ms-logger')
+const logger = Logger()
 
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
@@ -12,38 +13,43 @@ exports.getRouter = function () {
   const router = express.Router()
 
   router.get('/current', (req, res) => {
-    getMatchLogic.getCurrentMatch().then(data => {
+    getCurrentMatch().then(data => {
       if (data) {
-        mhubConnection.publishUpdateMsg('CurrentMatches', data)
         res.send(data)
       } else {
         res.sendStatus(404)
       }
+    }).catch(err => {
+      logger.error(err)
+      res.status(500).send('The server encounter a problem while the current match')
     })
   })
 
   router.get('/upcoming', (req, res) => {
-    Promise.all(getMatchLogic.getNextMatches()).then(data => data.filter(data => data)).then(data => {
-      if (data && data.length > 0) {
-        mhubConnection.publishUpdateMsg('UpcomingMatches', data)
-        res.send(data)
+    getNextMatches().then(matches => {
+      if (matches) {
+        res.send(matches)
       } else {
         res.sendStatus(404)
       }
+    }).catch(err => {
+      logger.error(err)
+      res.status(500).send('The server encounter a problem while fetching upcoming matches')
     })
   })
 
   router.get('/matchNumber', (req, res) => {
-    res.json(getMatchLogic.getMatch())
+    res.json(getCurrentMatchNumber())
   })
 
-  router.put('/current/set', adminAction, (req, res) => {
-    if (parseInt(req.body.match) || req.body.match === '0') {
-      getMatchLogic.setMatch(parseInt(req.body.match) || 0)
+  router.put('/current', adminAction, (req, res) => {
+    if (parseInt(req.body.match)) {
+      setCurrentMatchNumber(parseInt(req.body.match))
       res.sendStatus(200)
     } else {
       res.sendStatus(415)
     }
   })
+
   return router
 }

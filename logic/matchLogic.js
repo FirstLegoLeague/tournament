@@ -4,22 +4,27 @@ const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const MONGU_URI = process.env.MONGO_URI
 
-function getMatch (matchNumber) {
+function getMatch (matchNumber, stage) {
   return MongoClient.connect(MONGU_URI).then(connection => {
-    const dbMatch = connection.db().collection('settings').findOne({}).then(tournamentSettings => {
-      return connection.db().collection('matches').findOne({ 'stage': tournamentSettings.tournamentStage, 'matchId': matchNumber })
-        .then(resolvedMatch => {
-          return resolvedMatch
-        })
+    return connection.db().collection('matches').findOne({ 'stage': stage, 'matchId': matchNumber }).then(match => {
+      return match
     })
-
-    return dbMatch
   }).catch(err => {
     MsLogger.error(err)
     return null
   })
 }
 
+function isLastMatchInStage (matchNumber, stage) {
+  getMatch(matchNumber + 1, stage).then(match => {
+    if (match) {
+      return true
+    }
+    return false
+  })
+}
+
 module.exports = {
-  'getMatch': getMatch
+  getMatch,
+  isLastMatchInStage
 }
