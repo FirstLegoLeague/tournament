@@ -57,6 +57,10 @@ exports.getRouter = function (options) {
       res.sendStatus(400)
     }
 
+    if (typeof req.body._id === 'string') {
+      delete req.body._id
+    }
+
     MongoClient.connect(MONGO_URI).then(connection => {
       connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, req.params.id), { $set: req.body }).then(dbResponse => {
         if (dbResponse.ok === 1) {
@@ -87,6 +91,11 @@ exports.getRouter = function (options) {
           res.send('Object already exists')
           return
         }
+
+        if (typeof req.body._id === 'string') {
+          delete req.body._id
+        }
+
         connection.db().collection(options.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
             mhubConnection.publishUpdateMsg(options.mhubNamespace)

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs'
 
-export type ModalModelField = { display: string, type: string, get: () => any, set: (value: any) => void }
+export type ModalModelField = { display: string, type: string, get: () => any, set: ((value: any) => void), editable: boolean }
 
 export interface Deletable {
   id (): any;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { Editable, EditableModalService } from '../../models/interfaces/modal-model';
 import { ModelModalsService } from '../../services/model-modals.service';
 import { Notifications } from '../../services/notifications.service';
@@ -11,6 +11,7 @@ import { EditService } from '../../services/edit-service.service'
 })
 
 export class ModelEdit {
+
 
   loading: boolean;
 
