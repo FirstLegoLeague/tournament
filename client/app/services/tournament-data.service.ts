@@ -7,6 +7,7 @@ import {Observable} from 'rxjs';
 import {forkJoin} from 'rxjs/observable/forkJoin';
 import {DeletableModalService} from "../models/interfaces/modal-model";
 import {EventEmitter} from '@angular/core';
+import {map} from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -48,5 +49,18 @@ export class TournamentDataService implements DeletableModalService {
     deleteErrorText(): string {
         return 'Error deleting data! \n There are probably scores left in scoring..';
     };
+
+    hasData(){
+        return forkJoin(this.teams.requestAll(), this.matches.requestAll()).pipe(map(data =>{
+                let teams = data[0];
+                let matches = data[1];
+                // @ts-ignore
+                return (teams.length > 0) && (matches.length > 0);
+            },
+            error => {
+                return true;
+            }))
+    }
+
 }
 
