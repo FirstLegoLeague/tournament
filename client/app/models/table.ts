@@ -16,7 +16,7 @@ export class Table implements Editable, Deletable, Deserializable {
   }
 
   fields() {
-    return [{ display: 'Name', type: 'text', get: () => this.tableName, set: (value) => { this.tableName = value } }];
+    return [{ display: 'Name', type: 'text', get: () => this.tableName, set: (value) => { this.tableName = value }, editable: true }];
   }
 
   body() {

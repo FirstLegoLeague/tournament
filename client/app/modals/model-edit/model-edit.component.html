@@ -9,7 +9,8 @@
       <label>{{field.display}}
         <input type="{{field.type}}"
           value="{{field.get()}}"
-          (change)="field.set($event.target.value)"/>
+          (change)="field.editable || !model().savedInDB() ? field.set($event.target.value) : console.log('bla')"
+        [disabled]="field.editable == false && model().savedInDB()"/>
       </label>
     </div>
   </div>

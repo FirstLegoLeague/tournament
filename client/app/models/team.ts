@@ -26,14 +26,15 @@ export class Team implements Editable,Deletable, Deserializable {
 
   fields() {
     return [
-      { display: 'Number', type: 'text', get: () => this.number, set: (value) => { this.number = value } },
-      { display: 'Name', type: 'text', get: () => this.name, set: (value) => { this.name = value } },
-      { display: 'Affiliation', type: 'text', get: () => this.affiliation, set: (value) => { this.affiliation = value } },
+      { display: 'Number', type: 'text', get: () => this.number, set: (value) => { this.number = value }, editable: false },
+      { display: 'Name', type: 'text', get: () => this.name, set: (value) => { this.name = value } , editable: true},
+      { display: 'Affiliation', type: 'text', get: () => this.affiliation, set: (value) => { this.affiliation = value }, editable: true },
     ];
   }
 
   body() {
     return {
+      _id: this._id,
       name: this.name,
       number: Number(this.number),
       affiliation: this.affiliation,
