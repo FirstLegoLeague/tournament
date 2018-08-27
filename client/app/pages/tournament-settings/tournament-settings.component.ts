@@ -14,6 +14,7 @@ export class TournamentSettingsComponent implements OnInit {
 
     public settings: object;
     public loading: boolean = true;
+    public hasDataInDb = false;
 
     constructor(private tournamentSettingsService: TournamentSettingsService,
                 public tournamentDataService: TournamentDataService,
@@ -22,8 +23,16 @@ export class TournamentSettingsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.reload();
+        this.tournamentDataService.dataReload.subscribe(()=>{
+            this.reload()
+        })
+    }
+
+    private reload() {
         this.tournamentSettingsService.getAllSettings().subscribe({
             next: (settings: object) => {
+                this.haveDataInDb()
                 this.settings = {
                     tournamentTitle: {
                         display: 'Tournament Title',
@@ -66,6 +75,12 @@ export class TournamentSettingsComponent implements OnInit {
 
     setDeleteModel(model){
         this.deleteModalsService.setDeleteModel(model);
+    }
+
+    haveDataInDb(){
+        this.tournamentDataService.hasData().subscribe(result=>{
+            this.hasDataInDb = result
+        })
     }
 }
 
