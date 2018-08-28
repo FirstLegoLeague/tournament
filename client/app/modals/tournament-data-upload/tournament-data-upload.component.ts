@@ -33,6 +33,8 @@ export class TournamentDataUpload {
             this.data = data;
           }, error => {
             this.notifications.error('Tournament data parsing failed');
+            this.close();
+            this.loading = false;
           }, () => {
             this.loading = false;
           });
