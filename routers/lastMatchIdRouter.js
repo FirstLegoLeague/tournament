@@ -11,10 +11,9 @@ router.get('/:stage/nextId', (req, res) => {
   MongoClient.connect(MONGU_URI).then(connection => {
     connection.db().collection('matches').find({ 'stage': req.params.stage }).sort({ matchId: -1 }).limit(1).toArray().then(data => {
       if (data.length >= 1) {
-        console.log({ nextMatchId: data[0].matchId + 1 })
         res.status(200).send({ nextMatchId: data[0].matchId + 1 })
       } else {
-        res.status(404).send('Could find a new match id')
+        res.status(200).send({ nextMatchId: 1 })
       }
     })
   }).catch(err => {
