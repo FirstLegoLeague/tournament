@@ -21,7 +21,7 @@
     <button class="button" *ngIf="teams" (click)="upload($event)" >Upload</button>
   </div>
 
-  <button id="teams-close-button" class="close-button" data-close aria-label="Close modal" type="button">
+  <button id="teams-close-button" class="close-button" (click)="clearModal()" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
