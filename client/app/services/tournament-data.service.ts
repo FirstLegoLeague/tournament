@@ -32,14 +32,10 @@ export class TournamentDataService implements DeletableModalService {
     }
 
     reload() {
-        forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).subscribe(
+        return forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).pipe(map(
             (data) => {
                 this.dataReload.emit();
-            },
-            (err) =>{
-                console.error(err)
-            }
-        );
+            }));
     }
 
     delete() {
