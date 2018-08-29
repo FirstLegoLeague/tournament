@@ -55,7 +55,7 @@ export class TournamentDataService implements DeletableModalService {
                 let teams = data[0];
                 let matches = data[1];
                 // @ts-ignore
-                return (teams.length > 0) && (matches.length > 0);
+                return (teams.length > 0) || (matches.length > 0);
             },
             error => {
                 return true;
