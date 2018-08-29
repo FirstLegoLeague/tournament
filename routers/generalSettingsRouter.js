@@ -25,7 +25,7 @@ exports.getSettingsRouter = function () {
   router.get('/stages', (req, res) => {
     getAllStages().then(data => {
       if (data.length === 0 || !data) {
-        res.status(404).send()
+        res.status(200).json(['practice', 'ranking'])
         return
       }
 
