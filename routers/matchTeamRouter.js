@@ -18,6 +18,7 @@ exports.getRouter = function () {
       connection.db().collection('matches').find({ 'matchTeams.teamNumber': parseInt(req.params.team) }).toArray().then(data => {
         if (!data || data.length === 0) {
           res.send(getDefaultMatchesForTeam(parseInt(req.params.team)))
+          return
         }
 
         res.send(data)

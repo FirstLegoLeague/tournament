@@ -91,36 +91,7 @@ if (!process.env.DEV) {
         return
       }
 
-      MongoClient.connect(process.env.MONGO_URI).then(conn => {
-        const matchesDelete = conn.db().collection('matches').drop()
-        const teamDelete = conn.db().collection('teams').drop()
-        const tablesDelete = conn.db().collection('tables').drop()
-
-        Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
-          mhubConnection.publishUpdateMsg('matches')
-          mhubConnection.publishUpdateMsg('teams')
-          mhubConnection.publishUpdateMsg('tables')
-          res.status(200).send()
-        }).catch(error => {
-          MsLogger.error(`Error deleting data: \n ${error}`)
-          res.status(500).send('There was an error deleting data')
-        })
-      })
-    }).catch(err => {
-      MsLogger.error(`Error getting the matches count \n ${err}`)
-      res.status(405).send()
-    })
-  })
-}
-
-if (process.env.DEV) {
-  router.delete('/', adminAction, (req, res) => {
-    MongoClient.connect(process.env.MONGO_URI).then(conn => {
-      const matchesDelete = conn.db().collection('matches').drop()
-      const teamDelete = conn.db().collection('teams').drop()
-      const tablesDelete = conn.db().collection('tables').drop()
-
-      Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
+      dropCollectionsInDatabase().then(() => {
         mhubConnection.publishUpdateMsg('matches')
         mhubConnection.publishUpdateMsg('teams')
         mhubConnection.publishUpdateMsg('tables')
@@ -129,6 +100,58 @@ if (process.env.DEV) {
         MsLogger.error(`Error deleting data: \n ${error}`)
         res.status(500).send('There was an error deleting data')
       })
+    })
+  }).catch(err => {
+    MsLogger.error(`Error getting the matches count \n ${err}`)
+    res.status(405).send()
+  })
+}
+
+if (process.env.DEV) {
+  router.delete('/', adminAction, (req, res) => {
+    dropCollectionsInDatabase().then(() => {
+      mhubConnection.publishUpdateMsg('matches')
+      mhubConnection.publishUpdateMsg('teams')
+      mhubConnection.publishUpdateMsg('tables')
+      res.status(200).send()
+    }).catch(error => {
+      MsLogger.error(`Error deleting data: \n ${error}`)
+      res.status(500).send('There was an error deleting data')
+    })
+  })
+}
+
+function dropCollectionsInDatabase () {
+  return MongoClient.connect(process.env.MONGO_URI).then(conn => {
+    const matchesCollection = conn.db().collection('matches')
+    const teamsCollection = conn.db().collection('teams')
+    const tablesCollection = conn.db().collection('tables')
+
+    const collections = [
+      {
+        collection: matchesCollection
+      },
+      {
+        collection: teamsCollection
+      },
+      {
+        collection: tablesCollection
+      }
+    ]
+
+    const collectionsExistsPromises = []
+    for (let i = 0; i < collections.length; i++) {
+      collectionsExistsPromises.push(collections[i].collection.find().toArray())
+    }
+    return Promise.all(collectionsExistsPromises).then(returned => {
+      const dropPromises = []
+      for (let i = 0; i < returned.length; i++) {
+        if (returned[i].length > 0) {
+          dropPromises.push(collections[i].collection.drop())
+        }
+      }
+
+      return Promise.all(dropPromises)
     })
   })
 }
