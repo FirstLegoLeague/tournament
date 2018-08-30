@@ -100,10 +100,10 @@ if (!process.env.DEV) {
         MsLogger.error(`Error deleting data: \n ${error}`)
         res.status(500).send('There was an error deleting data')
       })
+    }).catch(err => {
+      MsLogger.error(`Error getting the matches count \n ${err}`)
+      res.status(405).send()
     })
-  }).catch(err => {
-    MsLogger.error(`Error getting the matches count \n ${err}`)
-    res.status(405).send()
   })
 }
 
