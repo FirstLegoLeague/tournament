@@ -24,7 +24,7 @@
 
             <h5>Delete Tournament Data</h5>
             <label>Press Delete to delete Teams and Matches. <br /> Note: You must first delete all scoring data.</label>
-            <button class="button alert" data-open="model-delete" (click)="setDeleteModel(tournamentDataService)">Delete</button>
+            <button class="button alert" data-open="model-delete" (click)="setDeleteModel(tournamentDataService)" [disabled]="!hasDataInDb">Delete</button>
 
             <div class="input-group">
                     <input type="text" [(ngModel)]="currentMatch" class="input-group-field">
@@ -34,7 +34,6 @@
                         </button>
                     </div>
                 </div>
-
         </fieldset>
 
         <fieldset class="fieldset">

@@ -43,9 +43,9 @@ export class Match implements Editable, Deletable, Deserializable {
       });
     }
     return [
-      { display: 'Stage', type: 'text', get: () => this.stage, set: (value) => { this.stage = value } },
-      { display: 'Start time', type: 'time', get: () => this.timeInputValueFromField(this.startTime), set: (value) => this.setTimeFieldFromInput('startTime',value) },
-      { display: 'End time', type: 'time', get: () => this.timeInputValueFromField(this.endTime), set: (value) => this.setTimeFieldFromInput('endTime',value) }
+      { display: 'Stage', type: 'text', get: () => this.stage, set: (value) => { this.stage = value } , editable: true},
+      { display: 'Start time', type: 'time', get: () => this.timeInputValueFromField(this.startTime), set: (value) => this.setTimeFieldFromInput('startTime',value), editable: true },
+      { display: 'End time', type: 'time', get: () => this.timeInputValueFromField(this.endTime), set: (value) => this.setTimeFieldFromInput('endTime',value), editable: true }
     ].concat(teamFields);
   }
 

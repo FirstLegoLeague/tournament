@@ -1,75 +1,84 @@
-import { Component } from '@angular/core';
-import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop';
+import {Component} from '@angular/core';
+import {UploadEvent, UploadFile, FileSystemFileEntry} from 'ngx-file-drop';
 
-import { ParserService } from '../../services/parser.service';
-import { TeamsService } from '../../services/teams.service';
-import { Notifications } from '../../services/notifications.service';
-import { Team } from '../../models/team';
+import {ParserService} from '../../services/parser.service';
+import {TeamsService} from '../../services/teams.service';
+import {Notifications} from '../../services/notifications.service';
+import {Team} from '../../models/team';
+import {TournamentDataService} from "../../services/tournament-data.service";
 
 @Component({
-  selector: 'teams-upload',
-  templateUrl: './teams-upload.component.html',
-  styleUrls: ['./teams-upload.component.css']
+    selector: 'teams-upload',
+    templateUrl: './teams-upload.component.html',
+    styleUrls: ['./teams-upload.component.css']
 })
 export class TeamsUpload {
 
-  public file: UploadFile;
-  public content: string;
-  public fileHovering: Boolean;
-  public loading: Boolean;
-  public teams: Array<Team>;
+    public file: UploadFile;
+    public content: string;
+    public fileHovering: Boolean;
+    public loading: Boolean;
+    public teams: Array<Team>;
 
-  constructor(private parser: ParserService, private teamsService: TeamsService, private notifications: Notifications) {
-  }
-
-  public dropped(event: UploadEvent) {
-  	this.file = event.files[0]
-    this.loading = true
-    if (this.file.fileEntry.isFile) {
-      const fileEntry = this.file.fileEntry as FileSystemFileEntry;
-      fileEntry.file((file: File) => {
-        const fileReader = new FileReader();
-        fileReader.onload = (e) => {
-          this.content = fileReader.result
-          this.parser.parseTeams(this.content).subscribe((data: any) =>{
-            this.teams = data;
-          }, error => {
-            this.notifications.error('Teams parsing failed');
-          }, () => {
-            this.loading = false;
-          });
-        }
-        fileReader.readAsText(file, "UTF-8");
-      });
-    } else {
-      this.file = null
+    constructor(private parser: ParserService, private teamsService: TeamsService, private tournamentDataService: TournamentDataService, private notifications: Notifications) {
     }
-  }
 
-  public upload(event) {
-    this.loading = true
-    this.teamsService.uploadBatch(this.content).subscribe(() => {
-      this.notifications.success('Teams uploaded');
-      this.close();
-      this.loading = false;
-      this.teamsService.reload();
-    }, error => {
-      this.notifications.error('Teams upload failed');
-      this.close();
-      this.loading = false;
-    });
-  }
+    public dropped(event: UploadEvent) {
+        this.file = event.files[0]
+        this.loading = true
+        if (this.file.fileEntry.isFile) {
+            const fileEntry = this.file.fileEntry as FileSystemFileEntry;
+            fileEntry.file((file: File) => {
+                const fileReader = new FileReader();
+                fileReader.onload = (e) => {
+                    this.content = fileReader.result
+                    this.parser.parseTeams(this.content).subscribe((data: any) => {
+                        this.teams = data;
+                    }, error => {
+                        this.notifications.error('Teams parsing failed');
+                    }, () => {
+                        this.loading = false;
+                    });
+                }
+                fileReader.readAsText(file, "UTF-8");
+            });
+        } else {
+            this.file = null
+        }
+    }
 
-  public fileOver(event) {
-    this.fileHovering = true;
-  }
+    public upload(event) {
+        this.loading = true
+        this.teamsService.uploadBatch(this.content).subscribe(() => {
+            this.notifications.success('Teams uploaded');
+            this.close();
+            this.loading = false;
+            this.tournamentDataService.reload().subscribe();
+        }, error => {
+            this.notifications.error('Teams upload failed');
+            this.close();
+            this.loading = false;
+        });
+    }
 
-  public fileLeave(event) {
-    this.fileHovering = false;
-  }
+    public fileOver(event) {
+        this.fileHovering = true;
+    }
 
-  public close() {
-    document.getElementById('teams-close-button').click();
-  }
+    public fileLeave(event) {
+        this.fileHovering = false;
+    }
+
+    public close() {
+        document.getElementById('teams-close-button').click();
+    }
+
+    public clearModal() {
+        this.file = null
+        this.content = null
+        this.fileHovering = false
+        this.loading = false
+        this.teams = null
+    }
 
 }
