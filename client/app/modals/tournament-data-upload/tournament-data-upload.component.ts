@@ -57,7 +57,7 @@ export class TournamentDataUpload {
             this.notifications.success('Tournament data uploaded');
             this.close();
             this.loading = false;
-            this.tournamentDataService.reload();
+            this.tournamentDataService.reload().subscribe();
         }, error => {
             this.notifications.error('Tournament data upload failed');
             this.close();

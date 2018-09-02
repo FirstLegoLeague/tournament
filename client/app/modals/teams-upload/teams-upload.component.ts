@@ -5,6 +5,7 @@ import {ParserService} from '../../services/parser.service';
 import {TeamsService} from '../../services/teams.service';
 import {Notifications} from '../../services/notifications.service';
 import {Team} from '../../models/team';
+import {TournamentDataService} from "../../services/tournament-data.service";
 
 @Component({
     selector: 'teams-upload',
@@ -19,7 +20,7 @@ export class TeamsUpload {
     public loading: Boolean;
     public teams: Array<Team>;
 
-    constructor(private parser: ParserService, private teamsService: TeamsService, private notifications: Notifications) {
+    constructor(private parser: ParserService, private teamsService: TeamsService, private tournamentDataService: TournamentDataService, private notifications: Notifications) {
     }
 
     public dropped(event: UploadEvent) {
@@ -52,7 +53,7 @@ export class TeamsUpload {
             this.notifications.success('Teams uploaded');
             this.close();
             this.loading = false;
-            this.teamsService.reload();
+            this.tournamentDataService.reload().subscribe();
         }, error => {
             this.notifications.error('Teams upload failed');
             this.close();
