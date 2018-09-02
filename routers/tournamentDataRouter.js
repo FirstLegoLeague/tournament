@@ -34,37 +34,44 @@ router.post('/', adminAction, (req, res) => {
     res.status(400).send('Please provide delimiter..')
   }
 
+  let tablesPromise
+  let teamsPromise
+  let practicePromise
+  let rankingPromose
+
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   MongoClient.connect(process.env.MONGO_URI).then(conn => {
     if (data.tables) {
-      conn.db().collection('tables').insertMany(data.tables).then(() => {
+      tablesPromise = conn.db().collection('tables').insertMany(data.tables).then(() => {
         MsLogger.info('Data saved successfully to collection tables')
+        mhubConnection.publishUpdateMsg('tables')
+        return true
       }).catch(err => {
         MsLogger.error('Something went wrong while saving data \n' + err)
       })
-
-      mhubConnection.publishUpdateMsg('tables')
     }
 
-    conn.db().collection('teams').insertMany(data.teams).then(() => {
+    teamsPromise = conn.db().collection('teams').insertMany(data.teams).then(() => {
       MsLogger.info('Data saved successfully to collection teams')
+      mhubConnection.publishUpdateMsg('teams')
+      return true
     }).catch(err => {
       MsLogger.error('Something went wrong while saving data \n' + err)
     })
 
-    mhubConnection.publishUpdateMsg('teams')
-
     if (data.practiceMatches) {
-      conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
+      practicePromise = conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
         MsLogger.info('practice matches saved successfully to collection matches')
+        return true
       }).catch(err => {
         MsLogger.error('Something went wrong while saving data \n' + err)
       })
     }
 
     if (data.rankingMatches) {
-      conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
+      rankingPromose = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
         MsLogger.info('ranking matches successfully to collection ranking-matches')
+        return true
       }).catch(err => {
         MsLogger.error('Something went wrong while saving data \n' + err)
       })
@@ -74,7 +81,11 @@ router.post('/', adminAction, (req, res) => {
       mhubConnection.publishUpdateMsg('matches')
     }
 
-    res.sendStatus(201)
+    const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromose].filter(promise => promise)
+
+    Promise.all(promises).then(() => {
+      res.sendStatus(201)
+    })
   }).catch(err => {
     console.log(err)
     res.sendStatus(500)
