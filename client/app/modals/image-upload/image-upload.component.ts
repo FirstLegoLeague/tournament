@@ -40,7 +40,7 @@ export class ImageUploadComponent {
           this.notifications.success('Image upload succeeded');
           this.close();
           this.loading = false;
-          this.imagesService.reload();
+          this.imagesService.reload().subscribe();
         },(error)=>{
           this.notifications.error('Image upload failed');
           this.close();
