@@ -7,7 +7,7 @@
   <file-drop class="expanded button" *ngIf="!teams" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Teams CSV file here</file-drop>
 
     <div class="grid-x align-center button-group">
-        <button class="button" *ngIf="teams" (click)="upload($event)" >Upload</button>
+        <button class="button" *ngIf="teams" (click)="upload($event)" >Import</button>
     </div>
 
   <table *ngIf="teams">
