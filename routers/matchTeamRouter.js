@@ -12,9 +12,8 @@ const RANDOM_ID_LENGTH = 25
 
 exports.getRouter = function () {
   const router = express.Router()
-
   router.get('/:team/matches', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
+    MongoClient().connect(MONGU_URI).then(connection => {
       connection.db().collection('matches').find({ 'matchTeams.teamNumber': parseInt(req.params.team) }).toArray().then(data => {
         if (!data || data.length === 0) {
           res.send(getDefaultMatchesForTeam(parseInt(req.params.team)))
@@ -22,6 +21,7 @@ exports.getRouter = function () {
         }
 
         res.send(data)
+        connection.close()
       })
     }).catch(err => {
       console.log(err)

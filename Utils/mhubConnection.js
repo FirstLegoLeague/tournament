@@ -9,26 +9,29 @@ const MHUB_NODES = {
 }
 
 const MHUB_CLIENT_ID = 'cl-schedule'
-
+const NODE = process.env.DEV ? 'default' : 'protected'
 const mhubClient = new MClient(process.env.MHUB_URI)
+
+loginToMhub(MHUB_NODES.PROTECTED)
+mhubClient.connect().then(() => {
+  mhubClient.subscribe('default')
+})
 
 mhubClient.on('error', msg => {
   MsLogger.error('Unable to connect to mhub, other modules won\'t be notified changes \n ' + msg)
 })
 
-mhubClient.subscribe('protected')
+mhubClient.subscribe('default')
 
 function publishUpdateMsg (nameSpace, data = '') {
   const connectedNode = loginToMhub(MHUB_NODES.PROTECTED)
-
   publishMsg(connectedNode, `${nameSpace}:reload`, data)
 }
 
 function publishMsg (node, topic, data = '') {
   const connectedNode = loginToMhub(node)
-
+  MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${data}`)
   mhubClient.connect().then(() => {
-    MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${data}`)
     mhubClient.publish(connectedNode, topic, data, {
       'client-id': MHUB_CLIENT_ID,
       'correlation-id': getCorrelationId()
@@ -37,8 +40,9 @@ function publishMsg (node, topic, data = '') {
 }
 
 function subscribe (topic, handle) {
+  mhubClient.subscribe(NODE, topic)
   mhubClient.on('message', message => {
-    if (message.topic == topic) {
+    if (message.topic === topic) {
       handle(message)
     }
   })
@@ -46,11 +50,9 @@ function subscribe (topic, handle) {
 
 function loginToMhub (node) {
   if (process.env.DEV) {
-    mhubClient.login('default', '')
     return 'default'
   }
-
-  if (node == MHUB_NODES.PROTECTED) {
+  if (node === MHUB_NODES.PROTECTED) {
     mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
     return MHUB_NODES.PROTECTED
   }
@@ -60,5 +62,6 @@ module.exports = {
   publishUpdateMsg,
   publishMsg,
   subscribe,
+  mhubClient,
   MHUB_NODES
 }

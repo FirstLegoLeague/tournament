@@ -31,7 +31,7 @@ rules:
   node/exports-style:
   - warn
   - exports
-  node/no-unsupported-features: warn
+  node/no-unsupported-features: 0
   node/shebang: warn
 
   promise/catch-or-return: warn
