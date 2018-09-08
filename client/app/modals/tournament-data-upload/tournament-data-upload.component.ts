@@ -30,9 +30,15 @@ export class TournamentDataUpload {
         fileReader.onload = (e) => {
           this.content = fileReader.result
           this.parser.parseTournamentData(this.content).subscribe((data: any) => {
-            this.data = data;
+            if(data['error']){
+              this.notifications.error(`Parsing of Schedule file failed.\n${data['error']}.`);
+              this.close();
+              this.loading = false;
+            }else{
+              this.data = data;
+            }
           }, error => {
-            this.notifications.error('Tournament data parsing failed');
+            this.notifications.error('Parsing of Schedule file failed');
             this.close();
             this.loading = false;
           }, () => {
@@ -53,12 +59,12 @@ export class TournamentDataUpload {
   public upload(event) {
     this.loading = true
     this.tournamentDataService.upload(this.content).subscribe(() => {
-      this.notifications.success('Tournament data uploaded');
+      this.notifications.success('Schedule file imported');
       this.close();
       this.loading = false;
       this.tournamentDataService.reload();
     }, error => {
-      this.notifications.error('Tournament data upload failed');
+      this.notifications.error('Schedule file import failed');
       this.close();
       this.loading = false;
     });

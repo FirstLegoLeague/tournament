@@ -1,10 +1,14 @@
 <div id="teams-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-  <h2>Load team list</h2>
+  <h2>Import team list</h2>
   <div class="dimmer">
   	<div class="big loader"></div>
   </div>
 
-  <file-drop class="expanded button" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Teams CSV file here</file-drop>
+  <file-drop class="expanded button" [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop your Team List CSV file here</file-drop>
+
+  <div class="grid-x align-center button-group">
+    <button class="button" *ngIf="teams" (click)="upload($event)" >Import</button>
+  </div>
 
   <table *ngIf="teams">
     <tr>
@@ -16,10 +20,6 @@
       <td>{{team.name}}</td>
     </tr>
   </table>
-
-  <div class="grid-x align-center button-group">
-    <button class="button" *ngIf="teams" (click)="upload($event)" >Upload</button>
-  </div>
 
   <button id="teams-close-button" class="close-button" data-close aria-label="Close modal" type="button">
     <span aria-hidden="true">&times;</span>

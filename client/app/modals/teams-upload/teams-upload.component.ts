@@ -32,7 +32,13 @@ export class TeamsUpload {
         fileReader.onload = (e) => {
           this.content = fileReader.result
           this.parser.parseTeams(this.content).subscribe((data: any) =>{
-            this.teams = data;
+            if(data['error']){
+              this.notifications.error(`Parsing of teams file failed.\n${data['error']}.`);
+              this.close();
+              this.loading = false;
+            }else{
+              this.teams = data['teams'];
+            }
           }, error => {
             this.notifications.error('Teams parsing failed');
           }, () => {
@@ -49,12 +55,12 @@ export class TeamsUpload {
   public upload(event) {
     this.loading = true
     this.teamsService.uploadBatch(this.content).subscribe(() => {
-      this.notifications.success('Teams uploaded');
+      this.notifications.success('Teams imported');
       this.close();
       this.loading = false;
       this.teamsService.reload();
     }, error => {
-      this.notifications.error('Teams upload failed');
+      this.notifications.error('Teams import failed');
       this.close();
       this.loading = false;
     });
