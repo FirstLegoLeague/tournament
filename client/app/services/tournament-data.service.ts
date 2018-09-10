@@ -32,14 +32,10 @@ export class TournamentDataService implements DeletableModalService {
     }
 
     reload() {
-        forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).subscribe(
+        return forkJoin([this.matches.reload(), this.teams.reload(), this.tables.reload()]).pipe(map(
             (data) => {
                 this.dataReload.emit();
-            },
-            (err) =>{
-                console.error(err)
-            }
-        );
+            }));
     }
 
     delete() {
@@ -55,7 +51,7 @@ export class TournamentDataService implements DeletableModalService {
                 let teams = data[0];
                 let matches = data[1];
                 // @ts-ignore
-                return (teams.length > 0) && (matches.length > 0);
+                return (teams.length > 0) || (matches.length > 0);
             },
             error => {
                 return true;

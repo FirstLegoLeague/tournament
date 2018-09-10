@@ -9,7 +9,6 @@ import {map} from "rxjs/operators";
     providedIn: 'root'
 })
 export class ImagesService implements DeletableModalService {
-    private initStarted: boolean = false
     public images: Image[] = []
 
     constructor(private requests: RequestService) {
