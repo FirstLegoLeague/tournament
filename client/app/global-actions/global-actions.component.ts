@@ -30,7 +30,7 @@ export class GlobalActions implements OnInit {
                 let teams = data[0];
                 let matches = data[1];
                 // @ts-ignore
-                this.hasData = (teams.length > 0) && (matches.length > 0);
+                this.hasData = (teams.length > 0) || (matches.length > 0);
             },
             error => {
                 this.hasData = true;

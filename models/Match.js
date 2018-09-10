@@ -10,6 +10,6 @@ class Match {
   }
 }
 
-Match.IdField = 'matchId'
+Match.IdField = '_id'
 
 module.exports = Match

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule, HttpClient, HTTP_INTERCEPTORS} from '@angular/common/http';
@@ -20,6 +20,7 @@ import { Tables } from './modals/tables/tables.component';
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
 import { ImagesComponent } from './pages/images/images.component';
 import {RequestInterceptor} from "./services/request-interceptor";
+import {ErrorLogger} from "./services/error-logger";
 
 const appRoutes = [
   {path: 'teams', component: TeamsComponent},
@@ -57,6 +58,10 @@ const appRoutes = [
           provide: HTTP_INTERCEPTORS,
           useClass: RequestInterceptor,
           multi: true
+      },
+      {
+          provide: ErrorHandler,
+          useClass: ErrorLogger
       }
   ],
   bootstrap: [AppComponent]

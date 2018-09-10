@@ -7,11 +7,45 @@ const MONGU_URI = process.env.MONGO_URI
 
 exports.deleteValidation = function (params) {
   try {
-    deleteMatchesForTeam(parseInt(params.id))
-    return true
+    return MongoClient.connect(MONGU_URI).then(connection => {
+      return connection.db().collection('teams').findOne({ _id: params.id }).then(team => {
+        if (team) {
+          deleteMatchesForTeam(team.number)
+        }
+      })
+    })
   } catch (e) {
+    MsLogger.error(e)
     return false
   }
+}
+
+exports.editValidation = function (params) {
+  return MongoClient.connect(MONGU_URI).then(connection => {
+    return connection.db().collection('teams').findOne({ _id: params._id }).then(originalTeam => {
+      if (params.number != originalTeam.number) {
+        return false
+      }
+      return true
+    })
+  }).catch(err => {
+    MsLogger.error(err)
+    throw err
+  })
+}
+
+exports.createValidation = function (params) {
+  return MongoClient.connect(MONGU_URI).then(connection => {
+    return connection.db().collection('teams').find({ number: params.number }).toArray().then(teams => {
+      if (teams.length > 0) {
+        return false
+      }
+      return true
+    })
+  }).catch(err => {
+    MsLogger.error(err)
+    throw err
+  })
 }
 
 function deleteMatchesForTeam (teamNumber) {

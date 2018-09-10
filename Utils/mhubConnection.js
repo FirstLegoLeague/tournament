@@ -44,6 +44,7 @@ function publishMsg (node, topic, data = '') {
   const connectedNode = loginToMhub(node)
 
   connect().then(() => {
+    MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${data}`)
     mhubClient.publish(connectedNode, topic, data, {
       'client-id': MHUB_CLIENT_ID,
       'correlation-id': getCorrelationId()

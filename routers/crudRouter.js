@@ -1,6 +1,7 @@
 'use strict'
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
+const ObjectId = require('mongodb').ObjectID
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
@@ -32,7 +33,7 @@ exports.getRouter = function (options) {
 
   router.get('/:id', (req, res) => {
     MongoClient.connect(MONGO_URI).then(connection => {
-      connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, parseInt(req.params.id))).then(data => {
+      connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, req.params.id)).then(data => {
         if (!data) {
           res.sendStatus(404)
           return
@@ -56,8 +57,12 @@ exports.getRouter = function (options) {
       res.sendStatus(400)
     }
 
+    if (typeof req.body._id === 'string') {
+      delete req.body._id
+    }
+
     MongoClient.connect(MONGO_URI).then(connection => {
-      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, parseInt(req.params.id)), { $set: req.body }).then(dbResponse => {
+      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, req.params.id), { $set: req.body }).then(dbResponse => {
         if (dbResponse.ok === 1) {
           mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(204)
@@ -86,6 +91,11 @@ exports.getRouter = function (options) {
           res.send('Object already exists')
           return
         }
+
+        if (typeof req.body._id === 'string') {
+          delete req.body._id
+        }
+
         connection.db().collection(options.collectionName).insertOne(req.body).then(a => {
           if (a.insertedCount > 0) {
             mhubConnection.publishUpdateMsg(options.mhubNamespace)
@@ -109,7 +119,7 @@ exports.getRouter = function (options) {
       res.sendStatus(400)
     }
     MongoClient.connect(MONGO_URI).then(connection => {
-      connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, parseInt(req.params.id))).then(dbResponse => {
+      connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, req.params.id)).then(dbResponse => {
         if (dbResponse.ok === 1) {
           mhubConnection.publishUpdateMsg(options.mhubNamespace)
           res.sendStatus(200)
@@ -126,6 +136,9 @@ exports.getRouter = function (options) {
 
 function idMongoQuery (idField, id) {
   const query = {}
+  if (idField == '_id') {
+    id = ObjectId(id)
+  }
   query[idField] = id
   return query
 }

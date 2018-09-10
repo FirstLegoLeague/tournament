@@ -12,10 +12,13 @@ import { EditService } from '../../services/edit-service.service'
 })
 export class TeamsComponent implements OnInit {
 
+    public loading: boolean = true;
   constructor(private teamsService: TeamsService, private deleteModalsService: DeleteService, private editModalsService: EditService) { }
 
   ngOnInit() {
-    this.teamsService.init();
+    this.teamsService.init().subscribe(()=>{
+        this.loading = false;
+    });
   }
 
   showAffiliation() {
@@ -37,5 +40,4 @@ export class TeamsComponent implements OnInit {
   newTeam() {
     return new Team()
   }
-
 }

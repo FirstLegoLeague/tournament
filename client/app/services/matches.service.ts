@@ -20,7 +20,7 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     init() {
         if (!this.initStarted) {
             this.initStarted = true
-            this.reload().subscribe()
+            return this.reload()
         }
     }
 
@@ -31,7 +31,20 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     save(match: Match): Observable<any> {
         const method = match.savedInDB() ? 'put' : 'post'
         const url = match.savedInDB() ? `/match/${match.id()}` : '/match/'
-        return this.requests[method](url, match.body(), {responseType: 'text'})
+        let body = match.body();
+        if (!match.savedInDB()) {
+            return this.getNextMatchId(match.stage).pipe(map(returned => {
+                // @ts-ignore
+                body['matchId'] = returned.nextMatchId
+                debugger;
+                return this.requests[method](url, body, {responseType: 'text'}).subscribe(data=>{
+                    return data;
+                })
+            }))
+        } else {
+            return this.requests[method](url, body, {responseType: 'text'})
+        }
+
     }
 
     requestAll() {
@@ -48,5 +61,9 @@ export class MatchesService implements EditableModalService, DeletableModalServi
     deleteErrorText(): string {
         return '';
     };
+
+    getNextMatchId(stage: string) {
+        return this.requests.get(`/match/${stage}/nextId`)
+    }
 
 }

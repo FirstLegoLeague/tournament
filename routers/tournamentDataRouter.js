@@ -34,37 +34,44 @@ router.post('/', adminAction, (req, res) => {
     res.status(400).send('Please provide delimiter..')
   }
 
+  let tablesPromise
+  let teamsPromise
+  let practicePromise
+  let rankingPromose
+
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   MongoClient.connect(process.env.MONGO_URI).then(conn => {
     if (data.tables) {
-      conn.db().collection('tables').insertMany(data.tables).then(() => {
+      tablesPromise = conn.db().collection('tables').insertMany(data.tables).then(() => {
         MsLogger.info('Data saved successfully to collection tables')
+        mhubConnection.publishUpdateMsg('tables')
+        return true
       }).catch(err => {
         MsLogger.error('Something went wrong while saving data \n' + err)
       })
-
-      mhubConnection.publishUpdateMsg('tables')
     }
 
-    conn.db().collection('teams').insertMany(data.teams).then(() => {
+    teamsPromise = conn.db().collection('teams').insertMany(data.teams).then(() => {
       MsLogger.info('Data saved successfully to collection teams')
+      mhubConnection.publishUpdateMsg('teams')
+      return true
     }).catch(err => {
       MsLogger.error('Something went wrong while saving data \n' + err)
     })
 
-    mhubConnection.publishUpdateMsg('teams')
-
     if (data.practiceMatches) {
-      conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
+      practicePromise = conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
         MsLogger.info('practice matches saved successfully to collection matches')
+        return true
       }).catch(err => {
         MsLogger.error('Something went wrong while saving data \n' + err)
       })
     }
 
     if (data.rankingMatches) {
-      conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
+      rankingPromose = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
         MsLogger.info('ranking matches successfully to collection ranking-matches')
+        return true
       }).catch(err => {
         MsLogger.error('Something went wrong while saving data \n' + err)
       })
@@ -74,7 +81,11 @@ router.post('/', adminAction, (req, res) => {
       mhubConnection.publishUpdateMsg('matches')
     }
 
-    res.sendStatus(201)
+    const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromose].filter(promise => promise)
+
+    Promise.all(promises).then(() => {
+      res.sendStatus(201)
+    })
   }).catch(err => {
     console.log(err)
     res.sendStatus(500)
@@ -91,20 +102,14 @@ if (!process.env.DEV) {
         return
       }
 
-      MongoClient.connect(process.env.MONGO_URI).then(conn => {
-        const matchesDelete = conn.db().collection('matches').drop()
-        const teamDelete = conn.db().collection('teams').drop()
-        const tablesDelete = conn.db().collection('tables').drop()
-
-        Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
-          mhubConnection.publishUpdateMsg('matches')
-          mhubConnection.publishUpdateMsg('teams')
-          mhubConnection.publishUpdateMsg('tables')
-          res.status(200).send()
-        }).catch(error => {
-          MsLogger.error(`Error deleting data: \n ${error}`)
-          res.status(500).send('There was an error deleting data')
-        })
+      dropCollectionsInDatabase().then(() => {
+        mhubConnection.publishUpdateMsg('matches')
+        mhubConnection.publishUpdateMsg('teams')
+        mhubConnection.publishUpdateMsg('tables')
+        res.status(200).send()
+      }).catch(error => {
+        MsLogger.error(`Error deleting data: \n ${error}`)
+        res.status(500).send('There was an error deleting data')
       })
     }).catch(err => {
       MsLogger.error(`Error getting the matches count \n ${err}`)
@@ -115,20 +120,49 @@ if (!process.env.DEV) {
 
 if (process.env.DEV) {
   router.delete('/', adminAction, (req, res) => {
-    MongoClient.connect(process.env.MONGO_URI).then(conn => {
-      const matchesDelete = conn.db().collection('matches').drop()
-      const teamDelete = conn.db().collection('teams').drop()
-      const tablesDelete = conn.db().collection('tables').drop()
+    dropCollectionsInDatabase().then(() => {
+      mhubConnection.publishUpdateMsg('matches')
+      mhubConnection.publishUpdateMsg('teams')
+      mhubConnection.publishUpdateMsg('tables')
+      res.status(200).send()
+    }).catch(error => {
+      MsLogger.error(`Error deleting data: \n ${error}`)
+      res.status(500).send('There was an error deleting data')
+    })
+  })
+}
 
-      Promise.all([matchesDelete, teamDelete, tablesDelete]).then(() => {
-        mhubConnection.publishUpdateMsg('matches')
-        mhubConnection.publishUpdateMsg('teams')
-        mhubConnection.publishUpdateMsg('tables')
-        res.status(200).send()
-      }).catch(error => {
-        MsLogger.error(`Error deleting data: \n ${error}`)
-        res.status(500).send('There was an error deleting data')
-      })
+function dropCollectionsInDatabase () {
+  return MongoClient.connect(process.env.MONGO_URI).then(conn => {
+    const matchesCollection = conn.db().collection('matches')
+    const teamsCollection = conn.db().collection('teams')
+    const tablesCollection = conn.db().collection('tables')
+
+    const collections = [
+      {
+        collection: matchesCollection
+      },
+      {
+        collection: teamsCollection
+      },
+      {
+        collection: tablesCollection
+      }
+    ]
+
+    const collectionsExistsPromises = []
+    for (let i = 0; i < collections.length; i++) {
+      collectionsExistsPromises.push(collections[i].collection.find().toArray())
+    }
+    return Promise.all(collectionsExistsPromises).then(returned => {
+      const dropPromises = []
+      for (let i = 0; i < returned.length; i++) {
+        if (returned[i].length > 0) {
+          dropPromises.push(collections[i].collection.drop())
+        }
+      }
+
+      return Promise.all(dropPromises)
     })
   })
 }

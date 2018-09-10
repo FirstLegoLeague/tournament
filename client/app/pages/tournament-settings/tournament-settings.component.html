@@ -1,8 +1,11 @@
-<div class="callout">
+<div id="wrapper" class="callout" [ngClass]="{'loading':loading}">
     <h3>Settings</h3>
 
-    <div *ngIf="!loading">
+    <div class="dimmer">
+        <div class="big loader"></div>
+    </div>
 
+    <div *ngIf="!loading">
         <fieldset class="fieldset">
             <legend>Tournament</legend>
             <h5>{{settings['tournamentStage'].display}}</h5>
@@ -19,9 +22,9 @@
                 </div>
             </div>
 
-            <legend>Delete Tournament Data</legend>
-            <label>Press Delete to delete Teams and Matches. Note: You must first delete all scoring data.</label>
-            <button class="button alert" data-open="model-delete" (click)="setDeleteModel(tournamentDataService)">Delete</button>
+            <h5>Delete Tournament Data</h5>
+            <label>Press Delete to delete Teams and Matches. <br /> Note: You must first delete all scoring data.</label>
+            <button class="button alert" data-open="model-delete" (click)="setDeleteModel(tournamentDataService)" [disabled]="!hasDataInDb">Delete</button>
         </fieldset>
 
         <fieldset class="fieldset">

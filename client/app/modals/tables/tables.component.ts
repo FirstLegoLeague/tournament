@@ -49,7 +49,7 @@ export class Tables implements OnInit {
     this.loading = true;
     this.tablesService.save().subscribe(() => {
       this.notifications.success('Changes saved');
-      this.tablesService.reload();
+      this.tablesService.reload().subscribe();
       this.close();
       this.loading = false;
     }, error => {
