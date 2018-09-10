@@ -1,13 +1,13 @@
 <div id="tournament-data-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal
      data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-    <h2>Load tournament schedule file</h2>
+    <h2>Import Tournament Schedule file</h2>
     <div class="dimmer">
         <div class="big loader"></div>
     </div>
 
     <file-drop class="expanded button" *ngIf="!data" [ngClass]="{ 'hollow': !fileHovering }"
                (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop
-        your Tournament CSV file here
+        your Tournament Scheduler CSV file here
     </file-drop>
 
     <div class="grid-x align-center button-group">

@@ -35,7 +35,7 @@ exports.getRouter = function () {
       return res.status(400).send('Please provide delimiter..')
     }
 
-    const teams = teamsBatchParser.parse(req.body.teamsData, req.body.delimiter)
+    const teams = teamsBatchParser.parse(req.body.teamsData, req.body.delimiter).teams
     MongoClient.connect(MONGU_URI).then(connection => {
       return connection.db().collection('teams').insertMany(teams).then(() => {
         publishUpdateMsg('teams')
