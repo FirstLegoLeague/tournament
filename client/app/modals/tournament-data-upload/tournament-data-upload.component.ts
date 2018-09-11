@@ -31,7 +31,13 @@ export class TournamentDataUpload {
                 fileReader.onload = (e) => {
                     this.content = fileReader.result
                     this.parser.parseTournamentData(this.content).subscribe((data: any) => {
-                        this.data = data;
+                        if(data['error']){
+                            this.notifications.error(`Parsing of Schedule file failed.\n${data['error']}.`);
+                            this.close();
+                            this.loading = false;
+                        }else{
+                            this.data = data;
+                        }
                     }, error => {
                         this.notifications.error('Tournament data parsing failed');
                         this.close();

@@ -33,7 +33,13 @@ export class TeamsUpload {
                 fileReader.onload = (e) => {
                     this.content = fileReader.result
                     this.parser.parseTeams(this.content).subscribe((data: any) => {
-                        this.teams = data;
+                        if(data['error']){
+                            this.notifications.error(`Parsing of teams file failed.\n${data['error']}.`);
+                            this.close();
+                            this.loading = false;
+                        }else{
+                            this.teams = data['teams'];
+                        }
                     }, error => {
                         this.notifications.error('Teams parsing failed');
                     }, () => {
