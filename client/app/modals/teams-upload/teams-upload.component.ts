@@ -50,12 +50,12 @@ export class TeamsUpload {
     public upload(event) {
         this.loading = true
         this.teamsService.uploadBatch(this.content).subscribe(() => {
-            this.notifications.success('Teams uploaded');
+            this.notifications.success('Teams imported');
             this.close();
             this.loading = false;
             this.tournamentDataService.reload().subscribe();
         }, error => {
-            this.notifications.error('Teams upload failed');
+            this.notifications.error('Teams import failed');
             this.close();
             this.loading = false;
         });
