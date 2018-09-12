@@ -23,10 +23,10 @@ import {RequestInterceptor} from "./services/request-interceptor";
 import {ErrorLogger} from "./services/error-logger";
 
 const appRoutes = [
-  {path: 'teams', component: TeamsComponent},
-  {path: 'matches', component: MatchesComponent},
   {path: 'settings', component: TournamentSettingsComponent},
-  {path: 'images', component: ImagesComponent}
+  {path: 'images', component: ImagesComponent},
+  {path: 'teams', component: TeamsComponent},
+  {path: 'matches', component: MatchesComponent}
 ]
 
 

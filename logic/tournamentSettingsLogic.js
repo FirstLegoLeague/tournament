@@ -9,7 +9,7 @@ const SETTING_COLLECTION_NAME = 'settings'
 function setDefaultSettings () {
   const defaultSettings = {
     'tournamentStage': 'practice',
-    'tournamentTitle': 'World Festival 2018'
+    'tournamentTitle': 'World Festival Houston 2019'
   }
   MongoClient.connect(MONGU_URI).then(connection => {
     connection.db().collection(SETTING_COLLECTION_NAME).findOne().then(response => {
