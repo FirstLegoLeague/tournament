@@ -13,10 +13,10 @@ export class NavigationComponent implements OnInit {
 
   constructor() {
   	this.links = [
-      { href: '/matches', title: 'Matches', icon: 'fa-clipboard-list' },
-      { href: '/teams', title: 'Teams', icon: 'fa-users' },
       { href: '/settings', title: 'Tournament Settings', icon: 'fa-cogs' },
-      { href: '/images', title: 'Images', icon: 'fa-image' }
+      { href: '/images', title: 'Images', icon: 'fa-image' },
+      { href: '/teams', title: 'Teams', icon: 'fa-users' },
+      { href: '/matches', title: 'Matches', icon: 'fa-clipboard-list' }
   	]
   }
 
