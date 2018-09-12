@@ -1,5 +1,6 @@
 'use strict'
 const objectDataParser = require('./objectDataParser')
+const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const Team = require('../models/Team')
 const Match = require('../models/Match')
@@ -38,8 +39,9 @@ function parse (data, delimiter) {
     }
   })
 
-  const numOfTeams = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1]
-  const teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeams[1]))
+  const numOfTeamsRow = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1]
+  const teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeamsRow[1]) + TEAM_DATE_HEADER_LINE_AMOUNT+1)
+  MsLogger.log(`Parsing schedule file. Found ${teamsRaw.length} team(s)`)
 
   let rankingMatchesRaw, numOfActualFields, tablesRaw
   if (doesSectionExsits(blocks, RANKING_MATCH_SCHEDULE_ID)) {
