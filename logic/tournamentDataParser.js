@@ -22,6 +22,7 @@ const PRACTICE_MATCH_HEADER_LINE_AMOUNT = 6
 const TABLE_NAMES_START = 1
 
 function parse (data, delimiter) {
+  let errorStr
   const dataLines = data.split('\n')
 
   const lines = []
@@ -42,6 +43,16 @@ function parse (data, delimiter) {
   const numOfTeamsRow = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1]
   const teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeamsRow[1]) + TEAM_DATE_HEADER_LINE_AMOUNT+1)
   MsLogger.log(`Parsing schedule file. Found ${teamsRaw.length} team(s)`)
+
+  // Check for duplicate team numbers. Cause import to fail if found
+  const teamNumbersArray = teamsRaw.map(team => team[0])
+  const hasDuplicateTeam = teamNumbersArray.some((team, index) => {
+    return teamNumbersArray.indexOf(team) !== index
+  })
+  if(hasDuplicateTeam) {
+    errorStr = 'Duplicate team number found in CSV. Aborting import.'
+    MsLogger.warn(errorStr)
+  }
 
   let rankingMatchesRaw, numOfActualFields, tablesRaw
   if (doesSectionExsits(blocks, RANKING_MATCH_SCHEDULE_ID)) {
@@ -86,7 +97,8 @@ function parse (data, delimiter) {
     'teams': teams,
     'tables': tables,
     'rankingMatches': rankingMatches,
-    'practiceMatches': practiceMatches
+    'practiceMatches': practiceMatches,
+    'error': errorStr
   }
 }
 
