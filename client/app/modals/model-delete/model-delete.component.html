@@ -1,8 +1,8 @@
 <div id="model-delete" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-  <h4 *ngIf="model()">Do you really want to delete {{model().title()}}?</h4>
-  <div class="subheader">This operation is irreversible!</div>
+  <h4 *ngIf="model()">{{model().title()}} is about to be deleted.</h4>
+  <div class="subheader">Warning: You can’t undo this action.</div>
   <div class="dimmer">
-  	<div class="loader"></div>
+    <div class="loader"></div>
   </div>
 
   <div class="grid-x align-center button-group">
