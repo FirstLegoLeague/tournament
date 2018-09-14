@@ -26,24 +26,16 @@ mhubClient.on('close', () => {
 function connect () {
   if (!connectionPromise) {
     connectionPromise = mhubClient.connect()
-    if (!process.env.DEV) {
-      connectionPromise = connectionPromise
-        .then(() => mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD))
-    }
   }
   return connectionPromise
 }
 
 function publishUpdateMsg (nameSpace) {
-  const connectedNode = loginToMhub(MHUB_NODES.PROTECTED)
-
-  publishMsg(connectedNode, `${nameSpace}:reload`)
+  publishMsg(MHUB_NODES.PROTECTED, `${nameSpace}:reload`)
 }
 
 function publishMsg (node, topic, data = '') {
-  const connectedNode = loginToMhub(node)
-
-  connect().then(() => {
+  connect().then(() => loginToMhub(node)).then(connectedNode => {
     MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${data}`)
     mhubClient.publish(connectedNode, topic, data, {
       'client-id': MHUB_CLIENT_ID,
