@@ -1,6 +1,6 @@
 {
   "name": "@first-lego-league/tournament",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "main": "index.js",
   "repository": "git@github.com:FirstLegoLeague/tournament.git",
   "author": "Tal Taub <taltaub22@gmail.com>",
