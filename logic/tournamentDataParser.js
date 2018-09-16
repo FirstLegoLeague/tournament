@@ -1,5 +1,6 @@
 'use strict'
 const objectDataParser = require('./objectDataParser')
+
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const Team = require('../models/Team')
@@ -41,7 +42,7 @@ function parse (data, delimiter) {
   })
 
   const numOfTeamsRow = lines[blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + 1]
-  const teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeamsRow[1]) + TEAM_DATE_HEADER_LINE_AMOUNT+1)
+  const teamsRaw = lines.slice(blocks.find(x => x.blockId === TEAM_DATA_BLOCK_ID).lineNumber + TEAM_DATE_HEADER_LINE_AMOUNT, parseInt(numOfTeamsRow[1]) + TEAM_DATE_HEADER_LINE_AMOUNT + 1)
   MsLogger.log(`Parsing schedule file. Found ${teamsRaw.length} team(s)`)
 
   // Check for duplicate team numbers. Cause import to fail if found
@@ -49,7 +50,7 @@ function parse (data, delimiter) {
   const hasDuplicateTeam = teamNumbersArray.some((team, index) => {
     return teamNumbersArray.indexOf(team) !== index
   })
-  if(hasDuplicateTeam) {
+  if (hasDuplicateTeam) {
     errorStr = 'Duplicate team number found in CSV. Aborting import.'
     MsLogger.warn(errorStr)
   }
@@ -80,17 +81,22 @@ function parse (data, delimiter) {
   }
 
   const tables = []
-  for (let i = 0; i < numOfActualFields; i++) {
+  for (let i = 0; i < numOfActualFields && arrayContainesNonEmptyFields(tablesRaw); i++) {
     tables.push(new Table(i, tablesRaw[i + TABLE_NAMES_START]))
   }
 
   let practiceMatches, rankingMatches
   const teams = teamsRaw.map(objectDataParser.deserializeTeam)
-  if (rankingMatchesRaw) {
+  if (rankingMatchesRaw && arrayContainesNonEmptyFields(rankingMatchesRaw)) {
     rankingMatches = rankingMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'ranking'))
+  } else {
+    rankingMatches = []
   }
+
   if (practiceMatchesRaw) {
     practiceMatches = practiceMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'practice'))
+  } else {
+    practiceMatches = []
   }
 
   return {
@@ -108,4 +114,17 @@ module.exports = {
 
 function doesSectionExsits (blocks, sectionId) {
   return blocks.find(x => x.blockId == sectionId) != undefined
+}
+
+function arrayContainesNonEmptyFields (arr) {
+  return arr.some(line => {
+    if (Array.isArray(line)) {
+      return line.some(x => !isStringEmpty(x))
+    }
+    return !isStringEmpty(line)
+  })
+}
+
+function isStringEmpty (str) {
+  return str == '' || str == undefined || /\s+/.test(str)
 }
