@@ -1,13 +1,11 @@
 'use strict'
 
-const MongoClient = require('mongodb').MongoClient
+const db = require('../Utils/mongoConnection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-
-const MONGU_URI = process.env.MONGO_URI
 
 exports.deleteValidation = function (params) {
   try {
-    return MongoClient.connect(MONGU_URI).then(connection => {
+    return db.connection().then(connection => {
       return connection.db().collection('teams').findOne({ _id: params.id }).then(team => {
         if (team) {
           deleteMatchesForTeam(team.number)
@@ -21,7 +19,7 @@ exports.deleteValidation = function (params) {
 }
 
 exports.editValidation = function (params) {
-  return MongoClient.connect(MONGU_URI).then(connection => {
+  return db.connection().then(connection => {
     return connection.db().collection('teams').findOne({ _id: params._id }).then(originalTeam => {
       if (params.number != originalTeam.number) {
         return false
@@ -35,7 +33,7 @@ exports.editValidation = function (params) {
 }
 
 exports.createValidation = function (params) {
-  return MongoClient.connect(MONGU_URI).then(connection => {
+  return db.connection().then(connection => {
     return connection.db().collection('teams').find({ number: params.number }).toArray().then(teams => {
       if (teams.length > 0) {
         return false
@@ -49,7 +47,7 @@ exports.createValidation = function (params) {
 }
 
 function deleteMatchesForTeam (teamNumber) {
-  MongoClient.connect(MONGU_URI).then(connection => {
+  db.connection().then(connection => {
     return connection.db().collection('matches').updateMany({ 'matchTeams.teamNumber': teamNumber },
       { $set: { 'matchTeams.$.teamNumber': 'null' } }
     )

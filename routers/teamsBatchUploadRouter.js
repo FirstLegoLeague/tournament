@@ -1,13 +1,11 @@
 'use strict'
 const express = require('express')
-const MongoClient = require('mongodb').MongoClient
+const db = require('../Utils/mongoConnection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 const {publishUpdateMsg} = require('../Utils/mhubConnection')
 
 const teamsBatchParser = require('../logic/teamsBatchParser')
-
-const MONGU_URI = process.env.MONGO_URI
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -36,7 +34,7 @@ exports.getRouter = function () {
     }
 
     const teams = teamsBatchParser.parse(req.body.teamsData, req.body.delimiter).teams
-    MongoClient.connect(MONGU_URI).then(connection => {
+    db.connection().then(connection => {
       return connection.db().collection('teams').insertMany(teams).then(() => {
         publishUpdateMsg('teams')
         res.status(201).send()

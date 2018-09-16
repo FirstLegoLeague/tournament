@@ -3,7 +3,7 @@ const express = require('express')
 const requestify = require('requestify')
 
 const router = express.Router()
-const MongoClient = require('mongodb').MongoClient
+const db = require('../Utils/mongoConnection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
@@ -40,7 +40,7 @@ router.post('/', adminAction, (req, res) => {
   let rankingPromose
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
-  MongoClient.connect(process.env.MONGO_URI).then(conn => {
+  db.connection().then(conn => {
     if (data.tables) {
       tablesPromise = conn.db().collection('tables').insertMany(data.tables).then(() => {
         MsLogger.info('Data saved successfully to collection tables')
@@ -133,7 +133,7 @@ if (process.env.DEV) {
 }
 
 function dropCollectionsInDatabase () {
-  return MongoClient.connect(process.env.MONGO_URI).then(conn => {
+  return db.connection().then(conn => {
     const matchesCollection = conn.db().collection('matches')
     const teamsCollection = conn.db().collection('teams')
     const tablesCollection = conn.db().collection('tables')
