@@ -1,9 +1,8 @@
 'use strict'
-const MongoClient = require('mongodb').MongoClient
+const db = require('../Utils/mongoConnection')
 
 const { MHUB_NODES, publishMsg } = require('../Utils/mhubConnection')
 
-const MONGU_URI = process.env.MONGO_URI
 const SETTING_COLLECTION_NAME = 'settings'
 
 function setDefaultSettings () {
@@ -11,7 +10,7 @@ function setDefaultSettings () {
     'tournamentStage': 'practice',
     'tournamentTitle': 'World Festival Houston 2019'
   }
-  MongoClient.connect(MONGU_URI).then(connection => {
+  db.connection().then(connection => {
     connection.db().collection(SETTING_COLLECTION_NAME).findOne().then(response => {
       if (!response) {
         return connection.db().collection(SETTING_COLLECTION_NAME).insert(defaultSettings)
@@ -21,7 +20,7 @@ function setDefaultSettings () {
 }
 
 function getAllSettings () {
-  return MongoClient.connect(MONGU_URI).then(connection => {
+  return db.connection().then(connection => {
     return connection.db().collection(SETTING_COLLECTION_NAME)
       .findOne({})
       .then(data => {
@@ -44,7 +43,7 @@ function getSetting (settingName) {
 }
 
 function updateSetting (settingName, value) {
-  return MongoClient.connect(MONGU_URI).then(connection => {
+  return db.connection().then(connection => {
     const setDocument = {}
     setDocument[settingName] = value
     return connection.db().collection(SETTING_COLLECTION_NAME)
@@ -59,7 +58,7 @@ function updateSetting (settingName, value) {
 }
 
 function getAllStages () {
-  return MongoClient.connect(MONGU_URI).then(connection => {
+  return db.connection().then(connection => {
     return connection.db().collection('matches').distinct('stage', {})
   })
 }
