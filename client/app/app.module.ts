@@ -21,6 +21,8 @@ import { TournamentSettingsComponent } from './pages/tournament-settings/tournam
 import { ImagesComponent } from './pages/images/images.component';
 import {RequestInterceptor} from "./services/request-interceptor";
 import {ErrorLogger} from "./services/error-logger";
+import { TeamPipe } from './pages/teams/pipes/team.pipe';
+import { BoldPartStringPipe } from './pages/teams/pipes/bold-part-string.pipe';
 
 const appRoutes = [
   {path: 'settings', component: TournamentSettingsComponent},
@@ -44,7 +46,9 @@ const appRoutes = [
     ModelDelete,
     Tables,
     TournamentSettingsComponent,
-    ImagesComponent
+    ImagesComponent,
+    TeamPipe,
+    BoldPartStringPipe
   ],
   imports: [
     FormsModule,
