@@ -14,6 +14,7 @@ import {forkJoin} from "rxjs";
 })
 export class MatchesComponent implements OnInit {
     public loading: boolean = true;
+    public filter: string = '';
 
     constructor(private matchesService: MatchesService, private tablesService: TablesService, private deleteModalsService: DeleteService, private editModalsService: EditService) {
     }

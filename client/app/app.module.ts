@@ -23,6 +23,8 @@ import {RequestInterceptor} from "./services/request-interceptor";
 import {ErrorLogger} from "./services/error-logger";
 import { TeamPipe } from './pages/teams/pipes/team.pipe';
 import { BoldPartStringPipe } from './pages/teams/pipes/bold-part-string.pipe';
+import { TeamMatchesPipe } from './pages/matches/pipes/team-matches.pipe';
+import { BoldPartNumberPipe } from './pages/matches/pipes/bold-part-number.pipe';
 
 const appRoutes = [
   {path: 'settings', component: TournamentSettingsComponent},
@@ -48,7 +50,9 @@ const appRoutes = [
     TournamentSettingsComponent,
     ImagesComponent,
     TeamPipe,
-    BoldPartStringPipe
+    BoldPartStringPipe,
+    TeamMatchesPipe,
+    BoldPartNumberPipe
   ],
   imports: [
     FormsModule,
