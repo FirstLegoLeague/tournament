@@ -1,43 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { TeamsService } from '../../services/teams.service';
-import { Team } from '../../models/team';
-import { TablesService } from '../../services/tables.service'
-import { DeleteService } from '../../services/delete-service.service'
-import { EditService } from '../../services/edit-service.service'
+import {Component, OnInit} from '@angular/core';
+import {TeamsService} from '../../services/teams.service';
+import {Team} from '../../models/team';
+import {TablesService} from '../../services/tables.service'
+import {DeleteService} from '../../services/delete-service.service'
+import {EditService} from '../../services/edit-service.service'
 
 @Component({
-  selector: 'app-teams',
-  templateUrl: './teams.component.html',
-  styleUrls: ['./teams.component.css']
+    selector: 'app-teams',
+    templateUrl: './teams.component.html',
+    styleUrls: ['./teams.component.css']
 })
 export class TeamsComponent implements OnInit {
 
     public loading: boolean = true;
-  constructor(private teamsService: TeamsService, private deleteModalsService: DeleteService, private editModalsService: EditService) { }
+    public filter: string = '';
 
-  ngOnInit() {
-    this.teamsService.init().subscribe(()=>{
-        this.loading = false;
-    });
-  }
+    constructor(private teamsService: TeamsService, private deleteModalsService: DeleteService, private editModalsService: EditService) {
+    }
 
-  showAffiliation() {
-    return this.teams().some(team => team.affiliation !== null)
-  }
+    ngOnInit() {
+        this.teamsService.init().subscribe(() => {
+            this.loading = false;
+        });
+    }
 
-  teams() {
-    return this.teamsService.teams;
-  }
+    showAffiliation() {
+        return this.teams().some(team => team.affiliation !== null)
+    }
 
-  setEditModel(team) {
-    this.editModalsService.setEditModel(team);
-  }
+    teams() {
+        return this.teamsService.teams;
+    }
 
-  setDeleteModel(team) {
-    this.deleteModalsService.setDeleteModel(team);
-  }
+    setEditModel(team) {
+        this.editModalsService.setEditModel(team);
+    }
 
-  newTeam() {
-    return new Team()
-  }
+    setDeleteModel(team) {
+        this.deleteModalsService.setDeleteModel(team);
+    }
+
+    newTeam() {
+        return new Team()
+    }
 }
