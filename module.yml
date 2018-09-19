@@ -1,6 +1,6 @@
 api: '1.0'
 name: 'tournament'
-display: 'Tournament Settings'
+display: 'Tournament Setup'
 version: '1.0.0'
 type: 'node'
 script: 'index.js'
