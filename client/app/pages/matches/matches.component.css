@@ -1,7 +1,7 @@
-#wrapper{
-    height: calc(100vh - 3.5rem);
-}
-
 #matches .actions .button {
 	margin: 0;
+}
+
+.top-bar .menu > :not(:first-child) {
+    margin-left: 1em;
 }
