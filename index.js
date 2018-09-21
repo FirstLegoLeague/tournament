@@ -9,12 +9,12 @@ const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-
 const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
-const db = require('./Utils/mongoConnection')
-const crudRouter = require('./routers/crudRouter').getRouter
+const db = require('./server/Utils/mongoConnection')
+const crudRouter = require('./server/routers/crudRouter').getRouter
 
-const Team = require('./models/Team')
-const Match = require('./models/Match')
-const Table = require('./models/Table')
+const Team = require('./server/models/Team')
+const Match = require('./server/models/Match')
+const Table = require('./server/models/Table')
 
 const appPort = process.env.PORT || 3001
 const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddleware() : authenticationMiddleware
@@ -28,12 +28,12 @@ app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const {getSettingsRouter} = require('./routers/generalSettingsRouter')
-const tournamentDataRouter = require('./routers/tournamentDataRouter')
-const matchTeamRouter = require('./routers/matchTeamRouter')
-const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
-const lastMatchIdRouter = require('./routers/lastMatchIdRouter').router
-const {imagesRouter} = require('./routers/imagesRouter')
+const {getSettingsRouter} = require('./server/routers/generalSettingsRouter')
+const tournamentDataRouter = require('./server/routers/tournamentDataRouter')
+const matchTeamRouter = require('./server/routers/matchTeamRouter')
+const teamsBatchUploadRouter = require('./server/routers/teamsBatchUploadRouter')
+const lastMatchIdRouter = require('./server/routers/lastMatchIdRouter').router
+const {imagesRouter} = require('./server/routers/imagesRouter')
 
 app.post(authenticationMiddlewareToUse)
 app.put(authenticationMiddlewareToUse)
@@ -44,7 +44,7 @@ app.use('/image', imagesRouter)
 
 app.use('/tournamentData', tournamentDataRouter)
 
-const teamLogic = require('./logic/teamLogic')
+const teamLogic = require('./server/logic/teamLogic')
 
 app.use('/team', crudRouter({
   'collectionName': 'teams',
