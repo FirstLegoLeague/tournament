@@ -48,8 +48,8 @@ function connect () {
   return connectionPromise
 }
 
-function publishUpdateMsg (nameSpace) {
-  publishMsg(MHUB_NODES.PROTECTED, `${nameSpace}:reload`)
+function publishUpdateMsg (nameSpace, data = '') {
+  publishMsg(MHUB_NODES.PROTECTED, `${nameSpace}:reload`, data)
 }
 
 function publishMsg (node, topic, data = '') {

@@ -1,25 +1,31 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {RequestService} from "./request.service";
 import {Observable} from "rxjs";
+import {MessengerService} from "./messenger.service";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class TournamentSettingsService {
+export class TournamentSettingsService implements OnInit {
 
-  constructor(private request: RequestService) { }
+    constructor(private request: RequestService, private messenger: MessengerService) {
+    }
 
-  getAllSettings() : Observable<any>{
-      return this.request.get('/settings/all');
-  }
+    ngOnInit(): void {
+        this.messenger.on('tournamentStage:updated', this.getStages.bind(this))
+    }
 
-  getStages(): Observable<any>{
-      return this.request.get('/settings/stages');
-  }
+    getAllSettings(): Observable<any> {
+        return this.request.get('/settings/all');
+    }
 
-  saveSetting(settingName, value): Observable<any>{
-      let data = {};
-      data[settingName] = value;
-      return this.request.put(`/settings/${settingName}`, data, { observe: 'response' });
-  }
+    getStages(): Observable<any> {
+        return this.request.get('/settings/stages');
+    }
+
+    saveSetting(settingName, value): Observable<any> {
+        let data = {};
+        data[settingName] = value;
+        return this.request.put(`/settings/${settingName}`, data, {observe: 'response'});
+    }
 }

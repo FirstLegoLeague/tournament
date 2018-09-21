@@ -42,10 +42,12 @@ export class MessengerService implements OnInit {
             this.token = parseInt(String(Math.floor(0x100000 * (Math.random()))), 16);
 
             this.ws.onopen = () => {
-                this.ws.send(JSON.stringify({
-                    type: MESSAGE_TYPES.SUBSCRIBE,
-                    node: this.node
-                }));
+                setTimeout(() => {
+                    this.ws.send(JSON.stringify({
+                        type: MESSAGE_TYPES.SUBSCRIBE,
+                        node: this.node
+                    }))
+                }, 0);
                 this.open = true;
                 this.logger.info("Client connected to mhub")
                 return of(this.ws)
@@ -54,10 +56,10 @@ export class MessengerService implements OnInit {
             this.ws.onclose = () => {
                 this.open = false;
                 this.logger.info("Client disconnected from mhub")
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.logger.info("Retrying mhub connection")
                     this.init()
-                },RETRY_TIMOUT)
+                }, RETRY_TIMOUT)
             }
 
             this.ws.onmessage = (msg: any) => {
@@ -77,7 +79,7 @@ export class MessengerService implements OnInit {
         });
     }
 
-    on (topic, handler, ignoreSelfMessages = true) {
+    on(topic, handler, ignoreSelfMessages = true) {
         this.listeners.push({
             topic: topic,
             handler: (data, msg) => {

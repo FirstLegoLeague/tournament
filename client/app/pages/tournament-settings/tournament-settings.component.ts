@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {TournamentSettingsService} from "../../shared/services/tournament-settings.service";
 import {Notifications} from "../../shared/services/notifications.service";
 import {TournamentStatusService} from '../../shared/services/tournament-status.service';
-import {Observable} from '../../../../node_modules/rxjs';
-import {st} from "../../../../node_modules/@angular/core/src/render3";
 import {DeleteService} from "../../shared/services/delete-service.service";
 import {TournamentDataService} from "../../shared/services/tournament-data.service";
 
@@ -64,15 +62,6 @@ export class TournamentSettingsComponent implements OnInit {
                 this.notification.error("There was a problem getting the settings.")
             }
         });
-
-        this.tournamentStatusService.getMatch().subscribe({
-            next: (newMatch: number) => {
-                this.currentMatch = newMatch
-            },
-            error: (err) => {
-                this.notification.error("There was a problem getting the current match number.")
-            }
-        })
     }
 
     save(setting: string) {
