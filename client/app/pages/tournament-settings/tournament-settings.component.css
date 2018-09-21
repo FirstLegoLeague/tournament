@@ -1,0 +1,4 @@
+#wrapper {
+    min-height: calc(100vh - 6rem);
+    margin: 0;
+}
