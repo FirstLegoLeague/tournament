@@ -3,36 +3,43 @@ const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const { getMatch, isLastMatchInStage } = require('./matchLogic')
 const { getSetting, updateSetting } = require('./tournamentSettingsLogic')
-const { getTeamsName } = require('./teamLogic')
 
-const { publishUpdateMsg, subscribe, publishMsg } = require('../Utils/mhubConnection')
+const { publishUpdateMsg, subscribe } = require('../Utils/mhubConnection')
 
 let currentMatchNumber = 0
 const UPCOMING_MATCHES_TO_GET = 2
 const CURRENT_STAGE_NAME = 'tournamentStage'
-let canUpdateMatch = true
+
+let isLastMatchFinished = true
+
 const practice = 'practice'
 const ranking = 'ranking'
 
 const clockStartEvent = function () {
   MsLogger.info('Got clock start event')
-  if (canUpdateMatch) {
-    currentMatchNumber++
-    publishMatchAvailable()
-    canUpdateMatch = false
+  if (isLastMatchFinished) {
+    getSetting(CURRENT_STAGE_NAME).then(currentStage => {
+      isLastMatchInStage(currentMatchNumber, currentStage).then(result => {
+        console.log(result)
+        if (result) {
+          MsLogger.info('This is the last match in the stage, Advancing stage..')
+          if (currentStage === practice) {
+            updateSetting(CURRENT_STAGE_NAME, ranking)
+            currentMatchNumber = 0
+          }
+        } else {
+          currentMatchNumber++
+        }
+        publishMatchAvailable()
+        isLastMatchFinished = false
+      })
+    })
   }
 }
 
 const clockEndEvent = function () {
   MsLogger.info('Got clock end event')
-  canUpdateMatch = true
-  if (isLastMatchInStage(currentMatchNumber, getSetting(CURRENT_STAGE_NAME))) {
-    if (getSetting(CURRENT_STAGE_NAME) === practice) {
-      updateSetting(CURRENT_STAGE_NAME, ranking)
-      publishMatchAvailable()
-      currentMatchNumber = 0
-    }
-  }
+  isLastMatchFinished = true
 }
 
 subscribe('clock:start', clockStartEvent)
@@ -61,46 +68,18 @@ function getNextMatches () {
   })
 }
 
-async function prepareStatusData (matches) {
-  const data = {}
-  if (matches.length === 2) {
-    let match = matches[0]
-    data.nextMatch = match.matchId
-    data.nextMatchTime = match.startTime
-    const match1Teams = await getTeamsName(match.matchTeams)
-    const teamsArr = match1Teams.map(team => {
-      return { number: team.number, name: team.name }
-    })
-    data.nextTeams = teamsArr
-    match = matches[1]
-    const match2Teams = await getTeamsName(match.matchTeams)
-    const teams2Arr = match2Teams.map(team => {
-      return { number: team.number, name: team.name }
-    })
-    data.nextNextTeams = teams2Arr
-    console.debug(`\n\nThe Data is \n\n`)
-    console.debug(data)
-  }
-  return data
-}
-
 function publishMatchAvailable () {
   getCurrentMatch().then(match => {
     publishUpdateMsg('CurrentMatch', match)
   }).catch(error => {
     MsLogger.error(error)
   })
+
   getNextMatches().then(matches => {
     publishUpdateMsg('UpcomingMatches', matches)
-    sendIt(matches).then(() => console.log('nothing'))
   }).catch(error => {
     MsLogger.error(`Error in "upcoming matches" ${error}`)
   })
-}
-
-async function sendIt (matches) {
-  const dat = await prepareStatusData(matches)
-  publishMsg('default', 'tournament:nextmatch', dat)
 }
 
 function getCurrentMatchNumber () {

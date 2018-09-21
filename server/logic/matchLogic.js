@@ -14,11 +14,11 @@ function getMatch (matchNumber, stage) {
 }
 
 function isLastMatchInStage (matchNumber, stage) {
-  getMatch(matchNumber + 1, stage).then(match => {
+  return getMatch(matchNumber + 1, stage).then(match => {
     if (match) {
-      return true
+      return false
     }
-    return false
+    return true
   })
 }
 

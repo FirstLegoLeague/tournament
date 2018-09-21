@@ -98,10 +98,12 @@ process.on('SIGINT', () => {
 
 process.on('uncaughtException', err => {
   logger.fatal(err.message)
+  console.error(err)
   process.exit(1)
 })
 
 process.on('unhandledRejection', err => {
   logger.fatal(err.message)
+  console.error(err)
   process.exit(1)
 })

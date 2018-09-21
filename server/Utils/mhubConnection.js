@@ -28,8 +28,7 @@ mhubClient.on('open', () => {
 })
 
 mhubClient.on('message', msg => {
-  console.log(msg)
-  const data = msg.data ? JSON.parse(msg.data) : undefined
+  const data = msg.data
   const headers = msg.headers
   const topic = msg.topic
 
