@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TournamentSettingsService} from "../../shared/services/tournament-settings.service";
 import {Notifications} from "../../shared/services/notifications.service";
-import {TournamentStatusService} from '../../services/tournament-status.service';
+import {TournamentStatusService} from '../../shared/services/tournament-status.service';
 import {Observable} from '../../../../node_modules/rxjs';
 import {st} from "../../../../node_modules/@angular/core/src/render3";
 import {DeleteService} from "../../shared/services/delete-service.service";

@@ -15,16 +15,16 @@ const practice = 'practice'
 const ranking = 'ranking'
 
 const clockStartEvent = function () {
+  MsLogger.info('Got clock start event')
   if (canUpdateMatch) {
     currentMatchNumber++
-
     publishMatchAvailable()
-
     canUpdateMatch = false
   }
 }
 
 const clockEndEvent = function () {
+  MsLogger.info('Got clock end event')
   canUpdateMatch = true
   if (isLastMatchInStage(currentMatchNumber, getSetting(CURRENT_STAGE_NAME))) {
     if (getSetting(CURRENT_STAGE_NAME) === practice) {

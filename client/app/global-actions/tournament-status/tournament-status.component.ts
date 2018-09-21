@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {TournamentStatusService} from '../../services/tournament-status.service';
-import {forkJoin} from '../../../../node_modules/rxjs';
+import {TournamentStatusService} from '../../shared/services/tournament-status.service';
+import {forkJoin} from '../../../../node_modules/rxjs/index';
+import {MessengerService} from "../../shared/services/messenger.service";
 
 @Component({
   selector: 'tournament-status',
@@ -18,12 +19,13 @@ export class TournamentStatusComponent implements OnInit {
   private _lastMatchStatus = {'text': 'Last match!', 'color': '#FFFFFF'}
   private _finishedAllMatchesStatus = {'text': 'All done!', 'color': '#FFFFFF'}
 
-  constructor(private tournamentStatusService: TournamentStatusService) {
+  constructor(private tournamentStatusService: TournamentStatusService, private messanger: MessengerService) {
   }
 
   ngOnInit() {
     this.updateVariables()
-    // setInterval(this.updateTime(), 1000)
+      this.updateTime()
+    this.messanger.on('CurrentMatch:reload',this.updateTime)
   }
 
   private updateTime() {
@@ -47,7 +49,6 @@ export class TournamentStatusComponent implements OnInit {
   }
 
   private matchChanged(match) {
-    console.info(match)
     forkJoin(match, this.tournamentStatusService.getMatch()).subscribe(data => {
       this._matchHasChanged = data[0] !== data[1]
     }, err => {

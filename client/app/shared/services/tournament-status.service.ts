@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {RequestService} from './request.service';
-import { Observable, throwError } from "../../../node_modules/rxjs";
+import { Observable, throwError } from "../../../../node_modules/rxjs/index";
 
 const STATUS = {
   GOOD: {'text': 'Ahead of time!', 'color': '#ADFF2F'},

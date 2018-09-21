@@ -8,15 +8,11 @@ const MHUB_NODES = {
   PROTECTED: 'protected'
 }
 
-const MHUB_CLIENT_ID = 'cl-schedule'
-const NODE = process.env.DEV ? 'default' : 'protected'
+const MHUB_CLIENT_ID = 'cl-tournament'
 const mhubClient = new MClient(process.env.MHUB_URI)
 
+const listeners = []
 let connectionPromise = null
-
-connect().then(() => {
-  mhubClient.subscribe(loginToMhub(MHUB_NODES.PROTECTED))
-})
 
 mhubClient.on('error', msg => {
   MsLogger.error('Unable to connect to mhub, other modules won\'t be notified changes \n ' + msg)
@@ -25,6 +21,25 @@ mhubClient.on('error', msg => {
 mhubClient.on('close', () => {
   connectionPromise = null
   MsLogger.warn('Disconnected from mhub. Retrying upon next publish')
+})
+
+mhubClient.on('open', () => {
+  mhubClient.subscribe(loginToMhub(MHUB_NODES.PROTECTED))
+})
+
+mhubClient.on('message', msg => {
+  console.log(msg)
+  const data = msg.data ? JSON.parse(msg.data) : undefined
+  const headers = msg.headers
+  const topic = msg.topic
+
+  msg.from = headers[MHUB_CLIENT_ID]
+  msg.fromMe = (msg.from === this.token)
+
+  listeners.filter(listener => {
+    return (typeof (listener.topic) === 'string' && topic === listener.topic) ||
+      (listener.topic instanceof RegExp && topic.matches(listener.topic))
+  }).forEach(listener => listener.handler(data, msg))
 })
 
 function connect () {
@@ -49,13 +64,8 @@ function publishMsg (node, topic, data = '') {
   })
 }
 
-function subscribe (topic, handle) {
-  mhubClient.subscribe(NODE, topic)
-  mhubClient.on('message', message => {
-    if (message.topic === topic) {
-      handle(message)
-    }
-  })
+function subscribe (topic, handler) {
+  listeners.push({ topic, handler })
 }
 
 function loginToMhub (node) {

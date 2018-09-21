@@ -17,7 +17,7 @@ import { ImageUploadComponent } from './shared/modals/image-upload/image-upload.
 import { ModelEdit } from './shared/modals/model-edit/model-edit.component';
 import { ModelDelete } from './shared/modals/model-delete/model-delete.component';
 import { Tables } from './shared/modals/tables/tables.component';
-import { TournamentStatusComponent } from './modals/tournament-status/tournament-status.component';
+import { TournamentStatusComponent } from './global-actions/tournament-status/tournament-status.component';
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
 import { ImagesComponent } from './pages/images/images.component';
 import {RequestInterceptor} from "./shared/services/request-interceptor";
