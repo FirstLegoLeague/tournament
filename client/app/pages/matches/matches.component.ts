@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {MatchesService} from '../../services/matches.service';
-import {TablesService} from '../../services/tables.service';
-import {Match} from '../../models/match';
-import {Table} from '../../models/table';
-import {DeleteService} from '../../services/delete-service.service'
-import {EditService} from '../../services/edit-service.service'
+import {MatchesService} from '../../shared/services/matches.service';
+import {TablesService} from '../../shared/services/tables.service';
+import {Match} from '../../shared/models/match';
+import {Table} from '../../shared/models/table';
+import {DeleteService} from '../../shared/services/delete-service.service'
+import {EditService} from '../../shared/services/edit-service.service'
 import {forkJoin} from "rxjs";
 
 @Component({

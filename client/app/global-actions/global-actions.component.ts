@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Input} from '@angular/core';
-import {TeamsService} from "../services/teams.service";
-import {MatchesService} from "../services/matches.service";
+import {TeamsService} from "../shared/services/teams.service";
+import {MatchesService} from "../shared/services/matches.service";
 import {forkJoin} from 'rxjs';
-import {TournamentDataService} from "../services/tournament-data.service";
+import {TournamentDataService} from "../shared/services/tournament-data.service";
 
 @Component({
     selector: 'global-actions',

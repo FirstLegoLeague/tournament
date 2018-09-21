@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ImagesService } from '../../services/images.service'
-import { DeleteService } from '../../services/delete-service.service'
+import { ImagesService } from '../../shared/services/images.service'
+import { DeleteService } from '../../shared/services/delete-service.service'
 
 @Component({
   selector: 'app-images',
