@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {TournamentSettingsService} from "../../services/tournament-settings.service";
-import {Notifications} from "../../services/notifications.service";
+import {TournamentSettingsService} from "../../shared/services/tournament-settings.service";
+import {Notifications} from "../../shared/services/notifications.service";
 import {TournamentStatusService} from '../../services/tournament-status.service';
 import {Observable} from '../../../../node_modules/rxjs';
 import {st} from "../../../../node_modules/@angular/core/src/render3";
-import {DeleteService} from "../../services/delete-service.service";
-import {TournamentDataService} from "../../services/tournament-data.service";
+import {DeleteService} from "../../shared/services/delete-service.service";
+import {TournamentDataService} from "../../shared/services/tournament-data.service";
 
 @Component({
     selector: 'app-tournament-settings',

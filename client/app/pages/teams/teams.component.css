@@ -1,3 +1,8 @@
-#wrapper{
-    height: calc(100vh - 3.5rem);
+.top-bar .menu > :not(:first-child) {
+    margin-left: 1em;
+}
+
+#search-filter{
+    max-width: unset;
+    width: 25vw;
 }

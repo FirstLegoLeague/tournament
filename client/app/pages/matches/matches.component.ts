@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {MatchesService} from '../../services/matches.service';
-import {TablesService} from '../../services/tables.service';
-import {Match} from '../../models/match';
-import {Table} from '../../models/table';
-import {DeleteService} from '../../services/delete-service.service'
-import {EditService} from '../../services/edit-service.service'
+import {MatchesService} from '../../shared/services/matches.service';
+import {TablesService} from '../../shared/services/tables.service';
+import {Match} from '../../shared/models/match';
+import {Table} from '../../shared/models/table';
+import {DeleteService} from '../../shared/services/delete-service.service'
+import {EditService} from '../../shared/services/edit-service.service'
 import {forkJoin} from "rxjs";
 
 @Component({
@@ -14,6 +14,7 @@ import {forkJoin} from "rxjs";
 })
 export class MatchesComponent implements OnInit {
     public loading: boolean = true;
+    public filter: string = '';
 
     constructor(private matchesService: MatchesService, private tablesService: TablesService, private deleteModalsService: DeleteService, private editModalsService: EditService) {
     }
@@ -54,18 +55,29 @@ export class MatchesComponent implements OnInit {
 
     amountOfMissingFields() {
         let tablesAmount = this.tables().length;
+        let matchTableAmount = this.maxTeamsPerMatch();
+        return tablesAmount - matchTableAmount
+    }
+
+    private maxTeamsPerMatch() {
         let matchTableAmount = 0;
         for (let match of this.matches()) {
             if (match.matchTeams.length > matchTableAmount) {
                 matchTableAmount = match.matchTeams.length
             }
         }
-        return tablesAmount - matchTableAmount
+        return matchTableAmount;
     }
 
-    missingFieldsArray() {
+    amountofMissingHeaderFields(){
+        let tablesAmount = this.tables().length;
+        let matchTableAmount = this.maxTeamsPerMatch();
+        return matchTableAmount - tablesAmount
+    }
+
+    missingFieldsArray(amount: number) {
         let arr = []
-        for (let i = 0; i < this.amountOfMissingFields(); i++) {
+        for (let i = 0; i < amount; i++) {
             arr.push(i)
         }
         return arr

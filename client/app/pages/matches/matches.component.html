@@ -1,49 +1,68 @@
-<div id="wrapper" [ngClass]="{'loading':loading}">
+<div class="top-bar secondary">
 
-    <div class="dimmer">
-        <div class="big loader"></div>
+    <div class="top-bar-left">
+        <ul class="menu">
+            <input type="text" [(ngModel)]="filter" placeholder="Search for team number">
+        </ul>
     </div>
-    <div [ngClass]="{'hide':loading}">
-        <ul class="menu align-right">
+
+    <div class="top-bar-right">
+        <ul class="menu">
             <li>
-                <div class="button-group">
-                    <button class="button" data-open="tables"><i class="fas fa-table"></i> Manage tables</button>
-                    <button class="button" data-open="model-edit" (click)="setEditModel(newMatch())"><i
-                            class="fas fa-plus-square"></i> Match
-                    </button>
-                </div>
+                <button class="button" data-open="tables"><i class="fas fa-table"></i> Manage tables</button>
+            </li>
+            <li>
+                <button class="button" data-open="model-edit" (click)="setEditModel(newMatch())"><i
+                        class="fas fa-plus-square"></i> Match
+                </button>
             </li>
         </ul>
+    </div>
+</div>
 
-        <table id="matches" class="centralized">
-            <tr>
-                <th>Id</th>
-                <th>Stage</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th *ngFor="let table of tables()">
-                    {{table.tableName}}
-                </th>
-                <th>Action</th>
-            </tr>
-            <tr *ngFor="let match of matches()">
-                <td>{{match.matchId}}</td>
-                <td>{{match.stage}}</td>
-                <td>{{match.startTime | date : 'shortTime'}}</td>
-                <td>{{match.endTime | date : 'shortTime'}}</td>
-                <td *ngFor="let matchTeam of match.matchTeams">
-                    {{matchTeam.teamNumber}}
-                </td>
-                <td *ngFor="let field of missingFieldsArray()"></td>
-                <td class="actions">
-                    <div class="button" data-open="model-edit" (click)="setEditModel(match)">
-                        <i class="fa fa-edit"></i>
-                    </div>
-                    <div class="alert button" data-open="model-delete" (click)="setDeleteModel(match)">
-                        <i class="fa fa-trash-alt"></i>
-                    </div>
-                </td>
-            </tr>
-        </table>
+
+<div class="top-bar-page grid-x grid-padding-x grid-padding-y">
+    <div class="large-10 large-offset-1 cell">
+        <div [ngClass]="{'loading':loading}">
+
+            <div class="dimmer">
+                <div class="big loader"></div>
+            </div>
+
+            <div [ngClass]="{'hide':loading}">
+
+                <table id="matches" class="centralized">
+                    <tr>
+                        <th>Id</th>
+                        <th>Stage</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th *ngFor="let table of tables()">
+                            {{table.tableName}}
+                        </th>
+                        <th *ngFor="let missingTable of missingFieldsArray(amountofMissingHeaderFields())"></th>
+                        <th>Action</th>
+                    </tr>
+                    <tr *ngFor="let match of (matches() | teamMatchesPipe: filter)">
+                        <td>{{match.matchId}}</td>
+                        <td>{{match.stage}}</td>
+                        <td>{{match.startTime | date : 'shortTime'}}</td>
+                        <td>{{match.endTime | date : 'shortTime'}}</td>
+                        <td *ngFor="let matchTeam of match.matchTeams"
+                            [innerHTML]="matchTeam.teamNumber | boldPartNumber : filter">
+                        </td>
+                        <td *ngFor="let field of missingFieldsArray(amountOfMissingFields())"></td>
+                        <td class="actions">
+                            <div class="button" data-open="model-edit" (click)="setEditModel(match)">
+                                <i class="fa fa-edit"></i>
+                            </div>
+                            <div class="alert button" data-open="model-delete" (click)="setDeleteModel(match)">
+                                <i class="fa fa-trash-alt"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
