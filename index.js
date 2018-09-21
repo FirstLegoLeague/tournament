@@ -8,13 +8,12 @@ const {correlationMiddleware} = require('@first-lego-league/ms-correlation')
 const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-lego-league/ms-auth')
 const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
-const logger = Logger()
-const db = require('./server/Utils/mongoConnection')
-const crudRouter = require('./server/routers/crudRouter').getRouter
-
 const Team = require('./server/models/Team')
 const Match = require('./server/models/Match')
 const Table = require('./server/models/Table')
+
+const logger = Logger()
+const db = require('./server/Utils/mongoConnection')
 
 const appPort = process.env.PORT || 3001
 const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddleware() : authenticationMiddleware
@@ -29,6 +28,8 @@ app.use(loggerMiddleware)
 app.use(cors())
 
 const {getSettingsRouter} = require('./server/routers/generalSettingsRouter')
+const configRouter = require('./server/routers/configRouter')
+const crudRouter = require('./server/routers/crudRouter').getRouter
 const tournamentDataRouter = require('./server/routers/tournamentDataRouter')
 const matchTeamRouter = require('./server/routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./server/routers/teamsBatchUploadRouter')
@@ -41,6 +42,7 @@ app.delete(authenticationMiddlewareToUse)
 
 app.use('/settings', getSettingsRouter())
 app.use('/image', imagesRouter)
+app.all('/config', configRouter)
 
 app.use('/tournamentData', tournamentDataRouter)
 
