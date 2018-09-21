@@ -40,6 +40,7 @@
                         <th *ngFor="let table of tables()">
                             {{table.tableName}}
                         </th>
+                        <th *ngFor="let missingTable of missingFieldsArray(amountofMissingHeaderFields())"></th>
                         <th>Action</th>
                     </tr>
                     <tr *ngFor="let match of (matches() | teamMatchesPipe: filter)">
@@ -50,7 +51,7 @@
                         <td *ngFor="let matchTeam of match.matchTeams"
                             [innerHTML]="matchTeam.teamNumber | boldPartNumber : filter">
                         </td>
-                        <td *ngFor="let field of missingFieldsArray()"></td>
+                        <td *ngFor="let field of missingFieldsArray(amountOfMissingFields())"></td>
                         <td class="actions">
                             <div class="button" data-open="model-edit" (click)="setEditModel(match)">
                                 <i class="fa fa-edit"></i>
