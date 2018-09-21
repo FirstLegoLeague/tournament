@@ -1,5 +1,5 @@
 <ul class="dropdown menu" data-dropdown-menu>
-    <li [hidden]="hasData">
+    <li [ngClass]="{'disabled': hasData}">
         <a>Import</a>
         <ul class="menu">
             <li class="grid-x grid-padding-x">

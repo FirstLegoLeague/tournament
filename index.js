@@ -4,11 +4,12 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const { correlationMiddleware } = require('@first-lego-league/ms-correlation')
-const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
-const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
+const {correlationMiddleware} = require('@first-lego-league/ms-correlation')
+const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-lego-league/ms-auth')
+const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
 
 const logger = Logger()
+const db = require('./Utils/mongoConnection')
 const crudRouter = require('./routers/crudRouter').getRouter
 
 const Team = require('./models/Team')
@@ -21,18 +22,18 @@ const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddlew
 logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json({limit: '50mb'}))
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const { getSettingsRouter } = require('./routers/generalSettingsRouter')
+const {getSettingsRouter} = require('./routers/generalSettingsRouter')
 const tournamentDataRouter = require('./routers/tournamentDataRouter')
 const matchTeamRouter = require('./routers/matchTeamRouter')
 const teamsBatchUploadRouter = require('./routers/teamsBatchUploadRouter')
 const lastMatchIdRouter = require('./routers/lastMatchIdRouter').router
-const { imagesRouter } = require('./routers/imagesRouter')
+const {imagesRouter} = require('./routers/imagesRouter')
 
 app.post(authenticationMiddlewareToUse)
 app.put(authenticationMiddlewareToUse)
@@ -81,12 +82,15 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/client/index.html'))
 })
 
-app.listen(appPort, () => {
-  logger.info('Server started on port ' + appPort)
+db.connect().then(() => {
+  app.listen(appPort, () => {
+    logger.info('Server started on port ' + appPort)
+  })
 })
 
 process.on('SIGINT', () => {
   logger.info('Process received SIGINT: shutting down')
+  db.close()
   process.exit(130)
 })
 

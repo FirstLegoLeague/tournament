@@ -1,20 +1,15 @@
 'use strict'
 const express = require('express')
-const MongoClient = require('mongodb').MongoClient
+const db = require('../Utils/mongoConnection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const Team = require('../models/Team')
-const Match = require('../models/Match')
-const Table = require('../models/Table')
-
-const MONGU_URI = process.env.MONGO_URI
 const RANDOM_ID_LENGTH = 25
 
 exports.getRouter = function () {
   const router = express.Router()
 
   router.get('/:team/matches', (req, res) => {
-    MongoClient.connect(MONGU_URI).then(connection => {
+    db.connection().then(connection => {
       connection.db().collection('matches').find({ 'matchTeams.teamNumber': parseInt(req.params.team) }).toArray().then(data => {
         if (!data || data.length === 0) {
           res.send(getDefaultMatchesForTeam(parseInt(req.params.team)))
