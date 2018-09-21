@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {TeamsService} from '../../services/teams.service';
-import {Team} from '../../models/team';
-import {TablesService} from '../../services/tables.service'
-import {DeleteService} from '../../services/delete-service.service'
-import {EditService} from '../../services/edit-service.service'
+import {TeamsService} from '../../shared/services/teams.service';
+import {Team} from '../../shared/models/team';
+import {TablesService} from '../../shared/services/tables.service'
+import {DeleteService} from '../../shared/services/delete-service.service'
+import {EditService} from '../../shared/services/edit-service.service'
 
 @Component({
     selector: 'app-teams',
