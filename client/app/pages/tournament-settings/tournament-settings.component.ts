@@ -14,7 +14,6 @@ export class TournamentSettingsComponent implements OnInit {
 
     public settings: object;
     public loading: boolean = true;
-    public currentMatch: number;
     public hasDataInDb = false;
 
     constructor(private tournamentSettingsService: TournamentSettingsService,
@@ -26,7 +25,7 @@ export class TournamentSettingsComponent implements OnInit {
 
     ngOnInit() {
         this.reload();
-        this.tournamentDataService.dataReload.subscribe(()=>{
+        this.tournamentDataService.dataReload.subscribe(() => {
             this.reload()
         })
     }
@@ -47,16 +46,28 @@ export class TournamentSettingsComponent implements OnInit {
                         name: 'tournamentStage'
                     }
                 }
+
+
                 this.tournamentSettingsService.getStages().subscribe(
                     (stages: any) => {
                         this.settings['tournamentStage'].options = stages
                         this.loading = false;
-                    },
-                    err => {
-                        this.notification.error("An error occurred while trying to load stages. \n Maybe you did not load any matches?")
-                        this.loading = false;
                     }
                 )
+
+                this.tournamentStatusService.getCurrentMatch().subscribe((match) => {
+                    this.settings['currentMatch'] = {
+                        display: "Current Match",
+                        value: match.matchId,
+                        name: 'currentMatch'
+                    }
+                }, error => {
+                    this.settings['currentMatch'] = {
+                        display: "Current Match",
+                        value: 0,
+                        name: 'currentMatch'
+                    }
+                })
             },
             error: (err) => {
                 this.notification.error("There was a problem getting the settings.")
@@ -65,20 +76,15 @@ export class TournamentSettingsComponent implements OnInit {
     }
 
     save(setting: string) {
-        if (setting === 'tournamentMatch') {
-            // @ts-ignore
-            this.tournamentStatusService.setMatch(this.currentMatch).subscribe((response, err) => {
-                if (err) {
-                    this.notification.error("Oh no! Something went wrong while trying to save match.")
-                } else {
-                    this.loading = false;
-                    this.notification.success("Match saved successfully")
-                }
+        if (setting === 'currentMatch') {
+            this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
+                this.notification.success("Match saved successfully")
+            }, (err) => {
+                this.notification.error("Oh no! Something went wrong while trying to save match.")
             })
         } else {
             this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
                 response => {
-                    this.loading = false;
                     this.notification.success("Setting saved successfully")
                 },
                 err => {
@@ -91,8 +97,8 @@ export class TournamentSettingsComponent implements OnInit {
         this.deleteModalsService.setDeleteModel(model);
     }
 
-    haveDataInDb(){
-        this.tournamentDataService.hasData().subscribe(result=>{
+    haveDataInDb() {
+        this.tournamentDataService.hasData().subscribe(result => {
             this.hasDataInDb = result
         })
     }

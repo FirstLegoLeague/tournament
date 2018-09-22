@@ -26,19 +26,23 @@
                         </div>
                     </div>
 
-            <h5>Delete Tournament Data</h5>
-            <label>Press Delete to delete Teams and Matches. <br /> Note: You must first delete all scoring data.</label>
-            <button class="button alert" data-open="model-delete" (click)="setDeleteModel(tournamentDataService)" [disabled]="!hasDataInDb">Delete</button>
+                    <h5>Delete Tournament Data</h5>
+                    <label>Press Delete to delete Teams and Matches. <br/> Note: You must first delete all scoring data.</label>
+                    <button class="button alert" data-open="model-delete"
+                            (click)="setDeleteModel(tournamentDataService)" [disabled]="!hasDataInDb">Delete
+                    </button>
 
-            <div class="input-group">
-                    <input type="text" [(ngModel)]="currentMatch" class="input-group-field">
-                    <div class="input-group-button">
-                        <button class="button" (click)="save('tournamentMatch')"
-                                [disabled]="currentMatch == undefined"><i class="fa fa-save"></i>
-                        </button>
+                    <h5>Current Match</h5>
+                    <div class="input-group">
+                        <input type="number" [(ngModel)]="settings['currentMatch'].value" class="input-group-field">
+                        <div class="input-group-button">
+                            <button class="button" (click)="save('currentMatch')"
+                                    [disabled]="settings['currentMatch'].value == undefined"><i class="fa fa-save"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-        </fieldset>
+
+                </fieldset>
 
                 <fieldset class="fieldset">
                     <legend>Display</legend>
