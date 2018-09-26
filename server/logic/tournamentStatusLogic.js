@@ -1,8 +1,8 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getMatch, isLastMatchInStage } = require('./matchLogic')
-const { getSetting, updateSetting } = require('./tournamentSettingsLogic')
+const { getMatch } = require('./matchLogic')
+const { getSetting } = require('./tournamentSettingsLogic')
 
 const { publishUpdateMsg, subscribe } = require('../Utils/mhubConnection')
 
@@ -12,28 +12,12 @@ const CURRENT_STAGE_NAME = 'tournamentStage'
 
 let isLastMatchFinished = true
 
-const practice = 'practice'
-const ranking = 'ranking'
-
 const clockStartEvent = function () {
   MsLogger.info('Got clock start event')
   if (isLastMatchFinished) {
-    getSetting(CURRENT_STAGE_NAME).then(currentStage => {
-      isLastMatchInStage(currentMatchNumber, currentStage).then(result => {
-        console.log(result)
-        if (result) {
-          MsLogger.info('This is the last match in the stage, Advancing stage..')
-          if (currentStage === practice) {
-            updateSetting(CURRENT_STAGE_NAME, ranking)
-            currentMatchNumber = 0
-          }
-        } else {
-          currentMatchNumber++
-        }
-        publishMatchAvailable()
-        isLastMatchFinished = false
-      })
-    })
+    currentMatchNumber++
+    publishMatchAvailable()
+    isLastMatchFinished = false
   }
 }
 
