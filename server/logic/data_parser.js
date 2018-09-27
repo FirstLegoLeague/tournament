@@ -1,5 +1,5 @@
 'use strict'
-const objectDataParser = require('./objectDataParser')
+const objectDataParser = require('./object_data_parser')
 
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 

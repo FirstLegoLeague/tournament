@@ -3,15 +3,15 @@ const express = require('express')
 const requestify = require('requestify')
 
 const router = express.Router()
-const db = require('../Utils/mongoConnection')
+const db = require('../utilities/mongo_connection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const mhubConnection = require('../Utils/mhubConnection')
+const mhubConnection = require('../utilities/mhub_connection')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
-const tournamentDataParser = require('../logic/tournamentDataParser')
+const tournamentDataParser = require('../logic/data_parser')
 
 router.get('/parse', (req, res) => {
   if (!req.query.tourData) {

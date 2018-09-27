@@ -1,10 +1,9 @@
 'use strict'
 const express = require('express')
-const MongoClient = require('mongodb').MongoClient
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
 
-const {getSetting, getAllSettings, updateSetting, setDefaultSettings, getAllStages} = require('../logic/tournamentSettingsLogic')
+const {getSetting, getAllSettings, updateSetting, setDefaultSettings, getAllStages} = require('../logic/settings_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
