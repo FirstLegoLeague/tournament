@@ -1,11 +1,11 @@
 'use strict'
 const express = require('express')
-const db = require('../Utils/mongoConnection')
+const db = require('../utilities/mongo_connection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
-const {publishUpdateMsg} = require('../Utils/mhubConnection')
+const {publishUpdateMsg} = require('../utilities/mhub_connection')
 
-const teamsBatchParser = require('../logic/teamsBatchParser')
+const teamsBatchParser = require('../logic/teams_batch_parser')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 

@@ -1,11 +1,11 @@
 'use strict'
 const express = require('express')
-const db = require('../Utils/mongoConnection')
+const db = require('../utilities/mongo_connection')
 const ObjectId = require('mongodb').ObjectID
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const mhubConnection = require('../Utils/mhubConnection')
+const mhubConnection = require('../utilities/mhub_connection')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
