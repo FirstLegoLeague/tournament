@@ -35,6 +35,9 @@ const matchTeamRouter = require('./server/routers/matchTeam_router')
 const teamsBatchUploadRouter = require('./server/routers/teams_batchupload_router')
 const lastMatchIdRouter = require('./server/routers/last_matchId_router').router
 const {imagesRouter} = require('./server/routers/images_router')
+const EventEmitter = require('events').EventEmitter
+
+EventEmitter.defaultMaxListeners = 12
 
 app.post(authenticationMiddlewareToUse)
 app.put(authenticationMiddlewareToUse)
