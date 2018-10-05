@@ -118,16 +118,22 @@ exports.getRouter = function (options) {
     if (!validationResult) {
       res.sendStatus(400)
     }
-    db.connection().then(connection => {
-      connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, req.params.id)).then(dbResponse => {
-        if (dbResponse.ok === 1) {
-          mhubConnection.publishUpdateMsg(options.mhubNamespace)
-          res.sendStatus(200)
-        }
+    validationResult.then(error => {
+      if (error && error.name === 'Error') {
+        res.status(500).send(error.message)
+        return
+      }
+      db.connection().then(connection => {
+        connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, req.params.id)).then(dbResponse => {
+          if (dbResponse.ok === 1) {
+            mhubConnection.publishUpdateMsg(options.mhubNamespace)
+            res.sendStatus(200)
+          }
+        })
+      }).catch(err => {
+        MsLogger.error(err)
+        res.sendStatus(500)
       })
-    }).catch(err => {
-      MsLogger.error(err)
-      res.sendStatus(500)
     })
   })
 
