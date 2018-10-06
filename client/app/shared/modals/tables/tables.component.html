@@ -5,6 +5,12 @@
   </div>
 
   <div class="grid-x grid-padding-y">
+      <div *ngIf="tables().length === 0" class="cell grid-x grid-padding-x">
+          Set names for different tournament tables.
+          <br>
+          These names will appear on the scoresheets
+      </div>
+
     <div *ngFor="let table of tables(); index as index" id="table-{{index}}" class="cell grid-x grid-padding-x">
       <input class="cell small-10" (keyup)="tableChanged(table)" [(ngModel)]="table.tableName">
       <div class="cell small-2">
