@@ -110,7 +110,7 @@ exports.getRouter = function (options) {
   })
 
   router.delete('/:id', adminAction, (req, res) => {
-    let validationResult = true
+    let validationResult = Promise.resolve(true)
     if (options.validationMethods && options.validationMethods.delete) {
       validationResult = options.validationMethods.delete(req.params)
     }
@@ -134,6 +134,8 @@ exports.getRouter = function (options) {
         MsLogger.error(err)
         res.sendStatus(500)
       })
+    }).catch(err => {
+      MsLogger.error(err)
     })
   })
 
