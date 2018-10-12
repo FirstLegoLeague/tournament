@@ -39,7 +39,8 @@ export class Match implements Editable, Deletable, Deserializable {
         display: `Team ${i+1}`,
         type: 'text',
         get: () => this.matchTeams[i].teamNumber,
-        set: (value) => { this.matchTeams[i].teamNumber = value }
+        set: (value) => { this.matchTeams[i].teamNumber = value },
+        editable: true
       });
     }
     return [
