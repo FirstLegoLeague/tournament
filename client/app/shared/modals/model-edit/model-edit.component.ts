@@ -27,7 +27,7 @@ export class ModelEdit {
     const service: EditableModalService = this.editModalsService.service(model);
     service.save(model).subscribe(() => {
       this.notifications.success(model.savedInDB() ? 'Changes saved' : `${model.title()} saved`);
-      this.reload();
+      this.reload().subscribe();
       this.close();
       this.loading = false;
     }, error => {
@@ -43,7 +43,7 @@ export class ModelEdit {
   }
 
   reload() {
-    this.editModalsService.service(this.model()).reload();
+    return this.editModalsService.service(this.model()).reload();
   }
 
 }

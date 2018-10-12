@@ -36,7 +36,6 @@ export class MatchesService implements EditableModalService, DeletableModalServi
             return this.getNextMatchId(match.stage).pipe(map(returned => {
                 // @ts-ignore
                 body['matchId'] = returned.nextMatchId
-                debugger;
                 return this.requests[method](url, body, {responseType: 'text'}).subscribe(data=>{
                     return data;
                 })
@@ -51,7 +50,7 @@ export class MatchesService implements EditableModalService, DeletableModalServi
         return this.requests.get('/match/all');
     }
 
-    reload() {
+    reload(): Observable<any> {
         return this.requestAll().pipe(map((matches: Match[]) => {
             this.matches = matches.map(match => new Match().deserialize(match))
             return this.matches;
