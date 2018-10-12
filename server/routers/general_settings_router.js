@@ -41,7 +41,7 @@ exports.getSettingsRouter = function () {
         res.sendStatus(404)
       }
 
-      res.send(data)
+      res.json(data)
     }).catch(err => {
       MsLogger.error(err)
       res.sendStatus(500)

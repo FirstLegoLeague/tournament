@@ -37,7 +37,7 @@ router.post('/', adminAction, (req, res) => {
   let tablesPromise
   let teamsPromise
   let practicePromise
-  let rankingPromose
+  let rankingPromise
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   db.connection().then(conn => {
@@ -69,7 +69,7 @@ router.post('/', adminAction, (req, res) => {
     }
 
     if (data.rankingMatches) {
-      rankingPromose = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
+      rankingPromise = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
         MsLogger.info('ranking matches successfully to collection ranking-matches')
         return true
       }).catch(err => {
@@ -81,7 +81,7 @@ router.post('/', adminAction, (req, res) => {
       mhubConnection.publishUpdateMsg('matches')
     }
 
-    const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromose].filter(promise => promise)
+    const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromise].filter(promise => promise)
 
     Promise.all(promises).then(() => {
       res.sendStatus(201)
