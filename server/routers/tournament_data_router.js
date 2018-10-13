@@ -41,13 +41,13 @@ router.post('/', adminAction, (req, res) => {
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   db.connection().then(conn => {
-    if (data.tables) {
+    if (data.tables && data.tables.length > 0) {
       tablesPromise = conn.db().collection('tables').insertMany(data.tables).then(() => {
         MsLogger.info('Data saved successfully to collection tables')
         mhubConnection.publishUpdateMsg('tables')
         return true
       }).catch(err => {
-        MsLogger.error('Something went wrong while saving data \n' + err)
+        MsLogger.error('Something went wrong while saving tables \n' + err)
       })
     }
 
@@ -56,28 +56,28 @@ router.post('/', adminAction, (req, res) => {
       mhubConnection.publishUpdateMsg('teams')
       return true
     }).catch(err => {
-      MsLogger.error('Something went wrong while saving data \n' + err)
+      MsLogger.error('Something went wrong while saving teams \n' + err)
     })
 
-    if (data.practiceMatches) {
+    if (data.practiceMatches && data.practiceMatches.length > 0) {
       practicePromise = conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
         MsLogger.info('practice matches saved successfully to collection matches')
         return true
       }).catch(err => {
-        MsLogger.error('Something went wrong while saving data \n' + err)
+        MsLogger.error('Something went wrong while saving practice matches \n' + err)
       })
     }
 
-    if (data.rankingMatches) {
+    if (data.rankingMatches && data.rankingMatches.length > 0) {
       rankingPromise = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
         MsLogger.info('ranking matches successfully to collection ranking-matches')
         return true
       }).catch(err => {
-        MsLogger.error('Something went wrong while saving data \n' + err)
+        MsLogger.error('Something went wrong while saving ranking matches \n' + err)
       })
     }
 
-    if (data.rankingMatches || data.practiceMatches) {
+    if ((data.rankingMatches && data.rankingMatches.length > 0) || (data.practiceMatches && data.practiceMatches.length > 0)) {
       mhubConnection.publishUpdateMsg('matches')
     }
 
