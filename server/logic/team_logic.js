@@ -44,7 +44,7 @@ exports.createValidation = function (params) {
 function deleteMatchesForTeam (teamNumber) {
   return requestify.get(`${process.env.MODULE_SCORING_URL}/scores/search?teamNumber=${teamNumber}`).then(response => {
     if (response.body !== '[]') {
-      return new Error('This team have scores. Please delete them before trying again.')
+      return new Error('This team has scores. Please delete them and try again')
     }
     if (!process.env.DEV && !response.body) {
       return db.connection().then(connection => {
