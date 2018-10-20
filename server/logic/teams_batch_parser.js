@@ -25,6 +25,13 @@ exports.parse = function (data, delimiter) {
     MsLogger.warn(errorStr)
     teams.length = 0
   }
+  const doesNotHaveTeamNumber = teamNumbersArray.some(team => {
+    return team == '' || team == undefined
+  })
+  if (doesNotHaveTeamNumber) {
+    errorStr = 'Some teams are missing team numbers, Aborting import.'
+    MsLogger.warn(errorStr)
+  }
 
   return { 'teams': teams, 'error': errorStr }
 }
