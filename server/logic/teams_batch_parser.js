@@ -29,7 +29,7 @@ exports.parse = function (data, delimiter) {
     return team == '' || team == undefined
   })
   if (doesNotHaveTeamNumber) {
-    errorStr = 'Some teams are missing team numbers, Aborting import.'
+    errorStr = 'Some teams are missing team numbers. Aborting import.'
     MsLogger.warn(errorStr)
   }
 
