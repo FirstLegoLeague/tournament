@@ -26,7 +26,7 @@ exports.parse = function (data, delimiter) {
     teams.length = 0
   }
   const doesNotHaveTeamNumber = teamNumbersArray.some(team => {
-    return team == '' || team == undefined
+    return isNaN(parseInt(team))
   })
   if (doesNotHaveTeamNumber) {
     errorStr = 'Some teams are missing team numbers. Aborting import.'

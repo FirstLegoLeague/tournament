@@ -55,7 +55,7 @@ function parse (data, delimiter) {
     MsLogger.warn(errorStr)
   }
   const doesNotHaveTeamNumber = teamNumbersArray.some(team => {
-    return team == '' || team == undefined || parseInt(team) != undefined
+    return isNaN(parseInt(team))
   })
   if (doesNotHaveTeamNumber) {
     errorStr = 'Some teams are missing team numbers. Aborting import.'
