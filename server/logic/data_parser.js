@@ -133,5 +133,5 @@ function arrayContainesNonEmptyFields (arr) {
 }
 
 function isStringEmpty (str) {
-  return str == '' || str == undefined || /\s+/.test(str)
+  return str == '' || str == undefined || /^\s+$/.test(str)
 }
