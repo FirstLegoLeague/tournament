@@ -1,11 +1,13 @@
 'use strict'
 const express = require('express')
-const db = require('../Utils/mongoConnection')
+
 const ObjectId = require('mongodb').ObjectID
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const mhubConnection = require('../Utils/mhubConnection')
+const db = require('../utilities/mongo_connection')
+
+const mhubConnection = require('../utilities/mhub_connection')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -108,7 +110,7 @@ exports.getRouter = function (options) {
   })
 
   router.delete('/:id', adminAction, (req, res) => {
-    let validationResult = true
+    let validationResult = Promise.resolve(true)
     if (options.validationMethods && options.validationMethods.delete) {
       validationResult = options.validationMethods.delete(req.params)
     }
@@ -116,16 +118,24 @@ exports.getRouter = function (options) {
     if (!validationResult) {
       res.sendStatus(400)
     }
-    db.connection().then(connection => {
-      connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, req.params.id)).then(dbResponse => {
-        if (dbResponse.ok === 1) {
-          mhubConnection.publishUpdateMsg(options.mhubNamespace)
-          res.sendStatus(200)
-        }
+    validationResult.then(error => {
+      if (error && error.name === 'Error') {
+        res.status(500).send(error.message)
+        return
+      }
+      db.connection().then(connection => {
+        connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, req.params.id)).then(dbResponse => {
+          if (dbResponse.ok === 1) {
+            mhubConnection.publishUpdateMsg(options.mhubNamespace)
+            res.sendStatus(200)
+          }
+        })
+      }).catch(err => {
+        MsLogger.error(err)
+        res.sendStatus(500)
       })
     }).catch(err => {
       MsLogger.error(err)
-      res.sendStatus(500)
     })
   })
 

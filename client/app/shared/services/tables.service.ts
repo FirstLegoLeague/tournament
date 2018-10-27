@@ -35,9 +35,8 @@ export class TablesService {
         const tablesToCreate = this.editingTables.filter(table => isNaN(table.tableId));
         const tablesToUpdate = this.editingTables.filter(editingTable =>
             isFinite(editingTable.tableId) && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
-
         // Add numbers to new tables
-        let lastTableId = Math.max.apply(null, this.tables.map(table => table.tableId)) || 0;
+        let lastTableId = this.lastTableId();
         tablesToCreate.forEach((table, index) => {
             table.tableId = (lastTableId + 1 + index)
         })
@@ -47,6 +46,14 @@ export class TablesService {
         const tablesToUpdateObservables = tablesToUpdate.map(table => this.requests.put(`/table/${table.id()}`, table.body()))
 
         return forkJoin(tablesToDeleteObservables.concat(tablesToCreateObservables).concat(tablesToUpdateObservables))
+    }
+
+    lastTableId() {
+        let lastTableId = Math.max.apply(Math, this.tables.map(table => table.tableId))
+        if (lastTableId < 0) {
+            return 0
+        }
+        return lastTableId
     }
 
 

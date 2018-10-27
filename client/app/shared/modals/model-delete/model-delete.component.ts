@@ -30,7 +30,7 @@ export class ModelDelete {
       this.reload()
     }, error => {
       if (!service.deleteErrorText()) {
-          this.notifications.error('Deletion failed')
+          this.notifications.error(`Deletion failed ${error.error}`)
       } else{
           this.notifications.error(service.deleteErrorText())
       }

@@ -1,6 +1,6 @@
 'use strict'
 const express = require('express')
-const db = require('../Utils/mongoConnection')
+const db = require('../utilities/mongo_connection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const router = express.Router()

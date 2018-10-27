@@ -13,7 +13,7 @@ const Match = require('./server/models/Match')
 const Table = require('./server/models/Table')
 
 const logger = Logger()
-const db = require('./server/Utils/mongoConnection')
+const db = require('./server/utilities/mongo_connection')
 
 const appPort = process.env.PORT || 3001
 const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddleware() : authenticationMiddleware
@@ -27,14 +27,18 @@ app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const {getSettingsRouter} = require('./server/routers/generalSettingsRouter')
-const configRouter = require('./server/routers/configRouter')
-const crudRouter = require('./server/routers/crudRouter').getRouter
-const tournamentDataRouter = require('./server/routers/tournamentDataRouter')
-const matchTeamRouter = require('./server/routers/matchTeamRouter')
-const teamsBatchUploadRouter = require('./server/routers/teamsBatchUploadRouter')
+const {getSettingsRouter} = require('./server/routers/general_settings_router')
+const configRouter = require('./server/routers/config_router')
+const crudRouter = require('./server/routers/crud_router').getRouter
+const tournamentDataRouter = require('./server/routers/tournament_data_router')
+const matchTeamRouter = require('./server/routers/matchTeam_router')
+const teamsBatchUploadRouter = require('./server/routers/teams_batchupload_router')
+const lastMatchIdRouter = require('./server/routers/last_matchId_router').router
 const tournamentStatusRouter = require('./server/routers/tournamentStatusRouter')
-const {imagesRouter} = require('./server/routers/imagesRouter')
+const {imagesRouter} = require('./server/routers/images_router')
+const EventEmitter = require('events').EventEmitter
+
+EventEmitter.defaultMaxListeners = 12
 
 app.post(authenticationMiddlewareToUse)
 app.put(authenticationMiddlewareToUse)
@@ -46,7 +50,7 @@ app.all('/config', configRouter)
 
 app.use('/tournamentData', tournamentDataRouter)
 
-const teamLogic = require('./server/logic/teamLogic')
+const teamLogic = require('./server/logic/team_logic')
 
 app.use('/team', crudRouter({
   'collectionName': 'teams',
@@ -63,7 +67,7 @@ app.use('/team', crudRouter({
 app.use('/match', crudRouter({
   'collectionName': 'matches',
   'IdField': Match.IdField,
-  'extraRouters': [tournamentStatusRouter.getRouter()],
+  'extraRouters': [lastMatchIdRouter, tournamentStatusRouter.getRouter()],
   'mhubNamespace': 'matches'
 }))
 

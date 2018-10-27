@@ -1,7 +1,7 @@
 'use strict'
-const db = require('../Utils/mongoConnection')
+const db = require('../utilities/mongo_connection')
 
-const { MHUB_NODES, publishMsg } = require('../Utils/mhubConnection')
+const { MHUB_NODES, publishMsg } = require('../utilities/mhub_connection')
 
 const SETTING_COLLECTION_NAME = 'settings'
 

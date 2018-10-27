@@ -3,9 +3,9 @@ const express = require('express')
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 const { Logger } = require('@first-lego-league/ms-logger')
 const formidable = require('formidable')
-const {publishUpdateMsg} = require('../Utils/mhubConnection')
+const {publishUpdateMsg} = require('../utilities/mhub_connection')
 
-const { getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder } = require('../logic/imagesLogic')
+const { getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder } = require('../logic/images_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 const logger = Logger()

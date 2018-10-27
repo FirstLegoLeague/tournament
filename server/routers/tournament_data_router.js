@@ -3,15 +3,15 @@ const express = require('express')
 const requestify = require('requestify')
 
 const router = express.Router()
-const db = require('../Utils/mongoConnection')
+const db = require('../utilities/mongo_connection')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const mhubConnection = require('../Utils/mhubConnection')
+const mhubConnection = require('../utilities/mhub_connection')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
-const tournamentDataParser = require('../logic/tournamentDataParser')
+const tournamentDataParser = require('../logic/data_parser')
 
 router.get('/parse', (req, res) => {
   if (!req.query.tourData) {
@@ -37,17 +37,17 @@ router.post('/', adminAction, (req, res) => {
   let tablesPromise
   let teamsPromise
   let practicePromise
-  let rankingPromose
+  let rankingPromise
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   db.connection().then(conn => {
-    if (data.tables) {
+    if (data.tables && data.tables.length > 0) {
       tablesPromise = conn.db().collection('tables').insertMany(data.tables).then(() => {
         MsLogger.info('Data saved successfully to collection tables')
         mhubConnection.publishUpdateMsg('tables')
         return true
       }).catch(err => {
-        MsLogger.error('Something went wrong while saving data \n' + err)
+        MsLogger.error('Something went wrong while saving tables \n' + err)
       })
     }
 
@@ -56,32 +56,32 @@ router.post('/', adminAction, (req, res) => {
       mhubConnection.publishUpdateMsg('teams')
       return true
     }).catch(err => {
-      MsLogger.error('Something went wrong while saving data \n' + err)
+      MsLogger.error('Something went wrong while saving teams \n' + err)
     })
 
-    if (data.practiceMatches) {
+    if (data.practiceMatches && data.practiceMatches.length > 0) {
       practicePromise = conn.db().collection('matches').insertMany(data.practiceMatches).then(() => {
         MsLogger.info('practice matches saved successfully to collection matches')
         return true
       }).catch(err => {
-        MsLogger.error('Something went wrong while saving data \n' + err)
+        MsLogger.error('Something went wrong while saving practice matches \n' + err)
       })
     }
 
-    if (data.rankingMatches) {
-      rankingPromose = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
+    if (data.rankingMatches && data.rankingMatches.length > 0) {
+      rankingPromise = conn.db().collection('matches').insertMany(data.rankingMatches).then(() => {
         MsLogger.info('ranking matches successfully to collection ranking-matches')
         return true
       }).catch(err => {
-        MsLogger.error('Something went wrong while saving data \n' + err)
+        MsLogger.error('Something went wrong while saving ranking matches \n' + err)
       })
     }
 
-    if (data.rankingMatches || data.practiceMatches) {
+    if ((data.rankingMatches && data.rankingMatches.length > 0) || (data.practiceMatches && data.practiceMatches.length > 0)) {
       mhubConnection.publishUpdateMsg('matches')
     }
 
-    const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromose].filter(promise => promise)
+    const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromise].filter(promise => promise)
 
     Promise.all(promises).then(() => {
       res.sendStatus(201)
