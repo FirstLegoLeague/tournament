@@ -54,6 +54,13 @@ function parse (data, delimiter) {
     errorStr = 'Duplicate team number found in CSV. Aborting import.'
     MsLogger.warn(errorStr)
   }
+  const doesNotHaveTeamNumber = teamNumbersArray.some(team => {
+    return isNaN(parseInt(team))
+  })
+  if (doesNotHaveTeamNumber) {
+    errorStr = 'Some teams are missing team numbers. Aborting import.'
+    MsLogger.warn(errorStr)
+  }
 
   let rankingMatchesRaw, numOfActualFields, tablesRaw
   if (doesSectionExsits(blocks, RANKING_MATCH_SCHEDULE_ID)) {
