@@ -1,10 +1,10 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getMatch } = require('./matchLogic')
-const { getSetting } = require('./tournamentSettingsLogic')
+const { getMatch } = require('./match_logic')
+const { getSetting } = require('./settings_logic')
 
-const { publishUpdateMsg, subscribe } = require('../Utils/mhubConnection')
+const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
 let currentMatchNumber = 0
 const UPCOMING_MATCHES_TO_GET = 2

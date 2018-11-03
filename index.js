@@ -34,7 +34,7 @@ const tournamentDataRouter = require('./server/routers/tournament_data_router')
 const matchTeamRouter = require('./server/routers/matchTeam_router')
 const teamsBatchUploadRouter = require('./server/routers/teams_batchupload_router')
 const lastMatchIdRouter = require('./server/routers/last_matchId_router').router
-const tournamentStatusRouter = require('./server/routers/tournamentStatusRouter')
+const tournamentStatusRouter = require('./server/routers/tournament_status_router')
 const {imagesRouter} = require('./server/routers/images_router')
 const EventEmitter = require('events').EventEmitter
 

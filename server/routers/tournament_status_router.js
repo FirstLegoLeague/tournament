@@ -1,6 +1,6 @@
 'use strict'
 const express = require('express')
-const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber} = require('../logic/tournamentStatusLogic')
+const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber} = require('../logic/tournament_status_logic')
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
