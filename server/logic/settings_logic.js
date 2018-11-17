@@ -1,7 +1,7 @@
 'use strict'
 const db = require('../utilities/mongo_connection')
-
-const { MHUB_NODES, publishMsg } = require('../utilities/mhub_connection')
+const logger = require('@first-lego-league/ms-logger').Logger()
+const {MHUB_NODES, publishMsg} = require('../utilities/mhub_connection')
 
 const SETTING_COLLECTION_NAME = 'settings'
 
@@ -47,12 +47,15 @@ function updateSetting (settingName, value) {
     const setDocument = {}
     setDocument[settingName] = value
     return connection.db().collection(SETTING_COLLECTION_NAME)
-      .findOneAndUpdate({}, { $set: setDocument })
+      .findOneAndUpdate({}, {$set: setDocument})
       .then(dbResponse => {
         if (dbResponse.ok == 1) {
-          publishMsg(MHUB_NODES.PROTECTED, `${settingName}:updated`, { value })
+          publishMsg(MHUB_NODES.PROTECTED, `${settingName}:updated`, {value})
+          logger.info(`Updated setting ${settingName} With value: ${value} Successfully`)
           return true
         }
+      }).catch(err => {
+        logger.warn(`Could not save ${settingName} with value: ${value}. Error: ${err.message}`)
       })
   })
 }
