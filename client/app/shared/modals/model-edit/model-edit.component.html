@@ -7,10 +7,15 @@
   <div *ngIf="model()">
     <div *ngFor="let field of model().fields()">
       <label>{{field.display}}
-        <input type="{{field.type}}"
-          value="{{field.get()}}"
-          (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"
-        [disabled]="field.editable == false && model().savedInDB()"/>
+        <input *ngIf="isInputType(field.type)"
+                type="{{field.type}}"
+                value="{{field.get()}}"
+                (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"
+                [disabled]="field.editable == false && model().savedInDB()"/>
+          <select *ngIf="field.type == 'select' && field.options.length > 0"
+                  (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"  >
+              <option *ngFor="let option of field.options" value="{{option.value}}"  [selected]="option.value == field.get()">{{option.display}}</option>
+          </select>
       </label>
     </div>
   </div>
