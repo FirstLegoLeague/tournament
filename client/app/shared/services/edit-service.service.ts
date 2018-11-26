@@ -15,7 +15,7 @@ export class EditService {
   }
 
   setEditModel (model) {
-    this.editModel = model
+    this.editModel = Object.create(model);
   }
 
   getEditModel () {

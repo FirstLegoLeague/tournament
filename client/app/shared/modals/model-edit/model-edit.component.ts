@@ -46,4 +46,8 @@ export class ModelEdit {
     return this.editModalsService.service(this.model()).reload();
   }
 
+  isInputType(checkedType){
+      return ['text', 'time'].some(type => type==checkedType);
+  }
+
 }

@@ -21,7 +21,7 @@
                         <div class="input-group-button">
                             <button class="button" (click)="save('tournamentStage')"
                                     [disabled]="settings['tournamentStage'].options == undefined"><i
-                                    class="fa fa-save"></i>
+                                    class="fa fa-save"></i>&nbsp; Save
                             </button>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                     <div class="input-group">
                         <input type="text" [(ngModel)]="settings['tournamentTitle'].value" class="input-group-field">
                         <div class="input-group-button">
-                            <button class="button" (click)="save('tournamentTitle')"><i class="fa fa-save"></i></button>
+                            <button class="button" (click)="save('tournamentTitle')"><i class="fa fa-save"></i>&nbsp; Save</button>
                         </div>
                     </div>
                 </fieldset>
