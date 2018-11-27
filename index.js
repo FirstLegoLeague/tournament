@@ -4,6 +4,7 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const version = require('project-version')
 const {correlationMiddleware} = require('@first-lego-league/ms-correlation')
 const {authenticationMiddleware, authenticationDevMiddleware} = require('@first-lego-league/ms-auth')
 const {loggerMiddleware, Logger} = require('@first-lego-league/ms-logger')
@@ -19,6 +20,7 @@ const appPort = process.env.PORT || 3001
 const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddleware() : authenticationMiddleware
 
 logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
+logger.info (`-------------------- tournament version ${version} startup --------------------`)
 
 const app = express()
 app.use(bodyParser.urlencoded({extended: true}))
