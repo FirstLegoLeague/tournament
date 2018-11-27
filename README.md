@@ -100,13 +100,13 @@ There is no option to add a setting with this api. This API is for reading and u
 When you are ready to publish to npm
 
 - run the command `yarn publish` from the repo root directory.
-- You will be asked to enter a new version to publish.
+- You will be asked to update the version number.
 - Following that the script will run the build `ng build --prod` and publish the artifacts to `@first-lego-league/tournament`.
 
 Notes:
 
 - You must be a member of the `npm` `first-lego-league` organization to publish the package.
-- Verify version in npm [@first-lego-league/tournament].(https://www.npmjs.com/package/@first-lego-league/tournament)
+- Verify version in npm [@first-lego-league/tournament] after the publish has completed (https://www.npmjs.com/package/@first-lego-league/tournament)
 - Remember to push package.xml (containing the updated version).
 
 ## Adding new version to the `launcher`
