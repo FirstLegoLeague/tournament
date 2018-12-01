@@ -2,20 +2,11 @@
 const express = require('express')
 
 const db = require('../utilities/mongo_connection')
+const settings = require('../logic/settings_logic')
 
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const RANDOM_ID_LENGTH = 25
-const stages = [
-  {
-    stageName: 'practice',
-    matchAmount: 1
-  },
-  {
-    stageName: 'ranking',
-    matchAmount: 3
-  }
-]
 
 exports.getRouter = function () {
   const router = express.Router()
@@ -24,10 +15,10 @@ exports.getRouter = function () {
     db.connection().then(connection => {
       connection.db().collection('matches').find({'matchTeams.teamNumber': parseInt(req.params.team)}).toArray().then(data => {
         if (!data || data.length === 0) {
-          res.send(getDefaultMatchesForTeam(parseInt(req.params.team), stages))
-          return
+          return getDefaultStages().then(stages => {
+            res.send(getDefaultMatchesForTeam(parseInt(req.params.team), stages))
+          })
         }
-
         res.send(data)
       })
     }).catch(err => {
@@ -58,6 +49,28 @@ function getDefaultMatchesForTeam (teamNumber, stages) {
   }
 
   return matches
+}
+
+function getDefaultStages () {
+  const stages = [
+    {
+      stageName: 'practice',
+      matchAmount: 1
+    },
+    {
+      stageName: 'ranking',
+      matchAmount: 3
+    }
+  ]
+
+  let practice = settings.getSetting('practiceAmountOfMatches')
+  let ranking = settings.getSetting('rankingAmountOfMatches')
+
+  return Promise.all([practice, ranking]).then(data => {
+    stages.filter(x => x.stageName == 'practice')[0].matchAmount = data[0]
+    stages.filter(x => x.stageName == 'ranking')[0].matchAmount = data[1]
+    return stages
+  })
 }
 
 function createRandomId (length) {
