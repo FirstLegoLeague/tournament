@@ -8,6 +8,7 @@ let _connection = null
 
 function connect () {
   if (_connection == null) {
+    MsLogger.info('Opening Mongo Db connection')
     _connection = MongoClient.connect(MONGO_URI, { useNewUrlParser: true, poolSize: 3 })
   }
   return _connection
@@ -15,7 +16,7 @@ function connect () {
 
 function connection () {
   if (_connection == null) {
-    MsLogger.debug('Mongo connection was not initialized, trying to connect before returning the connection.')
+    MsLogger.debug('Mongo Db connection was not initialized, trying to connect before returning the connection')
     connect()
   }
   return _connection

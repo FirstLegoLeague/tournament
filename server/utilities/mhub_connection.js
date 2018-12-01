@@ -36,7 +36,7 @@ function publishUpdateMsg (nameSpace) {
 
 function publishMsg (node, topic, data = '') {
   connect().then(() => loginToMhub(node)).then(connectedNode => {
-    MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${data}`)
+    MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${JSON.stringify(data)}`)
     mhubClient.publish(connectedNode, topic, data, {
       'client-id': MHUB_CLIENT_ID,
       'correlation-id': getCorrelationId()
