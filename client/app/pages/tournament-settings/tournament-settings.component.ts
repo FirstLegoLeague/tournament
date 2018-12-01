@@ -43,6 +43,16 @@ export class TournamentSettingsComponent implements OnInit {
                         display: 'Stage',
                         value: settings['tournamentStage'],
                         name: 'tournamentStage'
+                    },
+                    practiceAmountOfMatches: {
+                        display: 'Amount of practice rounds',
+                        value: settings['practiceAmountOfMatches'],
+                        name: 'practiceAmountOfMatches'
+                    },
+                    rankingAmountOfMatches: {
+                        display: 'Amount of ranking rounds',
+                        value: settings['rankingAmountOfMatches'],
+                        name: 'rankingAmountOfMatches'
                     }
                 }
                 this.tournamentSettingsService.getStages().subscribe(
@@ -66,7 +76,7 @@ export class TournamentSettingsComponent implements OnInit {
         this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
             response => {
                 this.loading = false;
-                this.notification.success("Setting saved successfully")
+                this.notification.success(`${this.settings[setting].display} saved successfully`)
             },
             err => {
                 this.notification.error("Oh no! Something went wrong while trying to save...")
