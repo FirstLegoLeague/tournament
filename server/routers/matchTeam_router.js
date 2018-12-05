@@ -13,7 +13,7 @@ exports.getRouter = function () {
 
   router.get('/:team/matches', (req, res) => {
     db.connection().then(connection => {
-      connection.db().collection('matches').find({'matchTeams.teamNumber': parseInt(req.params.team)}).toArray().then(data => {
+      connection.db().collection('matches').find({ 'matchTeams.teamNumber': parseInt(req.params.team) }).toArray().then(data => {
         if (!data || data.length === 0) {
           return getDefaultStages().then(stages => {
             res.send(getDefaultMatchesForTeam(parseInt(req.params.team), stages))
@@ -63,14 +63,13 @@ function getDefaultStages () {
     }
   ]
 
-  let practice = settings.getSetting('numberOfPracticeRounds')
-  let ranking = settings.getSetting('numberOfRankingRounds')
-
-  return Promise.all([practice, ranking]).then(data => {
-    stages.filter(x => x.stageName == 'practice')[0].matchAmount = data[0]
-    stages.filter(x => x.stageName == 'ranking')[0].matchAmount = data[1]
-    return stages
-  })
+  return Promise.all([settings.getSetting('numberOfPracticeRounds'),
+    settings.getSetting('numberOfRankingRounds')])
+    .then(data => {
+      stages.filter(x => x.stageName == 'practice')[0].matchAmount = data[0]
+      stages.filter(x => x.stageName == 'ranking')[0].matchAmount = data[1]
+      return stages
+    })
 }
 
 function createRandomId (length) {
