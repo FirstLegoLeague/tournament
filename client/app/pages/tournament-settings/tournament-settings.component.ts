@@ -45,12 +45,12 @@ export class TournamentSettingsComponent implements OnInit {
                         name: 'tournamentStage'
                     },
                     numberOfPracticeRounds: {
-                        display: 'Amount of practice rounds',
+                        display: 'Practice rounds',
                         value: settings['numberOfPracticeRounds'],
                         name: 'numberOfPracticeRounds'
                     },
                     numberOfRankingRounds: {
-                        display: 'Amount of ranking rounds',
+                        display: 'Ranking rounds',
                         value: settings['numberOfRankingRounds'],
                         name: 'numberOfRankingRounds'
                     }
