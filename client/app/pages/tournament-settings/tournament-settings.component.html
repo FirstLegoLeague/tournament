@@ -43,11 +43,11 @@
                             </label>
 
                             {{settings['numberOfPracticeRounds'].display}}
-                            <input type="number" [(ngModel)]="settings['numberOfPracticeRounds'].value" >
+                            <input type="number" [(ngModel)]="settings['numberOfPracticeRounds'].value" min="{{MIN_AMOUNT_OF_ROUNDS}}" max="{{MAX_AMOUNT_OF_ROUNDS}}">
                             {{settings['numberOfRankingRounds'].display}}
-                            <input type="number" [(ngModel)]="settings['numberOfRankingRounds'].value" >
+                            <input type="number" [(ngModel)]="settings['numberOfRankingRounds'].value" min="{{MIN_AMOUNT_OF_ROUNDS}}" max="{{MAX_AMOUNT_OF_ROUNDS}}">
 
-                            <button class="button" (click)="save('numberOfPracticeRounds'); save('numberOfRankingRounds')" [disabled]=""><i class="fa fa-save"></i>&nbsp; Save</button>
+                            <button class="button" (click)="saveNumberOFRounds()" [disabled]=""><i class="fa fa-save"></i>&nbsp; Save</button>
                         </div>
                     </div>
                 </fieldset>
