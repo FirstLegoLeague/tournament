@@ -16,8 +16,7 @@ function setDefaultSettings () {
   db.connection().then(connection => {
     connection.db().collection(SETTING_COLLECTION_NAME).findOne({}).then(response => {
       const promises = []
-      if (response.length > 0) {
-        response = response[0]
+      if (response) {
         for (const setting of Object.keys(defaultSettings)) {
           if (!response[setting]) {
             const toSet = {}
