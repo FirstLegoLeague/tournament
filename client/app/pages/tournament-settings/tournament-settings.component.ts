@@ -44,15 +44,15 @@ export class TournamentSettingsComponent implements OnInit {
                         value: settings['tournamentStage'],
                         name: 'tournamentStage'
                     },
-                    practiceAmountOfMatches: {
+                    numberOfPracticeRounds: {
                         display: 'Amount of practice rounds',
-                        value: settings['practiceAmountOfMatches'],
-                        name: 'practiceAmountOfMatches'
+                        value: settings['numberOfPracticeRounds'],
+                        name: 'numberOfPracticeRounds'
                     },
-                    rankingAmountOfMatches: {
+                    numberOfRankingRounds: {
                         display: 'Amount of ranking rounds',
-                        value: settings['rankingAmountOfMatches'],
-                        name: 'rankingAmountOfMatches'
+                        value: settings['numberOfRankingRounds'],
+                        name: 'numberOfRankingRounds'
                     }
                 }
                 this.tournamentSettingsService.getStages().subscribe(

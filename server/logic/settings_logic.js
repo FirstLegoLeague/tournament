@@ -9,8 +9,8 @@ function setDefaultSettings () {
   const defaultSettings = {
     'tournamentStage': 'practice',
     'tournamentTitle': 'World Festival Houston 2019',
-    'practiceAmountOfMatches': 1,
-    'rankingAmountOfMatches': 3
+    'numberOfPracticeRounds': 1,
+    'numberOfRankingRounds': 3
   }
 
   db.connection().then(connection => {

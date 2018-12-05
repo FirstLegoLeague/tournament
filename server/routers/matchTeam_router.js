@@ -63,8 +63,8 @@ function getDefaultStages () {
     }
   ]
 
-  let practice = settings.getSetting('practiceAmountOfMatches')
-  let ranking = settings.getSetting('rankingAmountOfMatches')
+  let practice = settings.getSetting('numberOfPracticeRounds')
+  let ranking = settings.getSetting('numberOfRankingRounds')
 
   return Promise.all([practice, ranking]).then(data => {
     stages.filter(x => x.stageName == 'practice')[0].matchAmount = data[0]

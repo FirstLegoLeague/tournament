@@ -44,12 +44,12 @@
                                 This setting is used when you import a partial schedule file or a team list.
                             </label>
 
-                            {{settings['practiceAmountOfMatches'].display}}
-                            <input type="number" [(ngModel)]="settings['practiceAmountOfMatches'].value" >
-                            {{settings['rankingAmountOfMatches'].display}}
-                            <input type="number" [(ngModel)]="settings['rankingAmountOfMatches'].value" >
+                            {{settings['numberOfPracticeRounds'].display}}
+                            <input type="number" [(ngModel)]="settings['numberOfPracticeRounds'].value" >
+                            {{settings['numberOfRankingRounds'].display}}
+                            <input type="number" [(ngModel)]="settings['numberOfRankingRounds'].value" >
 
-                            <button class="button" (click)="save('practiceAmountOfMatches'); save('rankingAmountOfMatches')" [disabled]=""><i class="fa fa-save"></i>&nbsp; Save</button>
+                            <button class="button" (click)="save('numberOfPracticeRounds'); save('numberOfRankingRounds')" [disabled]=""><i class="fa fa-save"></i>&nbsp; Save</button>
                         </div>
                     </div>
                 </fieldset>
