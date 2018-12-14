@@ -43,7 +43,7 @@ exports.getRouter = function () {
   router.put('/current', adminAction, (req, res) => {
     if (parseInt(req.body.match)) {
       setCurrentMatchNumber(parseInt(req.body.match))
-      res.sendStatus(200)
+      res.send('').status(200)
     } else {
       res.sendStatus(415)
     }

@@ -59,6 +59,7 @@ function getCurrentMatchNumber () {
 
 function setCurrentMatchNumber (newMatch) {
   currentMatchNumber = newMatch
+  publishMatchAvailable()
 }
 
 module.exports = {
