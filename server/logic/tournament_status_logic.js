@@ -1,9 +1,9 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const {getMatchesByTime, getMatchInCurrentStage} = require('./match_logic')
+const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage } = require('./match_logic')
 
-const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
+const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
 let currentMatchNumber = 0
 const UPCOMING_MATCHES_TO_GET = 2
@@ -32,11 +32,10 @@ function getCurrentMatch () {
 }
 
 function getNextMatches () {
-  let matchToGet = currentMatchNumber === 0 ? currentMatchNumber + 1 : currentMatchNumber
+  const matchToGet = currentMatchNumber === 0 ? currentMatchNumber + 1 : currentMatchNumber
   return getMatchInCurrentStage(matchToGet).then(match => {
     return getMatchesByTime(match.startTime, UPCOMING_MATCHES_TO_GET)
   })
-
 }
 
 function publishMatchAvailable () {
@@ -58,8 +57,15 @@ function getCurrentMatchNumber () {
 }
 
 function setCurrentMatchNumber (newMatch) {
-  currentMatchNumber = newMatch
-  publishMatchAvailable()
+  return isMatchInCurrentStage(newMatch).then(result => {
+    if (!result) {
+      currentMatchNumber = newMatch
+      publishMatchAvailable()
+      return true
+    }
+
+    throw new Error(`Match # ${newMatch} is not in the current stage. could not update`)
+  })
 }
 
 module.exports = {

@@ -1,9 +1,11 @@
 'use strict'
 const express = require('express')
-const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber} = require('../logic/tournament_status_logic')
+
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+
+const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber} = require('../logic/tournament_status_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -42,8 +44,12 @@ exports.getRouter = function () {
 
   router.put('/current', adminAction, (req, res) => {
     if (parseInt(req.body.match)) {
-      setCurrentMatchNumber(parseInt(req.body.match))
-      res.send('').status(200)
+      setCurrentMatchNumber(parseInt(req.body.match)).then(result => {
+        res.send('').status(200)
+      }).catch(error => {
+        MsLogger.error(error.message)
+        res.status(400).send({error: error.message})
+      })
     } else {
       res.sendStatus(415)
     }

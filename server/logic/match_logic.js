@@ -37,8 +37,8 @@ function getMatchesByTime (time, amountOfMatches) {
   })
 }
 
-function isLastMatchInStage (matchNumber, stage) {
-  return getMatch(matchNumber + 1, stage).then(match => {
+function isMatchInCurrentStage (matchNumber, stage) {
+  return getMatchInCurrentStage(matchNumber, stage).then(match => {
     if (match) {
       return false
     }
@@ -48,7 +48,7 @@ function isLastMatchInStage (matchNumber, stage) {
 
 module.exports = {
   getMatch,
-  isLastMatchInStage,
+  isMatchInCurrentStage,
   getMatchesByTime,
   getMatchInCurrentStage
 }
