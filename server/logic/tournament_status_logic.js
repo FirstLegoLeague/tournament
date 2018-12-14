@@ -1,14 +1,12 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getMatch } = require('./match_logic')
-const { getSetting } = require('./settings_logic')
+const {getMatchesByTime, getMatchInCurrentStage} = require('./match_logic')
 
-const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
+const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
 
 let currentMatchNumber = 0
 const UPCOMING_MATCHES_TO_GET = 2
-const CURRENT_STAGE_NAME = 'tournamentStage'
 
 let isLastMatchFinished = true
 
@@ -30,26 +28,15 @@ subscribe('clock:start', clockStartEvent)
 subscribe('clock:end', clockEndEvent)
 
 function getCurrentMatch () {
-  return getSetting(CURRENT_STAGE_NAME).then(stage => {
-    return getMatch(currentMatchNumber, stage).then(data => {
-      if (data) {
-        return data
-      }
-      return null
-    })
-  })
+  return getMatchInCurrentStage(currentMatchNumber)
 }
 
 function getNextMatches () {
-  return getSetting(CURRENT_STAGE_NAME).then(stage => {
-    const retMatches = []
-
-    for (let i = 1; i <= UPCOMING_MATCHES_TO_GET; i++) {
-      retMatches.push(getMatch(currentMatchNumber + i, stage))
-    }
-
-    return Promise.all(retMatches)
+  let matchToGet = currentMatchNumber === 0 ? currentMatchNumber + 1 : currentMatchNumber
+  return getMatchInCurrentStage(matchToGet).then(match => {
+    return getMatchesByTime(match.startTime, UPCOMING_MATCHES_TO_GET)
   })
+
 }
 
 function publishMatchAvailable () {
