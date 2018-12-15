@@ -101,7 +101,7 @@ export class TournamentSettingsComponent implements OnInit {
                     }
                 )
         } else {
-            this.notification.error(`Number of round per stage need to be between ${this.MIN_AMOUNT_OF_ROUNDS} and ${this.MAX_AMOUNT_OF_ROUNDS}`)
+            this.notification.error(`Valid rounds per stage is between ${this.MIN_AMOUNT_OF_ROUNDS} and ${this.MAX_AMOUNT_OF_ROUNDS}`)
         }
 
     }
