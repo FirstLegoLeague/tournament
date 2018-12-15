@@ -8,11 +8,26 @@ const SETTING_COLLECTION_NAME = 'settings'
 function setDefaultSettings () {
   const defaultSettings = {
     'tournamentStage': 'practice',
-    'tournamentTitle': 'World Festival Houston 2019'
+    'tournamentTitle': 'World Festival Houston 2019',
+    'numberOfPracticeRounds': 1,
+    'numberOfRankingRounds': 3
   }
+
   db.connection().then(connection => {
-    connection.db().collection(SETTING_COLLECTION_NAME).findOne().then(response => {
-      if (!response) {
+    connection.db().collection(SETTING_COLLECTION_NAME).findOne({}).then(response => {
+      const promises = []
+      if (response) {
+        for (const setting of Object.keys(defaultSettings)) {
+          if (!response[setting]) {
+            const toSet = {}
+            toSet[setting] = defaultSettings[setting]
+            promises.push(connection.db().collection(SETTING_COLLECTION_NAME).updateOne({}, {
+              $set: toSet
+            }))
+          }
+        }
+        return Promise.all(promises)
+      } else {
         return connection.db().collection(SETTING_COLLECTION_NAME).insert(defaultSettings)
       }
     })

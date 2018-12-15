@@ -4,6 +4,7 @@ import {Notifications} from "../../shared/services/notifications.service";
 import {st} from "../../../../node_modules/@angular/core/src/render3";
 import {DeleteService} from "../../shared/services/delete-service.service";
 import {TournamentDataService} from "../../shared/services/tournament-data.service";
+import {forkJoin} from "rxjs";
 
 @Component({
     selector: 'app-tournament-settings',
@@ -16,6 +17,9 @@ export class TournamentSettingsComponent implements OnInit {
     public loading: boolean = true;
     public hasDataInDb = false;
 
+    public MIN_AMOUNT_OF_ROUNDS = 0;
+    public MAX_AMOUNT_OF_ROUNDS = 5
+
     constructor(private tournamentSettingsService: TournamentSettingsService,
                 public tournamentDataService: TournamentDataService,
                 private notification: Notifications,
@@ -24,7 +28,7 @@ export class TournamentSettingsComponent implements OnInit {
 
     ngOnInit() {
         this.reload();
-        this.tournamentDataService.dataReload.subscribe(()=>{
+        this.tournamentDataService.dataReload.subscribe(() => {
             this.reload()
         })
     }
@@ -43,6 +47,16 @@ export class TournamentSettingsComponent implements OnInit {
                         display: 'Stage',
                         value: settings['tournamentStage'],
                         name: 'tournamentStage'
+                    },
+                    numberOfPracticeRounds: {
+                        display: 'Practice rounds',
+                        value: settings['numberOfPracticeRounds'],
+                        name: 'numberOfPracticeRounds'
+                    },
+                    numberOfRankingRounds: {
+                        display: 'Ranking rounds',
+                        value: settings['numberOfRankingRounds'],
+                        name: 'numberOfRankingRounds'
                     }
                 }
                 this.tournamentSettingsService.getStages().subscribe(
@@ -66,19 +80,42 @@ export class TournamentSettingsComponent implements OnInit {
         this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
             response => {
                 this.loading = false;
-                this.notification.success("Setting saved successfully")
+                this.notification.success(`${this.settings[setting].display} saved successfully`)
             },
             err => {
                 this.notification.error("Oh no! Something went wrong while trying to save...")
             })
     }
 
-    setDeleteModel(model){
+    saveNumberOFRounds() {
+        if (this.doesValueBetween(this.settings['numberOfPracticeRounds'].value, this.MIN_AMOUNT_OF_ROUNDS, this.MAX_AMOUNT_OF_ROUNDS) &&
+            this.doesValueBetween(this.settings['numberOfRankingRounds'].value, this.MIN_AMOUNT_OF_ROUNDS, this.MAX_AMOUNT_OF_ROUNDS)) {
+            forkJoin(this.tournamentSettingsService.saveSetting('numberOfPracticeRounds', this.settings['numberOfPracticeRounds'].value),
+                     this.tournamentSettingsService.saveSetting('numberOfRankingRounds', this.settings['numberOfRankingRounds'].value))
+                .subscribe(
+                    response => {
+                        this.notification.success(`Number of rounds saved successfully`)
+                    },
+                    error => {
+                        this.notification.error("Oh no! Something went wrong while trying to save number of rounds")
+                    }
+                )
+        } else {
+            this.notification.error(`Valid rounds per stage is between ${this.MIN_AMOUNT_OF_ROUNDS} and ${this.MAX_AMOUNT_OF_ROUNDS}`)
+        }
+
+    }
+
+    doesValueBetween(value, min, max) {
+        return value >= min && value <= max;
+    }
+
+    setDeleteModel(model) {
         this.deleteModalsService.setDeleteModel(model);
     }
 
-    haveDataInDb(){
-        this.tournamentDataService.hasData().subscribe(result=>{
+    haveDataInDb() {
+        this.tournamentDataService.hasData().subscribe(result => {
             this.hasDataInDb = result
         })
     }
