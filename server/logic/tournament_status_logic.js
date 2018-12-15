@@ -1,12 +1,12 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage } = require('./match_logic')
+const {getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage} = require('./match_logic')
+const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
+const Configuration = require('@first-lego-league/ms-configuration')
 
-const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
-
+const NEXTUP_MATCHES_AMOUNT_CONFIG_KEY = 'nextupMatchesToShow'
 let currentMatchNumber = 0
-const UPCOMING_MATCHES_TO_GET = 2
 
 let isLastMatchFinished = true
 
@@ -34,7 +34,9 @@ function getCurrentMatch () {
 function getNextMatches () {
   const matchToGet = currentMatchNumber === 0 ? currentMatchNumber + 1 : currentMatchNumber
   return getMatchInCurrentStage(matchToGet).then(match => {
-    return getMatchesByTime(match.startTime, UPCOMING_MATCHES_TO_GET)
+    return Configuration.get(NEXTUP_MATCHES_AMOUNT_CONFIG_KEY).then(amount => {
+      return getMatchesByTime(match.startTime, amount)
+    })
   })
 }
 

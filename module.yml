@@ -6,3 +6,10 @@ type: 'node'
 script: 'index.js'
 require:
   mongodb
+config:
+  - name: status
+    fields:
+      - name: nextupMatchesToShow
+        display: '# of next up rounds'
+        type: integer
+        default: 2
