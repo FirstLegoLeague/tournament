@@ -31,12 +31,10 @@ function getCurrentMatch () {
   return getMatchInCurrentStage(currentMatchNumber)
 }
 
-function getNextMatches () {
+function getNextMatches (amountOfMatches) {
   const matchToGet = currentMatchNumber === 0 ? currentMatchNumber + 1 : currentMatchNumber
   return getMatchInCurrentStage(matchToGet).then(match => {
-    return Configuration.get(NEXTUP_MATCHES_AMOUNT_CONFIG_KEY).then(amount => {
-      return getMatchesByTime(match.startTime, amount)
-    })
+    return getMatchesByTime(match.startTime, amountOfMatches)
   })
 }
 
@@ -47,11 +45,14 @@ function publishMatchAvailable () {
     MsLogger.error(error)
   })
 
-  getNextMatches().then(matches => {
-    publishUpdateMsg('UpcomingMatches', matches)
-  }).catch(error => {
-    MsLogger.error(`Error in "upcoming matches" ${error}`)
+  Configuration.get(NEXTUP_MATCHES_AMOUNT_CONFIG_KEY).then(amount => {
+    getNextMatches(amount).then(matches => {
+      publishUpdateMsg('UpcomingMatches', matches)
+    }).catch(error => {
+      MsLogger.error(`Error in "upcoming matches" ${error}`)
+    })
   })
+
 }
 
 function getCurrentMatchNumber () {

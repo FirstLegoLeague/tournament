@@ -3,9 +3,9 @@ const express = require('express')
 
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber} = require('../logic/tournament_status_logic')
+const { getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber } = require('../logic/tournament_status_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
@@ -25,8 +25,17 @@ exports.getRouter = function () {
     })
   })
 
-  router.get('/upcoming', (req, res) => {
-    getNextMatches().then(matches => {
+  router.get('/upcoming/:amount?', (req, res) => {
+    let amount = 2
+    if (req.params.amount) {
+      try {
+        amount = parseInt(req.params.amount)
+      } catch (e) {
+        res.status(400).send('Amount need to be a number')
+      }
+    }
+
+    getNextMatches(amount).then(matches => {
       if (matches) {
         res.send(matches)
       } else {
@@ -48,7 +57,7 @@ exports.getRouter = function () {
         res.send('').status(200)
       }).catch(error => {
         MsLogger.error(error.message)
-        res.status(400).send({error: error.message})
+        res.status(400).send({ error: error.message })
       })
     } else {
       res.sendStatus(415)
