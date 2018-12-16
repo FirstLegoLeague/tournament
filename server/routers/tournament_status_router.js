@@ -42,7 +42,7 @@ exports.getRouter = function () {
         res.sendStatus(404)
       }
     }).catch(err => {
-      MsLogger.error(err)
+      MsLogger.error(err.message)
       res.status(500).send('The server encounter a problem while fetching upcoming matches')
     })
   })

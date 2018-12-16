@@ -32,7 +32,7 @@ function getCurrentMatch () {
 }
 
 function getNextMatches (amountOfMatches) {
-  const matchToGet = currentMatchNumber === 0 ? currentMatchNumber + 1 : currentMatchNumber
+  const matchToGet = currentMatchNumber === 0 ? 1 : currentMatchNumber
   return getMatchInCurrentStage(matchToGet).then(match => {
     return getMatchesByTime(match.startTime, amountOfMatches)
   })
