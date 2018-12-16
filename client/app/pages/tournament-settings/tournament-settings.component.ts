@@ -45,7 +45,7 @@ export class TournamentSettingsComponent implements OnInit {
                         name: 'tournamentTitle'
                     },
                     tournamentStage: {
-                        display: 'Stage',
+                        display: 'Current Stage',
                         value: settings['tournamentStage'],
                         name: 'tournamentStage'
                     },
