@@ -1,8 +1,10 @@
 'use strict'
-const db = require('../utilities/mongo_connection')
 
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const {getSetting} = require('./settings_logic')
+
+const { getSetting } = require('./settings_logic')
+
+const db = require('../utilities/mongo_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const MATCH_COLLECTION = 'matches'
@@ -32,9 +34,18 @@ function getMatchInCurrentStage (matchId) {
   })
 }
 
-function getMatchesByTime (time, amountOfMatches) {
+function getMatchesByTime (time, amountOfMatches, stage) {
+  let stageToQuery = { $exists: true }
+  if (stage) {
+    stageToQuery = stage
+  }
   return db.connect().then(connection => {
-    return connection.db().collection(MATCH_COLLECTION).find({'startTime': {$gt: new Date(time)}}).limit(amountOfMatches).toArray()
+    return connection.db().collection(MATCH_COLLECTION).find({
+      $and: [
+        { 'startTime': { $gt: new Date(time) } },
+        { 'stage': stageToQuery }
+      ]
+    }).limit(amountOfMatches).toArray()
   })
 }
 
