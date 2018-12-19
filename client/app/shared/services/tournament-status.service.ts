@@ -1,6 +1,8 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {RequestService} from './request.service';
 import {Observable, throwError} from "../../../../node_modules/rxjs/index";
+import {MessengerService} from "./messenger.service";
+import {Match} from "../models/match";
 
 const STATUS = {
     GOOD: {'text': 'Ahead of time!', 'color': '#ADFF2F'},
@@ -19,7 +21,17 @@ const STATUS_TIMES = {
 })
 export class TournamentStatusService {
 
-    constructor(private requests: RequestService) {
+    public onCurrentMatchChangeEvent: EventEmitter<Match>;
+
+    constructor(private requests: RequestService,
+                private messenger: MessengerService) {
+
+        this.onCurrentMatchChangeEvent = new EventEmitter();
+
+        this.messenger.on('CurrentMatch:reload', (data)=>{
+            this.onCurrentMatchChangeEvent.emit(data.data)
+        })
+
     }
 
     getCurrentMatch(): Observable<any> {

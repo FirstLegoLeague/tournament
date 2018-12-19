@@ -5,6 +5,7 @@ import {TournamentStatusService} from '../../shared/services/tournament-status.s
 import {DeleteService} from "../../shared/services/delete-service.service";
 import {TournamentDataService} from "../../shared/services/tournament-data.service";
 import {forkJoin} from "rxjs";
+import {MessengerService} from "../../shared/services/messenger.service";
 
 @Component({
     selector: 'app-tournament-settings',
@@ -31,6 +32,11 @@ export class TournamentSettingsComponent implements OnInit {
         this.reload();
         this.tournamentDataService.dataReload.subscribe(() => {
             this.reload()
+        })
+        this.tournamentStatusService.onCurrentMatchChangeEvent.subscribe((match) => {
+            if (this.settings['currentMatch']) {
+                this.settings['currentMatch'].value = match.matchId
+            }
         })
     }
 
@@ -113,7 +119,7 @@ export class TournamentSettingsComponent implements OnInit {
         if (this.doesValueBetween(this.settings['numberOfPracticeRounds'].value, this.MIN_AMOUNT_OF_ROUNDS, this.MAX_AMOUNT_OF_ROUNDS) &&
             this.doesValueBetween(this.settings['numberOfRankingRounds'].value, this.MIN_AMOUNT_OF_ROUNDS, this.MAX_AMOUNT_OF_ROUNDS)) {
             forkJoin(this.tournamentSettingsService.saveSetting('numberOfPracticeRounds', this.settings['numberOfPracticeRounds'].value),
-                     this.tournamentSettingsService.saveSetting('numberOfRankingRounds', this.settings['numberOfRankingRounds'].value))
+                this.tournamentSettingsService.saveSetting('numberOfRankingRounds', this.settings['numberOfRankingRounds'].value))
                 .subscribe(
                     response => {
                         this.notification.success(`Number of rounds saved successfully`)
