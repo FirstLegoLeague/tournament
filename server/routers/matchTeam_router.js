@@ -19,7 +19,6 @@ exports.getRouter = function () {
           })
         }
         res.send(data)
-        connection.close()
       })
     }).catch(err => {
       console.log(err)
