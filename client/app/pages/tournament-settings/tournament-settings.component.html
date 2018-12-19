@@ -35,7 +35,7 @@
 
                         <div class="cell medium-1"></div>
 
-                        <div class="cell medium-3">
+                        <div class="cell medium-3" *ngIf="settings['currentMatch']">
                             <h5>Current Match</h5>
                             <div class="grid-x grid-margin-x">
                                 <div class="cell medium-8">
@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="cell medium-4">
                                     <button class="button" (click)="save('currentMatch')"
-                                            [disabled]="settings['currentMatch'].value == undefined">
+                                            [disabled]="settings['currentMatch']?.value == undefined">
                                         <i class="fa fa-save"></i>&nbsp; Save
                                     </button>
                                 </div>
