@@ -30,6 +30,7 @@ const clockEndEvent = function () {
 
 subscribe('clock:start', clockStartEvent)
 subscribe('clock:end', clockEndEvent)
+subscribe(`${CURRENT_STAGE_NAME}:updated`, publishMatchAvailable)
 
 function getCurrentMatch () {
   return getMatchInCurrentStage(currentMatchNumber)
