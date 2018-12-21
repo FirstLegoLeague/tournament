@@ -14,22 +14,28 @@
                     <div class="grid-x">
                         <div class="cell medium-3">
                             <h5>{{settings['tournamentStage'].display}}</h5>
-                            <div class="grid-x grid-margin-x">
-                                <div class="cell medium-8">
-                                    <select class="input-group-field" [(ngModel)]="settings['tournamentStage'].value"
-                                            [disabled]="settings['tournamentStage'].options == undefined">
-                                        <option *ngFor="let option of settings['tournamentStage'].options"
-                                                value="{{option}}">
-                                            {{option | upperCaseFirstLetter}}
-                                        </option>
-                                    </select>
+                            <div class="grid-y">
+                                <div class="cell">
+                                    <div class="grid-x grid-margin-x">
+                                        <div class="cell medium-8">
+                                            <select class="input-group-field"
+                                                    [(ngModel)]="settings['tournamentStage'].value"
+                                                    [disabled]="settings['tournamentStage'].options == undefined">
+                                                <option *ngFor="let option of settings['tournamentStage'].options"
+                                                        value="{{option}}">
+                                                    {{option | upperCaseFirstLetter}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="cell medium-4">
+                                            <button class="button" (click)="save('tournamentStage')"
+                                                    [disabled]="settings['tournamentStage'].options == undefined">
+                                                <i class="fa fa-save"></i>&nbsp; Save
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="cell medium-4">
-                                    <button class="button" (click)="save('tournamentStage')"
-                                            [disabled]="settings['tournamentStage'].options == undefined">
-                                        <i class="fa fa-save"></i>&nbsp; Save
-                                    </button>
-                                </div>
+                                <div class="cell"><label>*Changing the stage will reset the match counter</label></div>
                             </div>
                         </div>
 
