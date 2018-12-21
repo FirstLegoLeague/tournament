@@ -1,7 +1,7 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getSetting } = require('./settings_logic')
+const { getSetting, updateSetting } = require('./settings_logic')
 const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable } = require('./match_logic')
 
 const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
@@ -9,16 +9,19 @@ const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 const Configuration = require('@first-lego-league/ms-configuration')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
+const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
 const NEXTUP_MATCHES_AMOUNT_CONFIG_KEY = 'nextupMatchesToShow'
-let currentMatchNumber = 0
 
 let isLastMatchFinished = true
 
 const clockStartEvent = function () {
   MsLogger.info('Got clock start event')
   if (isLastMatchFinished) {
-    currentMatchNumber++
-    publishMatchAvailable()
+    getCurrentMatchNumber().then(number => {
+      setCurrentMatchNumber(number++).then(() => {
+        publishMatchAvailable()
+      })
+    })
     isLastMatchFinished = false
   }
 }
@@ -42,21 +45,25 @@ subscribe(`${CURRENT_STAGE_NAME}:updated`, () => {
 })
 
 function getCurrentMatch () {
-  return getMatchInCurrentStage(currentMatchNumber)
+  return getCurrentMatchNumber().then(number => {
+    return getMatchInCurrentStage(number)
+  })
 }
 
 function getNextMatches (amountOfMatches) {
-  if (currentMatchNumber === 0) { // When there is no match set
-    return getSetting(CURRENT_STAGE_NAME).then(stage => {
-      return getMatchesByTime(0, amountOfMatches, stage)
-    })
-  }
+  return getCurrentMatchNumber().then(currentMatchNumber => {
+    if (currentMatchNumber === 0) { // When there is no match set
+      return getSetting(CURRENT_STAGE_NAME).then(stage => {
+        return getMatchesByTime(0, amountOfMatches, stage)
+      })
+    }
 
-  if (currentMatchNumber > 0) {
-    return getMatchInCurrentStage(currentMatchNumber).then(match => {
-      return getMatchesByTime(match.startTime, amountOfMatches)
-    })
-  }
+    if (currentMatchNumber > 0) {
+      return getMatchInCurrentStage(currentMatchNumber).then(match => {
+        return getMatchesByTime(match.startTime, amountOfMatches)
+      })
+    }
+  })
 }
 
 function getNextMatchForTable (tableId, amountOfMatches = 1) {
@@ -65,7 +72,9 @@ function getNextMatchForTable (tableId, amountOfMatches = 1) {
   }
 
   return getSetting(CURRENT_STAGE_NAME).then(stage => {
-    return getMatchForTable(tableId, stage, currentMatchNumber, amountOfMatches)
+    return getCurrentMatchNumber().then(currentMatchNumber => {
+      return getMatchForTable(tableId, stage, currentMatchNumber, amountOfMatches)
+    })
   })
 }
 
@@ -92,15 +101,16 @@ function publishMatchAvailable () {
 }
 
 function getCurrentMatchNumber () {
-  return Promise.resolve(currentMatchNumber)
+  return getSetting(CURRENT_MATCH_NAME)
 }
 
 function setCurrentMatchNumber (newMatch) {
   return isMatchInCurrentStage(newMatch).then(result => {
     if (result || newMatch === 0) {
-      currentMatchNumber = newMatch
-      publishMatchAvailable()
-      return true
+      return updateSetting(CURRENT_MATCH_NAME, newMatch).then(() => {
+        publishMatchAvailable()
+        return true
+      })
     }
 
     throw new Error(`Match # ${newMatch} is not in the current stage. could not update`)
