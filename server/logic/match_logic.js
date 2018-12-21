@@ -49,6 +49,31 @@ function getMatchesByTime (time, amountOfMatches, stage) {
   })
 }
 
+function getMatchForTable (tableId, stage, fromMatch = 0, amount = 1) {
+  if (!tableId) {
+    throw new Error('Please provide table id')
+  }
+
+  if (!stage) {
+    throw new Error('Please provide stage')
+  }
+
+  return db.connect().then(connection => {
+    return connection.db().collection(MATCH_COLLECTION).find({
+      $and: [
+        { 'matchTeams': { $elemMatch: { 'tableId': tableId, 'teamNumber': { $ne: null } } } },
+        { 'matchId': { $gt: fromMatch } },
+        { 'stage': stage }
+      ]
+    }).limit(amount).toArray().then(matches => {
+      if (matches.length === 1) {
+        return matches[0]
+      }
+      return matches
+    })
+  })
+}
+
 function isMatchInCurrentStage (matchNumber) {
   return getMatchInCurrentStage(matchNumber).then(match => {
     if (match) {
@@ -62,5 +87,6 @@ module.exports = {
   getMatch,
   isMatchInCurrentStage,
   getMatchesByTime,
-  getMatchInCurrentStage
+  getMatchInCurrentStage,
+  getMatchForTable
 }

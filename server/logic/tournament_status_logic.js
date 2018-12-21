@@ -2,7 +2,7 @@
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const { getSetting } = require('./settings_logic')
-const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage } = require('./match_logic')
+const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable } = require('./match_logic')
 
 const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
@@ -53,6 +53,16 @@ function getNextMatches (amountOfMatches) {
   }
 }
 
+function getNextMatchForTable (tableId, amountOfMatches = 1) {
+  if (!tableId) {
+    throw new Error('Please provide table id')
+  }
+
+  return getSetting(CURRENT_STAGE_NAME).then(stage => {
+    return getMatchForTable(tableId, stage, currentMatchNumber, amountOfMatches)
+  })
+}
+
 function publishMatchAvailable () {
   getCurrentMatch().then(match => {
     publishUpdateMsg('CurrentMatch', match)
@@ -89,5 +99,6 @@ module.exports = {
   getCurrentMatch,
   getNextMatches,
   getCurrentMatchNumber,
-  setCurrentMatchNumber
+  setCurrentMatchNumber,
+  getNextMatchForTable
 }
