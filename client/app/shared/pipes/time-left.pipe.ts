@@ -17,7 +17,8 @@ export class TimeLeftPipe implements PipeTransform {
           delta -= minutes * 60;
           let seconds = Math.floor(delta % 60);
 
-          return `${milliseconds > 0 ? '-' : ''} ${this.pad(hours, 2)}:${this.pad(minutes, 2)}:${this.pad(seconds, 2)}`
+          let daysString = days !== 0 ? `${this.pad(days,2)}:`: ''
+          return `${milliseconds > 0 ? '-' : ''} ${daysString}${this.pad(hours, 2)}:${this.pad(minutes, 2)}:${this.pad(seconds, 2)}`
       }
 
       return 'Unknown'
