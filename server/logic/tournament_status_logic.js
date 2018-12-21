@@ -36,7 +36,9 @@ subscribe(`teams:reload`, publishMatchAvailable)
 
 subscribe(`${CURRENT_STAGE_NAME}:updated`, () => {
   setCurrentMatchNumber(0)
-  publishMatchAvailable()
+    .catch(e => {
+      MsLogger.error(e.message)
+    })
 })
 
 function getCurrentMatch () {
@@ -69,7 +71,13 @@ function getNextMatchForTable (tableId, amountOfMatches = 1) {
 
 function publishMatchAvailable () {
   getCurrentMatch().then(match => {
-    publishUpdateMsg('CurrentMatch', match)
+    if (match) {
+      publishUpdateMsg('CurrentMatch', match)
+    } else {
+      return getSetting(CURRENT_STAGE_NAME).then(stage => {
+        publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().get })
+      })
+    }
   }).catch(error => {
     MsLogger.error(error)
   })
@@ -84,12 +92,12 @@ function publishMatchAvailable () {
 }
 
 function getCurrentMatchNumber () {
-  return currentMatchNumber
+  return Promise.resolve(currentMatchNumber)
 }
 
 function setCurrentMatchNumber (newMatch) {
   return isMatchInCurrentStage(newMatch).then(result => {
-    if (!result) {
+    if (result || newMatch === 0) {
       currentMatchNumber = newMatch
       publishMatchAvailable()
       return true

@@ -81,7 +81,9 @@ exports.getRouter = function () {
   })
 
   router.get('/matchNumber', (req, res) => {
-    res.json(getCurrentMatchNumber())
+    getCurrentMatchNumber().then(match => {
+      res.json(match)
+    })
   })
 
   router.put('/current', adminAction, (req, res) => {

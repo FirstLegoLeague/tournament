@@ -77,9 +77,9 @@ function getMatchForTable (tableId, stage, fromMatch = 0, amount = 1) {
 function isMatchInCurrentStage (matchNumber) {
   return getMatchInCurrentStage(matchNumber).then(match => {
     if (match) {
-      return false
+      return true
     }
-    return true
+    return false
   })
 }
 
