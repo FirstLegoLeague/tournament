@@ -1,16 +1,14 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getSetting, updateSetting } = require('./settings_logic')
-const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable } = require('./match_logic')
+const {getSetting, updateSetting} = require('./settings_logic')
+const {getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable} = require('./match_logic')
 
-const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
-
-const Configuration = require('@first-lego-league/ms-configuration')
+const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
-const NEXTUP_MATCHES_AMOUNT_CONFIG_KEY = 'nextupMatchesToShow'
+const AMOUNT_OF_MATCHES_TO_MHUB = 2
 
 let isLastMatchFinished = true
 
@@ -18,7 +16,7 @@ const clockStartEvent = function () {
   MsLogger.info('Got clock start event')
   if (isLastMatchFinished) {
     getCurrentMatchNumber().then(number => {
-      setCurrentMatchNumber(number++).then(() => {
+      setCurrentMatchNumber(number + 1).then(() => {
         publishMatchAvailable()
       })
     })
@@ -84,19 +82,17 @@ function publishMatchAvailable () {
       publishUpdateMsg('CurrentMatch', match)
     } else {
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
-        publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().get })
+        publishUpdateMsg('CurrentMatch', {matchId: 0, stage: stage, startTime: new Date().get})
       })
     }
   }).catch(error => {
     MsLogger.error(error)
   })
 
-  Configuration.get(NEXTUP_MATCHES_AMOUNT_CONFIG_KEY).then(amount => {
-    getNextMatches(amount).then(matches => {
-      publishUpdateMsg('UpcomingMatches', matches)
-    }).catch(error => {
-      MsLogger.error(`Error in "upcoming matches" ${error}`)
-    })
+  getNextMatches(AMOUNT_OF_MATCHES_TO_MHUB).then(matches => {
+    publishUpdateMsg('UpcomingMatches', matches)
+  }).catch(error => {
+    MsLogger.error(`Error in "upcoming matches" ${error}`)
   })
 }
 
