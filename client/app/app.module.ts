@@ -27,6 +27,7 @@ import { BoldPartStringPipe } from './pages/teams/pipes/bold-part-string.pipe';
 import { TeamMatchesPipe } from './pages/matches/pipes/team-matches.pipe';
 import { BoldPartNumberPipe } from './pages/matches/pipes/bold-part-number.pipe';
 import { TimeLeftPipe } from './shared/pipes/time-left.pipe';
+import { UpperCaseFirstLetterPipe } from './shared/pipes/upper-case-first-letter.pipe';
 
 const appRoutes = [
   {path: 'settings', component: TournamentSettingsComponent},
@@ -56,7 +57,8 @@ const appRoutes = [
     BoldPartStringPipe,
     TeamMatchesPipe,
     BoldPartNumberPipe,
-    TimeLeftPipe
+    TimeLeftPipe,
+    UpperCaseFirstLetterPipe
   ],
   imports: [
     FormsModule,
