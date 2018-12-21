@@ -87,7 +87,7 @@ exports.getRouter = function () {
   })
 
   router.put('/current', adminAction, (req, res) => {
-    if (parseInt(req.body.match)) {
+    if (parseInt(req.body.match) >= 0) {
       setCurrentMatchNumber(parseInt(req.body.match)).then(result => {
         res.send('').status(200)
       }).catch(error => {
