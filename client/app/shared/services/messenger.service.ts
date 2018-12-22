@@ -38,9 +38,8 @@ export class MessengerService implements OnInit {
 
         return this.config.get().subscribe(config => {
             this.ws = new WebSocket(config.mhubUri);
-            this.node = DEFAULT_NODE || config.mhunNode;
+            this.node = config.mhubNode || DEFAULT_NODE;
             this.token = parseInt(String(Math.floor(0x100000 * (Math.random()))), 16);
-
             this.ws.onopen = () => {
                 setTimeout(() => {
                     this.ws.send(JSON.stringify({
@@ -67,11 +66,13 @@ export class MessengerService implements OnInit {
                 let headers = data.headers
                 let topic = data.topic
 
-                msg.from = headers[IDENTITY_TOKEN_KEY]
-                msg.fromMe = (msg.from === this.token)
+                if (headers && headers[IDENTITY_TOKEN_KEY]) {
+                    msg.from = headers[IDENTITY_TOKEN_KEY]
+                    msg.fromMe = (msg.from === this.token)
+                }
 
                 this.listeners.filter(listener => {
-                    return (typeof(listener.topic) === 'string' && topic === listener.topic) ||
+                    return (typeof (listener.topic) === 'string' && topic === listener.topic) ||
                         (listener.topic instanceof RegExp && topic.matches(listener.topic))
                 }).forEach(listener => listener.handler(data, msg))
             }
