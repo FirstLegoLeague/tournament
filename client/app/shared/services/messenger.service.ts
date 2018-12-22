@@ -8,7 +8,7 @@ const MESSAGE_TYPES = {
     LOGIN: 'login',
     PUBLISH: 'publish'
 }
-const IDENTITY_TOKEN_KEY = 'tournament-token'
+const IDENTITY_TOKEN_KEY = 'client-id'
 const DEFAULT_NODE = 'default'
 const RETRY_TIMOUT = 10000
 
