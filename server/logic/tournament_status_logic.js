@@ -1,10 +1,10 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const {getSetting, updateSetting} = require('./settings_logic')
-const {getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable} = require('./match_logic')
+const { getSetting, updateSetting } = require('./settings_logic')
+const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable } = require('./match_logic')
 
-const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
+const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
@@ -49,6 +49,10 @@ function getCurrentMatch () {
 }
 
 function getNextMatches (amountOfMatches) {
+  if (amountOfMatches === 0) {
+    return Promise.resolve([])
+  }
+
   return getCurrentMatchNumber().then(currentMatchNumber => {
     if (currentMatchNumber === 0) { // When there is no match set
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
@@ -82,7 +86,7 @@ function publishMatchAvailable () {
       publishUpdateMsg('CurrentMatch', match)
     } else {
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
-        publishUpdateMsg('CurrentMatch', {matchId: 0, stage: stage, startTime: new Date().get})
+        publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().get })
       })
     }
   }).catch(error => {
