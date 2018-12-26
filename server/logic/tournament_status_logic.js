@@ -1,10 +1,10 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getSetting, updateSetting } = require('./settings_logic')
-const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable } = require('./match_logic')
+const {getSetting, updateSetting} = require('./settings_logic')
+const {getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable} = require('./match_logic')
 
-const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
+const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
@@ -35,12 +35,16 @@ subscribe(`tables:reload`, publishMatchAvailable)
 subscribe(`matches:reload`, publishMatchAvailable)
 subscribe(`teams:reload`, publishMatchAvailable)
 
-subscribe(`${CURRENT_STAGE_NAME}:updated`, () => {
-  setCurrentMatchNumber(0)
+subscribe(`tournamentData:deleted`, resetMatchNumber)
+subscribe(`${CURRENT_STAGE_NAME}:updated`, resetMatchNumber)
+
+function resetMatchNumber () {
+  MsLogger.info('Resetting current match number to 0')
+  return setCurrentMatchNumber(0)
     .catch(e => {
       MsLogger.error(e.message)
     })
-})
+}
 
 function getCurrentMatch () {
   return getCurrentMatchNumber().then(number => {
@@ -64,7 +68,7 @@ function getNextMatches (amountOfMatches) {
       return getMatchInCurrentStage(currentMatchNumber).then(match => {
         if (match) {
           return getMatchesByTime(match.startTime, amountOfMatches)
-        }else{
+        } else {
           return Promise.resolve([])
         }
       })
@@ -90,7 +94,7 @@ function publishMatchAvailable () {
       publishUpdateMsg('CurrentMatch', match)
     } else {
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
-        publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().get })
+        publishUpdateMsg('CurrentMatch', {matchId: 0, stage: stage, startTime: new Date().get})
       })
     }
   }).catch(error => {

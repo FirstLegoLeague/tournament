@@ -1,9 +1,18 @@
 'use strict'
 const db = require('../utilities/mongo_connection')
+
 const logger = require('@first-lego-league/ms-logger').Logger()
-const {MHUB_NODES, publishMsg} = require('../utilities/mhub_connection')
+
+const {MHUB_NODES, publishMsg, subscribe} = require('../utilities/mhub_connection')
 
 const SETTING_COLLECTION_NAME = 'settings'
+
+subscribe(`tournamentData:deleted`, () => {
+  logger.info('Tournament data deleted, resetting stage')
+  updateSetting('tournamentStage', 'practice').catch(err => {
+    logger.error(`Could not reset tournament stage; ${err.message}`)
+  })
+})
 
 function setDefaultSettings () {
   const defaultSettings = {
