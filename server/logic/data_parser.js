@@ -62,7 +62,7 @@ function parse (data, delimiter) {
     MsLogger.warn(errorStr)
   }
 
-  let rankingMatchesRaw, numOfActualFields, tablesRaw
+  let rankingMatchesRaw, numOfActualRankingFields, rankingRablesRaw
   if (doesSectionExsits(blocks, RANKING_MATCH_SCHEDULE_ID)) {
     const numRankingOfMatches = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 1]
     rankingMatchesRaw = lines.slice(blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber +
@@ -71,13 +71,13 @@ function parse (data, delimiter) {
       RANKING_MATCH_HEADER_LINE_AMOUNT +
       Math.ceil(parseFloat(numRankingOfMatches[1])))
 
-    const numOfTables = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 2][1]
-    const numOfTeamsPerTable = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 3][1]
-    numOfActualFields = parseInt(numOfTables) * parseInt(numOfTeamsPerTable)
-    tablesRaw = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
+    const numOfRankingTables = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 2][1]
+    const numOfTeamsPerRankingTable = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + 3][1]
+    numOfActualRankingFields = parseInt(numOfRankingTables) * parseInt(numOfTeamsPerRankingTable)
+    rankingRablesRaw = lines[blocks.find(x => x.blockId === RANKING_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
   }
 
-  let practiceMatchesRaw
+  let practiceMatchesRaw, numOfActualPracticeFields, practiceTablesRaw
   if (doesSectionExsits(blocks, PRACTICE_MATCH_SCHEDULE_ID)) {
     const numOfPracticeMatches = lines[blocks.find(x => x.blockId == PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
     practiceMatchesRaw = lines.slice(blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
@@ -85,11 +85,28 @@ function parse (data, delimiter) {
     blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
       PRACTICE_MATCH_HEADER_LINE_AMOUNT +
       Math.ceil(parseFloat(numOfPracticeMatches[1])))
+
+    const numOfPracticeTables = lines[blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 2][1]
+    const numOfTeamsPerPracticeTable = lines[blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 3][1]
+    numOfActualPracticeFields = parseInt(numOfPracticeTables) * parseInt(numOfTeamsPerPracticeTable)
+    practiceTablesRaw = lines[blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber + TABLE_NAMES_LINE]
   }
 
-  const tables = []
-  for (let i = 0; i < numOfActualFields && arrayContainesNonEmptyFields(tablesRaw); i++) {
-    tables.push(new Table(i, tablesRaw[i + TABLE_NAMES_START]))
+  const rankingTables = []
+  for (let i = 0; i < numOfActualRankingFields && arrayContainesNonEmptyFields(rankingRablesRaw); i++) {
+    rankingTables.push(new Table(i, rankingRablesRaw[i + TABLE_NAMES_START]))
+  }
+
+  const practiceTables = []
+  for (let i = 0; i < numOfActualPracticeFields && arrayContainesNonEmptyFields(practiceTablesRaw); i++) {
+    practiceTables.push(new Table(i, practiceTablesRaw[i + TABLE_NAMES_START]))
+  }
+
+  let tables = []
+  if (rankingTables.length >= practiceTables.length) {
+    tables = rankingTables
+  } else if (rankingTables.length < practiceTables.length) {
+    tables = practiceTables
   }
 
   let practiceMatches, rankingMatches
@@ -104,6 +121,13 @@ function parse (data, delimiter) {
     practiceMatches = practiceMatchesRaw.map(x => objectDataParser.deserializeMatch(x, 'practice'))
   } else {
     practiceMatches = []
+  }
+
+  const practiceMaxTeamFields = getMaxTeamsFields(practiceMatches)
+  const rankingMaxTeamFields = getMaxTeamsFields(rankingMatches)
+  if (practiceMaxTeamFields > tables.length || rankingMaxTeamFields > tables.length) {
+    errorStr += '\n Amount of slots in each match must be the same as the number of tables. Aborting import.'
+    MsLogger.warn(`Amount of slots in each match must be the same as the number of tables. Aborting import. (practice: ${practiceMaxTeamFields}, ranking: ${rankingMaxTeamFields})`)
   }
 
   return {
@@ -134,4 +158,12 @@ function arrayContainesNonEmptyFields (arr) {
 
 function isStringEmpty (str) {
   return str == '' || str == undefined || /^\s+$/.test(str)
+}
+
+function getMaxTeamsFields (matchArray) {
+  let max = -Infinity
+  matchArray.forEach(match => {
+    max = match.matchTeams.length > max ? match.matchTeams.length : max
+  })
+  return max
 }
