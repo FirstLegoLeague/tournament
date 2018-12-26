@@ -62,7 +62,11 @@ function getNextMatches (amountOfMatches) {
 
     if (currentMatchNumber > 0) {
       return getMatchInCurrentStage(currentMatchNumber).then(match => {
-        return getMatchesByTime(match.startTime, amountOfMatches)
+        if (match) {
+          return getMatchesByTime(match.startTime, amountOfMatches)
+        }else{
+          return Promise.resolve([])
+        }
       })
     }
   })
