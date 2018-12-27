@@ -1,6 +1,7 @@
 'use strict'
 
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const moment = require('moment')
 
 const { getSetting } = require('./settings_logic')
 
@@ -15,7 +16,7 @@ function getMatch (matchNumber, stage) {
       'stage': stage,
       'matchId': matchNumber
     }).then(match => {
-      return match
+      return convertTimeToToday(match)
     })
   }).catch(err => {
     MsLogger.error(err)
@@ -27,7 +28,7 @@ function getMatchInCurrentStage (matchId) {
   return getSetting(CURRENT_STAGE_NAME).then(stage => {
     return getMatch(matchId, stage).then(data => {
       if (data) {
-        return data
+        return convertTimeToToday(data)
       }
       return null
     })
@@ -45,7 +46,9 @@ function getMatchesByTime (time, amountOfMatches, stage) {
         { 'startTime': { $gt: new Date(time) } },
         { 'stage': stageToQuery }
       ]
-    }).limit(amountOfMatches).toArray()
+    }).limit(amountOfMatches).toArray().then(matches => {
+      return matches.map(convertTimeToToday)
+    })
   })
 }
 
@@ -69,7 +72,7 @@ function getMatchForTable (tableId, stage, fromMatch = 0, amount = 1) {
       if (matches.length === 1) {
         return matches[0]
       }
-      return matches
+      return matches.map(convertTimeToToday)
     })
   })
 }
@@ -89,4 +92,22 @@ module.exports = {
   getMatchesByTime,
   getMatchInCurrentStage,
   getMatchForTable
+}
+
+function convertTimeToToday (match) {
+  const today = new Date()
+  const newMatch = match
+  newMatch.startTime = moment(match.startTime).set({
+    'year': today.getFullYear(),
+    'month': today.getMonth(),
+    'date': today.getDate()
+  })
+
+  newMatch.endTime = moment(match.endTime).set({
+    'year': today.getFullYear(),
+    'month': today.getMonth(),
+    'date': today.getDate()
+  })
+
+  return newMatch
 }

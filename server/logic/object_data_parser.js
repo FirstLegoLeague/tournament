@@ -9,8 +9,16 @@ function deserializeMatch (rawMatch, stage) {
   const newMatch = new Match()
 
   newMatch.matchId = parseIntOrUndefined(rawMatch[0])
-  newMatch.startTime = moment(rawMatch[1], 'hh:mm:ss A').toDate()
-  newMatch.endTime = moment(rawMatch[2], 'hh:mm:ss A').toDate()
+  newMatch.startTime = moment(rawMatch[1], 'hh:mm:ss A').set({
+    'year': 1970,
+    'month': 0,
+    'date': 1
+  }).toDate()
+  newMatch.endTime = moment(rawMatch[2], 'hh:mm:ss A').set({
+    'year': 1970,
+    'month': 0,
+    'date': 1
+  }).toDate()
   newMatch.stage = stage
   newMatch.matchTeams = []
 
