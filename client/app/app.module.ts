@@ -17,6 +17,7 @@ import { ImageUploadComponent } from './shared/modals/image-upload/image-upload.
 import { ModelEdit } from './shared/modals/model-edit/model-edit.component';
 import { ModelDelete } from './shared/modals/model-delete/model-delete.component';
 import { Tables } from './shared/modals/tables/tables.component';
+import { TournamentStatusComponent } from './global-actions/tournament-status/tournament-status.component';
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component';
 import { ImagesComponent } from './pages/images/images.component';
 import {RequestInterceptor} from "./shared/services/request-interceptor";
@@ -25,6 +26,8 @@ import { TeamPipe } from './pages/teams/pipes/team.pipe';
 import { BoldPartStringPipe } from './pages/teams/pipes/bold-part-string.pipe';
 import { TeamMatchesPipe } from './pages/matches/pipes/team-matches.pipe';
 import { BoldPartNumberPipe } from './pages/matches/pipes/bold-part-number.pipe';
+import { TimeLeftPipe } from './shared/pipes/time-left.pipe';
+import { UpperCaseFirstLetterPipe } from './shared/pipes/upper-case-first-letter.pipe';
 
 const appRoutes = [
   {path: 'settings', component: TournamentSettingsComponent},
@@ -47,12 +50,15 @@ const appRoutes = [
     ModelEdit,
     ModelDelete,
     Tables,
+    TournamentStatusComponent,
     TournamentSettingsComponent,
     ImagesComponent,
     TeamPipe,
     BoldPartStringPipe,
     TeamMatchesPipe,
-    BoldPartNumberPipe
+    BoldPartNumberPipe,
+    TimeLeftPipe,
+    UpperCaseFirstLetterPipe
   ],
   imports: [
     FormsModule,

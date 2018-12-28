@@ -10,7 +10,6 @@ const RANDOM_ID_LENGTH = 25
 
 exports.getRouter = function () {
   const router = express.Router()
-
   router.get('/:team/matches', (req, res) => {
     db.connection().then(connection => {
       connection.db().collection('matches').find({ 'matchTeams.teamNumber': parseInt(req.params.team) }).toArray().then(data => {

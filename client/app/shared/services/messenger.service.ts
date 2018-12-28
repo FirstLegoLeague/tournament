@@ -8,7 +8,7 @@ const MESSAGE_TYPES = {
     LOGIN: 'login',
     PUBLISH: 'publish'
 }
-const IDENTITY_TOKEN_KEY = 'tournament-token'
+const IDENTITY_TOKEN_KEY = 'client-id'
 const DEFAULT_NODE = 'default'
 const RETRY_TIMOUT = 10000
 
@@ -38,14 +38,15 @@ export class MessengerService implements OnInit {
 
         return this.config.get().subscribe(config => {
             this.ws = new WebSocket(config.mhubUri);
-            this.node = DEFAULT_NODE || config.mhunNode;
+            this.node = config.mhubNode || DEFAULT_NODE;
             this.token = parseInt(String(Math.floor(0x100000 * (Math.random()))), 16);
-
             this.ws.onopen = () => {
-                this.ws.send(JSON.stringify({
-                    type: MESSAGE_TYPES.SUBSCRIBE,
-                    node: this.node
-                }));
+                setTimeout(() => {
+                    this.ws.send(JSON.stringify({
+                        type: MESSAGE_TYPES.SUBSCRIBE,
+                        node: this.node
+                    }))
+                }, 0);
                 this.open = true;
                 this.logger.info("Client connected to mhub")
                 return of(this.ws)
@@ -54,10 +55,10 @@ export class MessengerService implements OnInit {
             this.ws.onclose = () => {
                 this.open = false;
                 this.logger.info("Client disconnected from mhub")
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.logger.info("Retrying mhub connection")
                     this.init()
-                },RETRY_TIMOUT)
+                }, RETRY_TIMOUT)
             }
 
             this.ws.onmessage = (msg: any) => {
@@ -65,11 +66,13 @@ export class MessengerService implements OnInit {
                 let headers = data.headers
                 let topic = data.topic
 
-                msg.from = headers[IDENTITY_TOKEN_KEY]
-                msg.fromMe = (msg.from === this.token)
+                if (headers && headers[IDENTITY_TOKEN_KEY]) {
+                    msg.from = headers[IDENTITY_TOKEN_KEY]
+                    msg.fromMe = (msg.from === this.token)
+                }
 
                 this.listeners.filter(listener => {
-                    return (typeof(listener.topic) === 'string' && topic === listener.topic) ||
+                    return (typeof (listener.topic) === 'string' && topic === listener.topic) ||
                         (listener.topic instanceof RegExp && topic.matches(listener.topic))
                 }).forEach(listener => listener.handler(data, msg))
             }
@@ -77,7 +80,7 @@ export class MessengerService implements OnInit {
         });
     }
 
-    on (topic, handler, ignoreSelfMessages = true) {
+    on(topic, handler, ignoreSelfMessages = true) {
         this.listeners.push({
             topic: topic,
             handler: (data, msg) => {

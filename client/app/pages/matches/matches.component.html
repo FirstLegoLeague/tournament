@@ -45,7 +45,7 @@
                     </tr>
                     <tr *ngFor="let match of (matches() | teamMatchesPipe: filter)">
                         <td>{{match.matchId}}</td>
-                        <td>{{match.stage}}</td>
+                        <td>{{match.stage | upperCaseFirstLetter}}</td>
                         <td>{{match.startTime | date : 'shortTime'}}</td>
                         <td>{{match.endTime | date : 'shortTime'}}</td>
                         <td *ngFor="let matchTeam of match.matchTeams"

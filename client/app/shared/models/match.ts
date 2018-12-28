@@ -29,6 +29,7 @@ export class Match implements Editable, Deletable, Deserializable {
         const date = this[timeFieldName] ? new Date(this[timeFieldName]) : new Date();
         date.setHours(hours);
         date.setMinutes(minutes);
+        date.setFullYear(1970, 0, 1)
         this[timeFieldName] = date.toISOString()
     }
 

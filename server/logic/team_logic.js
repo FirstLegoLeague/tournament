@@ -8,7 +8,7 @@ const db = require('../utilities/mongo_connection')
 
 exports.deleteValidation = function (params) {
   return db.connection().then(connection => {
-    return connection.db().collection('teams').findOne({ _id: new ObjectId(params.id) }).then(team => {
+    return connection.db().collection('teams').findOne({_id: new ObjectId(params.id)}).then(team => {
       if (team) {
         return deleteMatchesForTeam(team.number)
       }
@@ -18,7 +18,7 @@ exports.deleteValidation = function (params) {
 
 exports.editValidation = function (params) {
   return db.connection().then(connection => {
-    return connection.db().collection('teams').findOne({ _id: params._id }).then(originalTeam => {
+    return connection.db().collection('teams').findOne({_id: params._id}).then(originalTeam => {
       return params.number == originalTeam.number
     })
   }).catch(err => {
@@ -29,7 +29,7 @@ exports.editValidation = function (params) {
 
 exports.createValidation = function (params) {
   return db.connection().then(connection => {
-    return connection.db().collection('teams').find({ number: params.number }).toArray().then(teams => {
+    return connection.db().collection('teams').find({number: params.number}).toArray().then(teams => {
       if (teams.length > 0) {
         return false
       }
@@ -41,6 +41,13 @@ exports.createValidation = function (params) {
   })
 }
 
+exports.getTeamsName = function (numbers) {
+  const actualNumbers = numbers.map(number => number.teamNumber)
+  return db.connection().then(connection => {
+    return connection.db().collection('teams').find({number: {$in: actualNumbers}}).toArray()
+  }).catch(error => console.error(`Error in "getTeamsName" internal ${error}`))
+}
+
 function deleteMatchesForTeam (teamNumber) {
   return requestify.get(`${process.env.MODULE_SCORING_URL}/scores/search?teamNumber=${teamNumber}`).then(response => {
     if (response.body !== '[]') {
@@ -48,8 +55,8 @@ function deleteMatchesForTeam (teamNumber) {
     }
     if (!process.env.DEV && !response.body) {
       return db.connection().then(connection => {
-        return connection.db().collection('matches').updateMany({ 'matchTeams.teamNumber': teamNumber },
-          { $set: { 'matchTeams.$.teamNumber': null } }
+        return connection.db().collection('matches').updateMany({'matchTeams.teamNumber': teamNumber},
+          {$set: {'matchTeams.$.teamNumber': null}}
         )
       }).then(dbResponse => {
         if (dbResponse.modifiedCount > 0) {

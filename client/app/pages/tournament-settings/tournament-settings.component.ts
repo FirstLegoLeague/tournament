@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {TournamentSettingsService} from "../../shared/services/tournament-settings.service";
 import {Notifications} from "../../shared/services/notifications.service";
-import {st} from "../../../../node_modules/@angular/core/src/render3";
+import {TournamentStatusService} from '../../shared/services/tournament-status.service';
 import {DeleteService} from "../../shared/services/delete-service.service";
 import {TournamentDataService} from "../../shared/services/tournament-data.service";
 import {forkJoin} from "rxjs";
+import {MessengerService} from "../../shared/services/messenger.service";
 
 @Component({
     selector: 'app-tournament-settings',
@@ -23,13 +24,19 @@ export class TournamentSettingsComponent implements OnInit {
     constructor(private tournamentSettingsService: TournamentSettingsService,
                 public tournamentDataService: TournamentDataService,
                 private notification: Notifications,
-                private deleteModalsService: DeleteService) {
+                private deleteModalsService: DeleteService,
+                private tournamentStatusService: TournamentStatusService) {
     }
 
     ngOnInit() {
         this.reload();
         this.tournamentDataService.dataReload.subscribe(() => {
             this.reload()
+        })
+        this.tournamentStatusService.onCurrentMatchChangeEvent.subscribe((match) => {
+            if (this.settings['currentMatch']) {
+                this.settings['currentMatch'].value = match.matchId
+            }
         })
     }
 
@@ -44,7 +51,7 @@ export class TournamentSettingsComponent implements OnInit {
                         name: 'tournamentTitle'
                     },
                     tournamentStage: {
-                        display: 'Stage',
+                        display: 'Current Stage',
                         value: settings['tournamentStage'],
                         name: 'tournamentStage'
                     },
@@ -69,6 +76,20 @@ export class TournamentSettingsComponent implements OnInit {
                         this.loading = false;
                     }
                 )
+
+                this.tournamentStatusService.getCurrentMatch().subscribe((match) => {
+                    this.settings['currentMatch'] = {
+                        display: "Current Match",
+                        value: match.matchId,
+                        name: 'currentMatch'
+                    }
+                }, error => {
+                    this.settings['currentMatch'] = {
+                        display: "Current Match",
+                        value: 0,
+                        name: 'currentMatch'
+                    }
+                })
             },
             error: (err) => {
                 this.notification.error("There was a problem getting the settings.")
@@ -77,21 +98,28 @@ export class TournamentSettingsComponent implements OnInit {
     }
 
     save(setting: string) {
-        this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
-            response => {
-                this.loading = false;
-                this.notification.success(`${this.settings[setting].display} saved successfully`)
-            },
-            err => {
-                this.notification.error("Oh no! Something went wrong while trying to save...")
+        if (setting === 'currentMatch') {
+            this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
+                this.notification.success("Match saved successfully")
+            }, (err) => {
+                this.notification.error("Oh no! Something went wrong while trying to save match.")
             })
+        } else {
+            this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
+                response => {
+                    this.notification.success(`${this.settings[setting].display} saved successfully`)
+                },
+                err => {
+                    this.notification.error("Oh no! Something went wrong while trying to save...")
+                })
+        }
     }
 
     saveNumberOFRounds() {
         if (this.doesValueBetween(this.settings['numberOfPracticeRounds'].value, this.MIN_AMOUNT_OF_ROUNDS, this.MAX_AMOUNT_OF_ROUNDS) &&
             this.doesValueBetween(this.settings['numberOfRankingRounds'].value, this.MIN_AMOUNT_OF_ROUNDS, this.MAX_AMOUNT_OF_ROUNDS)) {
             forkJoin(this.tournamentSettingsService.saveSetting('numberOfPracticeRounds', this.settings['numberOfPracticeRounds'].value),
-                     this.tournamentSettingsService.saveSetting('numberOfRankingRounds', this.settings['numberOfRankingRounds'].value))
+                this.tournamentSettingsService.saveSetting('numberOfRankingRounds', this.settings['numberOfRankingRounds'].value))
                 .subscribe(
                     response => {
                         this.notification.success(`Number of rounds saved successfully`)

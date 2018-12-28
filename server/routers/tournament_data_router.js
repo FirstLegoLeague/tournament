@@ -106,6 +106,7 @@ if (!process.env.DEV) {
         mhubConnection.publishUpdateMsg('matches')
         mhubConnection.publishUpdateMsg('teams')
         mhubConnection.publishUpdateMsg('tables')
+        mhubConnection.publishMsg(mhubConnection.MHUB_NODES.PROTECTED, 'tournamentData:deleted')
         res.status(200).send()
       }).catch(error => {
         MsLogger.error(`Error deleting data: \n ${error}`)
@@ -124,6 +125,7 @@ if (process.env.DEV) {
       mhubConnection.publishUpdateMsg('matches')
       mhubConnection.publishUpdateMsg('teams')
       mhubConnection.publishUpdateMsg('tables')
+      mhubConnection.publishMsg(mhubConnection.MHUB_NODES.PROTECTED, 'tournamentData:deleted')
       res.status(200).send()
     }).catch(error => {
       MsLogger.error(`Error deleting data: \n ${error}`)
