@@ -78,10 +78,6 @@ function getNextMatches (amountOfMatches) {
 }
 
 function getNextMatchForTable (tableId, amountOfMatches = 1) {
-  if (!tableId) {
-    throw new Error('Please provide table id')
-  }
-
   return getSetting(CURRENT_STAGE_NAME).then(stage => {
     return getCurrentMatchNumber().then(currentMatchNumber => {
       return getMatchForTable(tableId, stage, currentMatchNumber, amountOfMatches)

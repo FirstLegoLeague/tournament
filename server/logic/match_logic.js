@@ -48,10 +48,6 @@ function getMatchesByTime (time, amountOfMatches, stage) {
 }
 
 function getMatchForTable (tableId, stage, fromMatch = 0, amount = 1) {
-  if (!tableId) {
-    throw new Error('Please provide table id')
-  }
-
   if (!stage) {
     throw new Error('Please provide stage')
   }
