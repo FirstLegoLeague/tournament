@@ -1,10 +1,9 @@
 'use strict'
 const express = require('express')
-
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
-
+const {convertMatchTimeToToday} = require('../logic/object_data_parser')
 const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber, getNextMatchForTable} = require('../logic/tournament_status_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
@@ -15,7 +14,7 @@ exports.getRouter = function () {
   router.get('/current', (req, res) => {
     getCurrentMatch().then(data => {
       if (data) {
-        res.send(data)
+        res.send(convertMatchTimeToToday(data))
       } else {
         res.sendStatus(404)
       }
@@ -37,7 +36,7 @@ exports.getRouter = function () {
 
     getNextMatches(amount).then(matches => {
       if (matches) {
-        res.send(matches)
+        res.send(matches.map(convertMatchTimeToToday))
       } else {
         res.sendStatus(404)
       }
@@ -65,7 +64,7 @@ exports.getRouter = function () {
         return getNextMatchForTable(tableId, amount)
           .then(match => {
             if (match) {
-              res.send(match)
+              res.send(convertMatchTimeToToday(match))
             } else {
               res.sendStatus(404)
             }

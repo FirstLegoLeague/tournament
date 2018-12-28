@@ -56,7 +56,26 @@ function parseFloatOrUndefined (float) {
   return parseFloat(float) || undefined
 }
 
+function convertMatchTimeToToday (match) {
+  const today = new Date()
+  const newMatch = match
+  newMatch.startTime = moment(match.startTime).set({
+    'year': today.getFullYear(),
+    'month': today.getMonth(),
+    'date': today.getDate()
+  })
+
+  newMatch.endTime = moment(match.endTime).set({
+    'year': today.getFullYear(),
+    'month': today.getMonth(),
+    'date': today.getDate()
+  })
+
+  return newMatch
+}
+
 module.exports = {
   'deserializeMatch': deserializeMatch,
-  'deserializeTeam': deserializeTeam
+  'deserializeTeam': deserializeTeam,
+  convertMatchTimeToToday
 }
