@@ -24,8 +24,8 @@ function connection () {
 
 function close () {
   MsLogger.info('Closing Mongo Db connection')
-  if (connection != null) {
-    connection.then(conn => {
+  if (_connection != null) {
+    connection().then(conn => {
       conn.close()
     })
   }
