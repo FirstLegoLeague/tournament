@@ -9,6 +9,7 @@ const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
+const OFFSET_TIME_NAME = 'scheduleTimeOffset'
 const AMOUNT_OF_MATCHES_TO_MHUB = 2
 
 let isLastMatchFinished = true
@@ -34,8 +35,9 @@ subscribe('clock:start', clockStartEvent)
 subscribe('clock:end', clockEndEvent)
 subscribe(`tables:reload`, publishMatchAvailable)
 subscribe(`matches:reload`, publishMatchAvailable)
-subscribe(`teams:reload`, publishMatchAvailable)
+subscribe(`${OFFSET_TIME_NAME}:updated`, publishMatchAvailable)
 
+subscribe(`teams:reload`, publishMatchAvailable)
 subscribe(`tournamentData:deleted`, resetMatchNumber)
 subscribe(`${CURRENT_STAGE_NAME}:updated`, resetMatchNumber)
 
