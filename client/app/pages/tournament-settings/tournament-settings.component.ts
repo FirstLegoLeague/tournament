@@ -113,7 +113,14 @@ export class TournamentSettingsComponent implements OnInit {
     }
 
     private saveOffset() {
-        let offset = moment.utc(this.settings['scheduleTimeOffset'].value, 'HH:mm').set({'year': 1970, 'month': 0, 'date': 1}).valueOf()
+        let offset = 0
+        if (this.settings['scheduleTimeOffset'].value !== '') {
+            offset = moment.utc(this.settings['scheduleTimeOffset'].value, 'HH:mm').set({
+                'year': 1970,
+                'month': 0,
+                'date': 1
+            }).valueOf()
+        }
         this.tournamentSettingsService.saveSetting('scheduleTimeOffset', offset).subscribe(
             response => {
                 this.notification.success(`${this.settings['scheduleTimeOffset'].display} saved successfully`)
@@ -121,6 +128,7 @@ export class TournamentSettingsComponent implements OnInit {
             error => {
                 this.notification.error(`Oh no! Something went wrong while trying to save ${this.settings['scheduleTimeOffset'].display}`)
             })
+
     }
 
     private defaultSaveSetting(setting: string) {

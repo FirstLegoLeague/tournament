@@ -114,13 +114,23 @@
                                     </div>
                                 </div>
 
-                                <h5>Schedule offset</h5>
-                                <label>Uses to offset schedule times.</label>
-                                <input type="time" [(ngModel)]="settings['scheduleTimeOffset'].value">
-                                <button class="button" (click)="save('scheduleTimeOffset')"
-                                        [disabled]="">
-                                    <i class="fa fa-save"></i>&nbsp; Save
-                                </button>
+                                <div class="grid-y">
+                                    <div class="cell">
+                                        <h5>Schedule offset</h5>
+                                        <label>Uses to offset schedule times.</label>
+                                    </div>
+                                    <div class="cell grid-x grid-margin-x">
+                                        <div class="cell small-5 medium-5 large-5">
+                                            <input type="time" [(ngModel)]="settings['scheduleTimeOffset'].value">
+                                        </div>
+                                        <div class="cell small-3 medium-3 large-3">
+                                            <button class="button" (click)="save('scheduleTimeOffset')"
+                                                    [disabled]="">
+                                                <i class="fa fa-save"></i>&nbsp; Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <h5>Delete Tournament Data</h5>
                                 <label>Press Delete to delete Teams and Matches. <br/> Note: You must first delete all
