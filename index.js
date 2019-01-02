@@ -67,10 +67,13 @@ app.use('/team', crudRouter({
   }
 }))
 
+const matchLogic = require('./server/logic/match_logic')
+
 app.use('/match', crudRouter({
   'collectionName': 'matches',
   'IdField': Match.IdField,
   'extraRouters': [lastMatchIdRouter, tournamentStatusRouter.getRouter()],
+  'mapping': matchLogic.offsetMatch,
   'mhubNamespace': 'matches'
 }))
 
