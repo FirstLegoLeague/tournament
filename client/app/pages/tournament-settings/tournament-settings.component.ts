@@ -113,6 +113,14 @@ export class TournamentSettingsComponent implements OnInit {
         }
     }
 
+    private saveCurrentMatch() {
+        this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
+            this.notification.success("Match saved successfully")
+        }, (err) => {
+            this.notification.error("Oh no! Something went wrong while trying to save match.")
+        })
+    }
+
     private saveOffset() {
         let offset = 0
         let negative = 1
@@ -144,14 +152,6 @@ export class TournamentSettingsComponent implements OnInit {
             err => {
                 this.notification.error("Oh no! Something went wrong while trying to save...")
             })
-    }
-
-    private saveCurrentMatch() {
-        this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
-            this.notification.success("Match saved successfully")
-        }, (err) => {
-            this.notification.error("Oh no! Something went wrong while trying to save match.")
-        })
     }
 
     saveNumberOFRounds() {
