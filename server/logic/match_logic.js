@@ -5,6 +5,7 @@ const MsLogger = require('@first-lego-league/ms-logger').Logger()
 const { getSetting } = require('./settings_logic')
 
 const { offsetMatchTime } = require('./object_data_parser')
+const { convertMatchTimeToToday } = require('../logic/object_data_parser')
 
 const db = require('../utilities/mongo_connection')
 
@@ -86,11 +87,18 @@ function offsetMatch (match) {
   })
 }
 
+function offsetAndConvertToToday (match) {
+  return offsetMatch(match).then(newMatch => {
+    return convertMatchTimeToToday(newMatch)
+  })
+}
+
 module.exports = {
   getMatch,
   isMatchInCurrentStage,
   getMatchesByTime,
   getMatchInCurrentStage,
   getMatchForTable,
-  offsetMatch
+  offsetMatch,
+  offsetAndConvertToToday
 }

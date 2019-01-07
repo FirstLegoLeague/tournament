@@ -2,9 +2,8 @@
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const { getSetting, updateSetting } = require('./settings_logic')
-const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable, offsetMatch } = require('./match_logic')
+const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable, offsetAndConvertToToday } = require('./match_logic')
 
-const { convertMatchTimeToToday } = require('../logic/object_data_parser')
 const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
@@ -90,8 +89,8 @@ function getNextMatchForTable (tableId, amountOfMatches = 1) {
 function publishMatchAvailable () {
   getCurrentMatch().then(match => {
     if (match) {
-      offsetMatch(match).then(newMatch => {
-        publishUpdateMsg('CurrentMatch', convertMatchTimeToToday(newMatch))
+      offsetAndConvertToToday(match).then(newMatch => {
+        publishUpdateMsg('CurrentMatch', newMatch)
       })
     } else {
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
@@ -103,7 +102,7 @@ function publishMatchAvailable () {
   })
 
   getNextMatches(AMOUNT_OF_MATCHES_TO_MHUB).then(matches => {
-    Promise.all(matches.map(convertMatchTimeToToday).map(offsetMatch)).then(offsetMatches => {
+    Promise.all(matches.map(offsetAndConvertToToday)).then(offsetMatches => {
       publishUpdateMsg('UpcomingMatches', offsetMatches)
     })
   }).catch(error => {
