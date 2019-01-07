@@ -73,7 +73,7 @@ app.use('/match', crudRouter({
   'collectionName': 'matches',
   'IdField': Match.IdField,
   'extraRouters': [lastMatchIdRouter, tournamentStatusRouter.getRouter()],
-  'mapping': matchLogic.offsetMatch,
+  'preprocessing': matchLogic.offsetMatch,
   'mhubNamespace': 'matches'
 }))
 

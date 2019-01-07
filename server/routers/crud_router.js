@@ -23,8 +23,8 @@ exports.getRouter = function (options) {
   router.get('/all', (req, res) => {
     db.connection().then(connection => {
       connection.db().collection(options.collectionName).find().toArray().then(data => {
-        if (options.mapping) {
-          Promise.all(data.map(options.mapping)).then(mappedData => {
+        if (options.preprocessing) {
+          Promise.all(data.map(options.preprocessing)).then(mappedData => {
             res.send(mappedData)
           })
         } else {
@@ -45,8 +45,8 @@ exports.getRouter = function (options) {
           return
         }
 
-        if (options.mapping) {
-          Promise.resolve(options.mapping(data)).then(mappedData=>{
+        if (options.preprocessing) {
+          Promise.resolve(options.preprocessing(data)).then(mappedData => {
             res.send(mappedData)
           })
         } else {
