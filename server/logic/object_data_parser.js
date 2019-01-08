@@ -74,8 +74,16 @@ function convertMatchTimeToToday (match) {
   return newMatch
 }
 
+function offsetMatchTime (match, offset) {
+  const newMatch = match
+  newMatch.startTime = moment(match.startTime).add(offset, 'ms')
+  newMatch.endTime = moment(match.endTime).add(offset, 'ms')
+  return newMatch
+}
+
 module.exports = {
   'deserializeMatch': deserializeMatch,
   'deserializeTeam': deserializeTeam,
-  convertMatchTimeToToday
+  convertMatchTimeToToday,
+  offsetMatchTime
 }

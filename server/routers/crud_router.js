@@ -23,7 +23,13 @@ exports.getRouter = function (options) {
   router.get('/all', (req, res) => {
     db.connection().then(connection => {
       connection.db().collection(options.collectionName).find().toArray().then(data => {
-        res.send(data)
+        if (options.preprocessing) {
+          Promise.all(data.map(options.preprocessing)).then(mappedData => {
+            res.send(mappedData)
+          })
+        } else {
+          res.send(data)
+        }
       })
     }).catch(err => {
       MsLogger.error(err)
@@ -39,7 +45,13 @@ exports.getRouter = function (options) {
           return
         }
 
-        res.send(data)
+        if (options.preprocessing) {
+          Promise.resolve(options.preprocessing(data)).then(mappedData => {
+            res.send(mappedData)
+          })
+        } else {
+          res.send(data)
+        }
       })
     }).catch(err => {
       MsLogger.error(err)

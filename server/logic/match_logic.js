@@ -4,9 +4,13 @@ const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
 const { getSetting } = require('./settings_logic')
 
+const { offsetMatchTime } = require('./object_data_parser')
+const { convertMatchTimeToToday } = require('../logic/object_data_parser')
+
 const db = require('../utilities/mongo_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
+const OFFSET_SETTING = 'scheduleTimeOffset'
 const MATCH_COLLECTION = 'matches'
 
 function getMatch (matchNumber, stage) {
@@ -77,10 +81,24 @@ function isMatchInCurrentStage (matchNumber) {
   })
 }
 
+function offsetMatch (match) {
+  return getSetting(OFFSET_SETTING).then(offset => {
+    return offsetMatchTime(match, offset)
+  })
+}
+
+function offsetAndConvertToToday (match) {
+  return offsetMatch(match).then(newMatch => {
+    return convertMatchTimeToToday(newMatch)
+  })
+}
+
 module.exports = {
   getMatch,
   isMatchInCurrentStage,
   getMatchesByTime,
   getMatchInCurrentStage,
-  getMatchForTable
+  getMatchForTable,
+  offsetMatch,
+  offsetAndConvertToToday
 }

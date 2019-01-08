@@ -5,7 +5,7 @@ import {TournamentStatusService} from '../../shared/services/tournament-status.s
 import {DeleteService} from "../../shared/services/delete-service.service";
 import {TournamentDataService} from "../../shared/services/tournament-data.service";
 import {forkJoin} from "rxjs";
-import {MessengerService} from "../../shared/services/messenger.service";
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-tournament-settings',
@@ -64,6 +64,12 @@ export class TournamentSettingsComponent implements OnInit {
                         display: 'Ranking rounds',
                         value: settings['numberOfRankingRounds'],
                         name: 'numberOfRankingRounds'
+                    },
+                    scheduleTimeOffset: {
+                        display: 'Schedule offset',
+                        value: moment(settings['scheduleTimeOffset']).utc().format('HH:mm'),
+                        negative: false,
+                        name: 'scheduleTimeOffset'
                     }
                 }
                 this.tournamentSettingsService.getStages().subscribe(
@@ -99,20 +105,53 @@ export class TournamentSettingsComponent implements OnInit {
 
     save(setting: string) {
         if (setting === 'currentMatch') {
-            this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
-                this.notification.success("Match saved successfully")
-            }, (err) => {
-                this.notification.error("Oh no! Something went wrong while trying to save match.")
-            })
+            this.saveCurrentMatch();
+        } else if (setting === 'scheduleTimeOffset') {
+            this.saveOffset();
         } else {
-            this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
-                response => {
-                    this.notification.success(`${this.settings[setting].display} saved successfully`)
-                },
-                err => {
-                    this.notification.error("Oh no! Something went wrong while trying to save...")
-                })
+            this.defaultSaveSetting(setting);
         }
+    }
+
+    private saveCurrentMatch() {
+        this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
+            this.notification.success("Match saved successfully")
+        }, (err) => {
+            this.notification.error("Oh no! Something went wrong while trying to save match.")
+        })
+    }
+
+    private saveOffset() {
+        let offset = 0
+        let negative = 1
+        if (this.settings['scheduleTimeOffset'].value !== '') {
+            if (this.settings['scheduleTimeOffset'].negative) {
+                negative = -1
+            }
+            offset = moment.utc(this.settings['scheduleTimeOffset'].value, 'HH:mm').set({
+                'year': 1970,
+                'month': 0,
+                'date': 1
+            }).valueOf() * negative
+        }
+        this.tournamentSettingsService.saveSetting('scheduleTimeOffset', offset).subscribe(
+            response => {
+                this.notification.success(`${this.settings['scheduleTimeOffset'].display} saved successfully`)
+            },
+            error => {
+                this.notification.error(`Oh no! Something went wrong while trying to save ${this.settings['scheduleTimeOffset'].display}`)
+            })
+
+    }
+
+    private defaultSaveSetting(setting: string) {
+        this.tournamentSettingsService.saveSetting(setting, this.settings[setting].value).subscribe(
+            response => {
+                this.notification.success(`${this.settings[setting].display} saved successfully`)
+            },
+            err => {
+                this.notification.error("Oh no! Something went wrong while trying to save...")
+            })
     }
 
     saveNumberOFRounds() {
