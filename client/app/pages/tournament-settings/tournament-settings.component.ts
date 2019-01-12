@@ -117,7 +117,8 @@ export class TournamentSettingsComponent implements OnInit {
         this.tournamentStatusService.setMatch(this.settings['currentMatch'].value).subscribe(() => {
             this.notification.success("Match saved successfully")
         }, (err) => {
-            this.notification.error("Oh no! Something went wrong while trying to save match.")
+            console.log(err)
+            this.notification.error(err.error.error)
         })
     }
 
