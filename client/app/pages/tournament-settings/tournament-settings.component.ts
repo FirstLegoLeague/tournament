@@ -67,7 +67,8 @@ export class TournamentSettingsComponent implements OnInit {
                     },
                     scheduleTimeOffset: {
                         display: 'Schedule offset',
-                        value: moment(settings['scheduleTimeOffset']).utc().format('HH:mm'),
+                        hoursValue: moment(settings['scheduleTimeOffset']).utc().format('HH'),
+                        minutesValue: moment(settings['scheduleTimeOffset']).utc().format('mm'),
                         negative: false,
                         name: 'scheduleTimeOffset'
                     }
@@ -125,11 +126,11 @@ export class TournamentSettingsComponent implements OnInit {
     private saveOffset() {
         let offset = 0
         let negative = 1
-        if (this.settings['scheduleTimeOffset'].value !== '') {
+        if (!isNaN(this.settings['scheduleTimeOffset'].minutesValue) && !isNaN(this.settings['scheduleTimeOffset'].hoursValue)) {
             if (this.settings['scheduleTimeOffset'].negative) {
                 negative = -1
             }
-            offset = moment.utc(this.settings['scheduleTimeOffset'].value, 'HH:mm').set({
+            offset = moment.utc(`${this.settings['scheduleTimeOffset'].hoursValue}:${this.settings['scheduleTimeOffset'].minutesValue}`, 'HH:mm').set({
                 'year': 1970,
                 'month': 0,
                 'date': 1
