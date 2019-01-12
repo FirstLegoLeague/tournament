@@ -16,11 +16,15 @@ let isLastMatchFinished = true
 const clockStartEvent = function () {
   MsLogger.info('Got clock start event')
   if (isLastMatchFinished) {
-    getCurrentMatchNumber().then(number => {
-      setCurrentMatchNumber(number + 1).then(() => {
-        publishMatchAvailable()
+    try {
+      getCurrentMatchNumber().then(number => {
+        setCurrentMatchNumber(number + 1).then(() => {
+          publishMatchAvailable()
+        })
       })
-    })
+    } catch (e) {
+      MsLogger.warn(`Error when trying to set the next match number: ${e.message}`)
+    }
     isLastMatchFinished = false
   }
 }
