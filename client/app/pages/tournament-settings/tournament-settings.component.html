@@ -124,9 +124,13 @@
                                             <label>negative?</label>
                                             <input type="checkbox" [(ngModel)]="settings['scheduleTimeOffset'].negative">
                                         </div>
-                                        <div class="cell small-4 medium-4 large-4">
-                                            <input type="time" [(ngModel)]="settings['scheduleTimeOffset'].value">
+                                        <div class="cell small-2 medium-2 large-2">
+                                            <input type="number" [(ngModel)]="settings['scheduleTimeOffset'].hoursValue" min="0">
                                         </div>
+                                        <div class="cell small-2 medium-2 large-2">
+                                            <input type="number" [(ngModel)]="settings['scheduleTimeOffset'].minutesValue" min="0" max="59">
+                                        </div>
+
                                         <div class="cell small-3 medium-3 large-3">
                                             <button class="button" (click)="save('scheduleTimeOffset')"
                                                     [disabled]="">
