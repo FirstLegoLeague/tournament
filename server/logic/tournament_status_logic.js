@@ -1,10 +1,10 @@
 'use strict'
 const MsLogger = require('@first-lego-league/ms-logger').Logger()
 
-const { getSetting, updateSetting } = require('./settings_logic')
-const { getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable, offsetAndConvertToToday } = require('./match_logic')
+const {getSetting, updateSetting} = require('./settings_logic')
+const {getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable, offsetAndConvertToToday, getFirstMatchInStage} = require('./match_logic')
 
-const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
+const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
@@ -18,9 +18,19 @@ const clockStartEvent = function () {
   if (isLastMatchFinished) {
     try {
       getCurrentMatchNumber().then(number => {
-        setCurrentMatchNumber(number + 1).then(() => {
-          publishMatchAvailable()
-        })
+        if (number === 0) {
+          getSetting(CURRENT_STAGE_NAME).then(currStage => {
+            getFirstMatchInStage(currStage).then(match => {
+              setCurrentMatchNumber(match.matchId).then(() => {
+                publishMatchAvailable()
+              })
+            })
+          })
+        } else {
+          setCurrentMatchNumber(number + 1).then(() => {
+            publishMatchAvailable()
+          })
+        }
       })
     } catch (e) {
       MsLogger.warn(`Error when trying to set the next match number: ${e.message}`)
@@ -98,7 +108,7 @@ function publishMatchAvailable () {
       })
     } else {
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
-        publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().getTime() })
+        publishUpdateMsg('CurrentMatch', {matchId: 0, stage: stage, startTime: new Date().getTime()})
       })
     }
   }).catch(error => {
