@@ -21,7 +21,6 @@ const clockStartEvent = function () {
         if (number === 0) {
           getSetting(CURRENT_STAGE_NAME).then(currStage => {
             getFirstMatchInStage(currStage).then(match => {
-              console.log(match)
               setCurrentMatchNumber(match.matchId).then(() => {
                 publishMatchAvailable()
               })
