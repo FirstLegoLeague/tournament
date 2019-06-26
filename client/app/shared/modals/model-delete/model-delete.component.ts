@@ -30,9 +30,9 @@ export class ModelDelete {
       this.reload()
     }, error => {
       if (!service.deleteErrorText()) {
-          this.notifications.error(`Deletion failed ${error.error}`)
-      } else{
-          this.notifications.error(service.deleteErrorText())
+        this.notifications.error(`Deletion failed ${error.error}`)
+      } else {
+        this.notifications.error(service.deleteErrorText())
       }
       this.loading = false
       this.close()
@@ -46,7 +46,7 @@ export class ModelDelete {
 
   reload () {
     // @ts-ignore
-      this.deleteService.service(this.model()).reload().subscribe()
+    this.deleteService.service(this.model()).reload().subscribe()
   }
 
 }

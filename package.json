@@ -6,7 +6,7 @@
   "author": "Tal Taub <taltaub22@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint ./server",
+    "lint": "eslint ./server && ng lint client",
     "prepack": "ng build --prod",
     "start": "ng build && node index.js",
     "build": "ng build"
@@ -70,11 +70,12 @@
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "ngx-file-drop": "^4.0.6",
-    "protractor": "~5.3.0",
+    "protractor": "~5.4.2",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.2.2",
     "ts-node": "~5.0.1",
-    "tslint": "~5.9.1",
+    "tslint": "~5.18.0",
+    "tslint-config-standard": "^8.0.1",
     "typescript": "~2.7.2",
     "zone.js": "^0.8.26"
   }

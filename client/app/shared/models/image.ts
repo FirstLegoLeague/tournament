@@ -3,13 +3,13 @@ import { Deserializable } from './interfaces/deserializable'
 
 export class Image implements Deletable, Deserializable {
 
-  public _id: string;
-  public name: string;
-  public image: string;
+  public _id: string
+  public name: string
+  public image: string
 
   deserialize (input: any) {
-    Object.assign(this, input);
-    return this;
+    Object.assign(this, input)
+    return this
   }
 
   id () {
@@ -17,8 +17,7 @@ export class Image implements Deletable, Deserializable {
   }
 
   title () {
-    return this.name;
+    return this.name
   }
-
 
 }

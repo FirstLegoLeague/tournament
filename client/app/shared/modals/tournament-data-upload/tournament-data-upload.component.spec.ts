@@ -1,25 +1,25 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { TournamentDataUpload } from './tournament-data-upload.component';
+import { TournamentDataUpload } from './tournament-data-upload.component'
 
 describe('TournamentDataUpload', () => {
-  let component: TournamentDataUpload;
-  let fixture: ComponentFixture<TournamentDataUpload>;
+  let component: TournamentDataUpload
+  let fixture: ComponentFixture<TournamentDataUpload>
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
+    return TestBed.configureTestingModule({
       declarations: [ TournamentDataUpload ]
     })
-    .compileComponents();
-  }));
+    .compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TournamentDataUpload);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(TournamentDataUpload)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

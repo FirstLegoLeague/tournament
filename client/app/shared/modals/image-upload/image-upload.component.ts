@@ -5,7 +5,6 @@ import { ParserService } from '../../services/parser.service'
 import { ImagesService } from '../../services/images.service'
 import { Notifications } from '../../services/notifications.service'
 import { Image } from '../../models/image'
-import { HttpHeaders } from '@angular/common/http'
 
 @Component({
   selector: 'image-upload',
@@ -36,15 +35,15 @@ export class ImageUploadComponent {
         const formData = new FormData()
         const name = file.name
         formData.append('imageFile', file, name)
-        this.imagesService.upload(formData).subscribe(()=>{
-          this.notifications.success('Image upload succeeded');
-          this.close();
-          this.loading = false;
-          this.imagesService.reload().subscribe();
-        },(error)=>{
-          this.notifications.error('Image upload failed');
-          this.close();
-          this.loading = false;
+        this.imagesService.upload(formData).subscribe(() => {
+          this.notifications.success('Image upload succeeded')
+          this.close()
+          this.loading = false
+          this.imagesService.reload().subscribe()
+        },() => {
+          this.notifications.error('Image upload failed')
+          this.close()
+          this.loading = false
         })
       })
     } else {
