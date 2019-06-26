@@ -1,6 +1,8 @@
-.idea/
+# Project specific
+
 dist/
 data/
+
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
