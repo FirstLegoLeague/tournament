@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint ./server && ng lint client",
     "prepack": "ng build --prod",
-    "start": "ng build && node index.js",
+    "start": "ng build && devl",
     "build": "ng build"
   },
   "engines": {
@@ -47,6 +47,7 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@first-lego-league/dev-launcher": "^0.1.2",
     "@first-lego-league/eslint-config": "^1.0.0",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
@@ -76,7 +77,7 @@
     "ts-node": "~5.0.1",
     "tslint": "~5.18.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "~2.7.2",
+    "typescript": "^2.7.2",
     "zone.js": "^0.8.26"
   }
 }

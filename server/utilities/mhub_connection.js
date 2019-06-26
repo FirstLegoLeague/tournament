@@ -74,9 +74,6 @@ function subscribe (topic, handler) {
 }
 
 function loginToMhub (node) {
-  if (process.env.DEV) {
-    return 'default'
-  }
   if (node === MHUB_NODES.PROTECTED) {
     mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
       .catch(err => { throw err })

@@ -56,7 +56,7 @@ function deleteMatchesForTeam (teamNumber) {
     if (response.body !== '[]') {
       return new Error('This team has scores. Please delete them and try again')
     }
-    if (!process.env.DEV && !response.body) {
+    if (process.env.NODE_ENV !== 'development' && !response.body) {
       return db.connection().then(connection => {
         return connection.db().collection('matches').updateMany({ 'matchTeams.teamNumber': teamNumber },
           { $set: { 'matchTeams.$.teamNumber': null } }

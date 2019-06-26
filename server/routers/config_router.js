@@ -4,8 +4,7 @@ const router = new express.Router()
 
 router.get('/config', (req, res) => {
   const config = {
-    mhubUri: process.env.MHUB_URI,
-    mhubNode: process.env.DEV ? 'default' : 'protected'
+    mhubUri: process.env.MHUB_URI
   }
 
   res.status(200).send(config)

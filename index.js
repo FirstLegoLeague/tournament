@@ -1,5 +1,3 @@
-'use strict'
-
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
@@ -18,9 +16,8 @@ const logger = new Logger()
 const db = require('./server/utilities/mongo_connection')
 
 const appPort = process.env.PORT || 3001
-const authenticationMiddlewareToUse = process.env.DEV ? authenticationDevMiddleware() : authenticationMiddleware
+const authenticationMiddlewareToUse = process.env.NODE_ENV === 'development' ? authenticationDevMiddleware() : authenticationMiddleware
 
-logger.setLogLevel(process.env.LOG_LEVEL || logger.LOG_LEVELS.DEBUG)
 logger.info(`-------------------- tournament version ${version} startup --------------------`)
 
 const app = express()

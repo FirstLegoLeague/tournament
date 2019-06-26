@@ -94,7 +94,7 @@ router.post('/', adminAction, (req, res) => {
   })
 })
 
-if (!process.env.DEV) {
+if (process.env.NODE_ENV !== 'development') {
   router.delete('/', adminAction, (req, res) => {
     requestify.get(`${process.env.MODULE_SCORING_URL}/scores/count`).then(response => {
       const body = response.getBody()
@@ -121,7 +121,7 @@ if (!process.env.DEV) {
   })
 }
 
-if (process.env.DEV) {
+if (process.env.NODE_ENV === 'development') {
   router.delete('/', adminAction, (req, res) => {
     dropCollectionsInDatabase().then(() => {
       mhubConnection.publishUpdateMsg('matches')
