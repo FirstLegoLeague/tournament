@@ -5,4 +5,4 @@ class MatchTeam {
   }
 }
 
-module.exports = MatchTeam
+exports.MatchTeam = MatchTeam

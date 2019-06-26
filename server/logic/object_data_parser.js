@@ -1,9 +1,9 @@
 'use strict'
 const moment = require('moment')
 
-const Match = require('../models/Match')
-const Team = require('../models/Team')
-const MatchTeam = require('../models/MatchTeam')
+const { Match } = require('../models/Match')
+const { Team } = require('../models/Team')
+const { MatchTeam } = require('../models/MatchTeam')
 
 function deserializeMatch (rawMatch, stage) {
   const newMatch = new Match()
@@ -43,7 +43,7 @@ function deserializeTeam (rawTeam) {
   newTeam.judgingGroup = rawTeam[7] || undefined
   newTeam.pitNumber = parseIntOrUndefined(rawTeam[8])
   newTeam.pitLocation = rawTeam[9] || undefined
-  newTeam.translationNeeded = rawTeam[10] == 'true' || undefined
+  newTeam.translationNeeded = rawTeam[10] === 'true' || undefined
 
   return newTeam
 }
@@ -81,9 +81,9 @@ function offsetMatchTime (match, offset) {
   return newMatch
 }
 
-module.exports = {
+Object.assign(exports, {
   'deserializeMatch': deserializeMatch,
   'deserializeTeam': deserializeTeam,
   convertMatchTimeToToday,
   offsetMatchTime
-}
+})

@@ -14,6 +14,9 @@ rules:
   prefer-arrow-callback: warn
   prefer-const: warn
   strict: [ warn, global ]
+  new-cap:
+  - error
+  - capIsNew: true
 
   import/newline-after-import: warn
   import/no-absolute-path: warn

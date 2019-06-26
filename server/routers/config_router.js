@@ -1,7 +1,7 @@
 'use strict'
 const express = require('express')
 
-const router = express.Router()
+const router = new express.Router()
 
 router.get('/config', (req, res) => {
   const config = {
@@ -12,4 +12,4 @@ router.get('/config', (req, res) => {
   res.status(200).send(config)
 })
 
-module.exports = router
+exports.configRouter = router

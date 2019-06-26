@@ -1,8 +1,11 @@
 'use strict'
-const MongoClient = require('mongodb').MongoClient
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const Promise = require('bluebird')
+const { MongoClient } = require('mongodb')
+const { Logger } = require('@first-lego-league/ms-logger')
 
 const MONGO_URI = process.env.MONGO_URI
+
+const MsLogger = new Logger()
 
 let _connection = null
 
@@ -25,14 +28,16 @@ function connection () {
 function close () {
   MsLogger.info('Closing Mongo Db connection')
   if (_connection != null) {
-    connection().then(conn => {
-      conn.close()
-    })
+    return connection()
+      .then(conn => {
+        conn.close()
+      })
   }
+  return Promise.resolve()
 }
 
-module.exports = {
+Object.assign(exports, {
   connect,
   connection,
   close
-}
+})

@@ -8,12 +8,13 @@ const version = require('project-version')
 const { correlationMiddleware } = require('@first-lego-league/ms-correlation')
 const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
 const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
+const EventEmitter = require('events').EventEmitter
 
-const Team = require('./server/models/Team')
-const Match = require('./server/models/Match')
-const Table = require('./server/models/Table')
+const { Team } = require('./server/models/Team')
+const { Match } = require('./server/models/Match')
+const { Table } = require('./server/models/Table')
 
-const logger = Logger()
+const logger = new Logger()
 const db = require('./server/utilities/mongo_connection')
 
 const appPort = process.env.PORT || 3001
@@ -30,16 +31,14 @@ app.use(loggerMiddleware)
 app.use(cors())
 
 const { getSettingsRouter } = require('./server/routers/general_settings_router')
-const configRouter = require('./server/routers/config_router')
+const { configRouter } = require('./server/routers/config_router')
 const crudRouter = require('./server/routers/crud_router').getRouter
-const tournamentDataRouter = require('./server/routers/tournament_data_router')
+const { tournamentDataRouter } = require('./server/routers/tournament_data_router')
 const matchTeamRouter = require('./server/routers/matchTeam_router')
 const teamsBatchUploadRouter = require('./server/routers/teams_batchupload_router')
 const lastMatchIdRouter = require('./server/routers/last_matchId_router').router
 const tournamentStatusRouter = require('./server/routers/tournament_status_router')
 const { imagesRouter } = require('./server/routers/images_router')
-
-const EventEmitter = require('events').EventEmitter
 
 EventEmitter.defaultMaxListeners = 12
 

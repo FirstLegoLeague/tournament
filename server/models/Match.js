@@ -12,4 +12,4 @@ class Match {
 
 Match.IdField = '_id'
 
-module.exports = Match
+exports.Match = Match
