@@ -1,4 +1,3 @@
-'use strict'
 
 class Match {
   constructor (matchId, startTime, endTime, stage, matchTeams) {

@@ -1,5 +1,3 @@
-'use strict'
-
 const { Logger } = require('@first-lego-league/ms-logger')
 
 const { getSetting } = require('./settings_logic')

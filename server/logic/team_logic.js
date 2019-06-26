@@ -1,4 +1,3 @@
-'use strict'
 const ObjectId = require('mongodb').ObjectID
 
 const { Logger } = require('@first-lego-league/ms-logger')

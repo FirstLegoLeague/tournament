@@ -1,4 +1,3 @@
-'use strict'
 const { Logger } = require('@first-lego-league/ms-logger')
 
 const objectDataParser = require('./object_data_parser')

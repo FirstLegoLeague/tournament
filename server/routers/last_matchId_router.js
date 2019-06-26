@@ -1,4 +1,3 @@
-'use strict'
 const express = require('express')
 const { Logger } = require('@first-lego-league/ms-logger')
 

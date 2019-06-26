@@ -1,4 +1,3 @@
-'use strict'
 const Promise = require('bluebird')
 const { MongoClient } = require('mongodb')
 const { Logger } = require('@first-lego-league/ms-logger')

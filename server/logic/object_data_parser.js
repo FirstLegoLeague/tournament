@@ -1,4 +1,3 @@
-'use strict'
 const moment = require('moment')
 
 const { Match } = require('../models/Match')
