@@ -9,7 +9,7 @@ const MESSAGE_TYPES = {
   PUBLISH: 'publish'
 }
 const IDENTITY_TOKEN_KEY = 'client-id'
-const DEFAULT_NODE = 'default'
+const DEFAULT_NODE = 'protected'
 const RETRY_TIMOUT = 10000
 
 @Injectable({

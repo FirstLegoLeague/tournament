@@ -62,10 +62,16 @@ function publishMsg (node, topic, data = '') {
   MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${JSON.stringify(data)}`)
   return Promise.resolve(connect())
     .then(() => {
-      return mhubClient.publish(connectedNode, topic, data, {
-        'client-id': MHUB_CLIENT_ID,
-        'correlation-id': getCorrelationId()
-      })
+      const headers = {
+        'client-id': MHUB_CLIENT_ID
+      }
+      const correlationId = getCorrelationId()
+
+      if (correlationId) {
+        headers['correlation-id'] = correlationId
+      }
+
+      return mhubClient.publish(connectedNode, topic, data, headers)
     })
 }
 
