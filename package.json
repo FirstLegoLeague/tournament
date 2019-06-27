@@ -11,6 +11,13 @@
     "start": "ng build && devl",
     "build": "ng build"
   },
+  "files": [
+    "server",
+    "dist/client",
+    "index.js",
+    "module.yml",
+    "yarn.lock"
+  ],
   "engines": {
     "node": ">=8.x"
   },
