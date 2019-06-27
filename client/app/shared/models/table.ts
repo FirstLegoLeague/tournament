@@ -3,36 +3,36 @@ import { Deserializable } from './interfaces/deserializable'
 
 export class Table implements Editable, Deletable, Deserializable {
 
-  _id: string;
-  tableId: number;
-  tableName: string;
+  _id: string
+  tableId: number
+  tableName: string
 
-  id() {
-    return this._id;
+  id () {
+    return this._id
   }
 
-  title() {
-    return this.id() ? this.tableName : 'New table';
+  title () {
+    return this.id() ? this.tableName : 'New table'
   }
 
-  fields() {
-    return [{ display: 'Name', type: 'text', get: () => this.tableName, set: (value) => { this.tableName = value }, editable: true }];
+  fields () {
+    return [{ display: 'Name', type: 'text', get: () => this.tableName, set: (value) => { this.tableName = value }, editable: true }]
   }
 
-  body() {
+  body () {
     return {
       tableName: this.tableName,
       tableId: Number(this.tableId)
-    };
+    }
   }
 
-  deserialize(input: any) {
-    Object.assign(this, input);
-    return this;
+  deserialize (input: any) {
+    Object.assign(this, input)
+    return this
   }
 
-  savedInDB() {
-    return !!this._id;
+  savedInDB () {
+    return !!this._id
   }
 
 }

@@ -1,14 +1,15 @@
-'use strict'
+const Promise = require('bluebird')
 const express = require('express')
 const requestify = require('requestify')
 
-const router = express.Router()
-const db = require('../utilities/mongo_connection')
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const { Logger } = require('@first-lego-league/ms-logger')
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
+const db = require('../utilities/mongo_connection')
 const mhubConnection = require('../utilities/mhub_connection')
 
+const router = new express.Router()
+const MsLogger = new Logger()
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 const tournamentDataParser = require('../logic/data_parser')
@@ -83,16 +84,17 @@ router.post('/', adminAction, (req, res) => {
 
     const promises = [tablesPromise, teamsPromise, practicePromise, rankingPromise].filter(promise => promise)
 
-    Promise.all(promises).then(() => {
-      res.sendStatus(201)
-    })
+    return Promise.all(promises)
+      .then(() => {
+        res.sendStatus(201)
+      })
   }).catch(err => {
     console.log(err)
     res.sendStatus(500)
   })
 })
 
-if (!process.env.DEV) {
+if (process.env.NODE_ENV !== 'development') {
   router.delete('/', adminAction, (req, res) => {
     requestify.get(`${process.env.MODULE_SCORING_URL}/scores/count`).then(response => {
       const body = response.getBody()
@@ -119,7 +121,7 @@ if (!process.env.DEV) {
   })
 }
 
-if (process.env.DEV) {
+if (process.env.NODE_ENV === 'development') {
   router.delete('/', adminAction, (req, res) => {
     dropCollectionsInDatabase().then(() => {
       mhubConnection.publishUpdateMsg('matches')
@@ -169,4 +171,4 @@ function dropCollectionsInDatabase () {
   })
 }
 
-module.exports = router
+exports.tournamentDataRouter = router

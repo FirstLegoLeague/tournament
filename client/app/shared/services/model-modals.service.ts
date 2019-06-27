@@ -11,11 +11,8 @@ export class ModelModalsService {
 
   private editModel: Editable
 
-
   constructor (private teamsService: TeamsService, private matchesServices: MatchesService, private imagesService: ImagesService) {
   }
-
-
 
   service (model) {
     switch (model.constructor.name) {

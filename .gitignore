@@ -1,6 +1,9 @@
-.idea/
+# Project specific
+
 dist/
 data/
+module-config.json
+
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###

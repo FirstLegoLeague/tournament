@@ -1,11 +1,8 @@
-'use strict'
+const { Logger } = require('@first-lego-league/ms-logger')
+
 const objectDataParser = require('./object_data_parser')
 
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
-
-const Team = require('../models/Team')
-const Match = require('../models/Match')
-const Table = require('../models/Table')
+const { Table } = require('../models/Table')
 
 const TEAM_DATA_BLOCK_ID = 1
 const TEAM_DATE_HEADER_LINE_AMOUNT = 2
@@ -14,13 +11,12 @@ const RANKING_MATCH_SCHEDULE_ID = 2
 const RANKING_MATCH_HEADER_LINE_AMOUNT = 6
 const TABLE_NAMES_LINE = 5
 
-const JUDJING_INFO_BLOCK_ID = 3
-const JUDJING_INFO_HEADER_LINE_AMOUNT = 6
-
 const PRACTICE_MATCH_SCHEDULE_ID = 4
 const PRACTICE_MATCH_HEADER_LINE_AMOUNT = 6
 
 const TABLE_NAMES_START = 1
+
+const MsLogger = new Logger()
 
 function parse (data, delimiter) {
   let errorStr
@@ -79,7 +75,7 @@ function parse (data, delimiter) {
 
   let practiceMatchesRaw, numOfActualPracticeFields, practiceTablesRaw
   if (doesSectionExsits(blocks, PRACTICE_MATCH_SCHEDULE_ID)) {
-    const numOfPracticeMatches = lines[blocks.find(x => x.blockId == PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
+    const numOfPracticeMatches = lines[blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber + 1]
     practiceMatchesRaw = lines.slice(blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
       PRACTICE_MATCH_HEADER_LINE_AMOUNT,
     blocks.find(x => x.blockId === PRACTICE_MATCH_SCHEDULE_ID).lineNumber +
@@ -139,12 +135,10 @@ function parse (data, delimiter) {
   }
 }
 
-module.exports = {
-  'parse': parse
-}
+exports.parse = parse
 
 function doesSectionExsits (blocks, sectionId) {
-  return blocks.find(x => x.blockId == sectionId) != undefined
+  return blocks.find(x => x.blockId === sectionId) !== undefined
 }
 
 function arrayContainesNonEmptyFields (arr) {
@@ -157,7 +151,7 @@ function arrayContainesNonEmptyFields (arr) {
 }
 
 function isStringEmpty (str) {
-  return str == '' || str == undefined || /^\s+$/.test(str)
+  return str === '' || str === undefined || /^\s+$/.test(str)
 }
 
 function getMaxTeamsFields (matchArray) {

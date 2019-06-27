@@ -1,15 +1,15 @@
-'use strict'
 const express = require('express')
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 const { Logger } = require('@first-lego-league/ms-logger')
 const formidable = require('formidable')
-const {publishUpdateMsg} = require('../utilities/mhub_connection')
+
+const { publishUpdateMsg } = require('../utilities/mhub_connection')
 
 const { getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder } = require('../logic/images_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
-const logger = Logger()
-const router = express.Router()
+const logger = new Logger()
+const router = new express.Router()
 
 initImagesFolder().catch(err => {
   logger.error(`Could not init image folder: ${err}`)
@@ -39,7 +39,7 @@ router.get('/:imageName', (req, res) => {
  * A handler for post requests to /images/upload.
  */
 router.post('/upload', adminAction, (req, res) => {
-  const form = formidable.IncomingForm()
+  const form = new formidable.IncomingForm()
   /*
    * Adding a listener for handling forms with a "file" field.
    * This doesn't assume the name of the input field of the form.
@@ -61,17 +61,23 @@ router.post('/upload', adminAction, (req, res) => {
 })
 
 router.post('/', adminAction, (req, res) => {
-  const form = formidable.IncomingForm()
+  const form = new formidable.IncomingForm()
   form.parse(req, (err, fields, files) => {
+    if (err) {
+      throw err
+    }
+
     const tmpFilePath = files.filetoupload.path
     const imageName = files.filetoupload.name
 
-    saveImageToImagePath(tmpFilePath, imageName).then(() => {
-      publishUpdateMsg('images')
-      res.status(201).send()
-    }).catch(err => {
-      res.status(500).send(err.message)
-    })
+    saveImageToImagePath(tmpFilePath, imageName)
+      .then(() => {
+        publishUpdateMsg('images')
+        res.status(201).send()
+      })
+      .catch(e => {
+        res.status(500).send(e.message)
+      })
   })
 })
 
@@ -86,4 +92,4 @@ router.delete('/:imageName', adminAction, (req, res) => {
   })
 })
 
-module.exports = { imagesRouter: router }
+exports.imagesRouter = router

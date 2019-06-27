@@ -5,4 +5,4 @@ class Table {
   }
 }
 Table.IdField = '_id'
-module.exports = Table
+exports.Table = Table

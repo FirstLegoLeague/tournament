@@ -1,4 +1,3 @@
-'use strict'
 
 class Match {
   constructor (matchId, startTime, endTime, stage, matchTeams) {
@@ -12,4 +11,4 @@ class Match {
 
 Match.IdField = '_id'
 
-module.exports = Match
+exports.Match = Match

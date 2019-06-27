@@ -1,18 +1,19 @@
-'use strict'
+const Promise = require('bluebird')
 const express = require('express')
 
 const ObjectId = require('mongodb').ObjectID
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const { Logger } = require('@first-lego-league/ms-logger')
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
 const db = require('../utilities/mongo_connection')
 
 const mhubConnection = require('../utilities/mhub_connection')
 
+const MsLogger = new Logger()
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 exports.getRouter = function (options) {
-  const router = express.Router()
+  const router = new express.Router()
 
   if (options.extraRouters) {
     for (const extraRouter of options.extraRouters) {
@@ -22,15 +23,19 @@ exports.getRouter = function (options) {
 
   router.get('/all', (req, res) => {
     db.connection().then(connection => {
-      connection.db().collection(options.collectionName).find().toArray().then(data => {
-        if (options.preprocessing) {
-          Promise.all(data.map(options.preprocessing)).then(mappedData => {
-            res.send(mappedData)
-          })
-        } else {
-          res.send(data)
-        }
-      })
+      return connection.db().collection(options.collectionName)
+        .find()
+        .toArray()
+        .then(data => {
+          if (options.preprocessing) {
+            return Promise.all(data.map(options.preprocessing))
+              .then(mappedData => {
+                res.send(mappedData)
+              })
+          } else {
+            res.send(data)
+          }
+        })
     }).catch(err => {
       MsLogger.error(err)
       res.sendStatus(500)
@@ -39,20 +44,22 @@ exports.getRouter = function (options) {
 
   router.get('/:id', (req, res) => {
     db.connection().then(connection => {
-      connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, req.params.id)).then(data => {
-        if (!data) {
-          res.sendStatus(404)
-          return
-        }
+      return connection.db().collection(options.collectionName)
+        .findOne(idMongoQuery(options.IdField, req.params.id))
+        .then(data => {
+          if (!data) {
+            res.sendStatus(404)
+            return
+          }
 
-        if (options.preprocessing) {
-          Promise.resolve(options.preprocessing(data)).then(mappedData => {
-            res.send(mappedData)
-          })
-        } else {
-          res.send(data)
-        }
-      })
+          if (options.preprocessing) {
+            return Promise.resolve(options.preprocessing(data)).then(mappedData => {
+              res.send(mappedData)
+            })
+          } else {
+            res.send(data)
+          }
+        })
     }).catch(err => {
       MsLogger.error(err)
       res.sendStatus(500)
@@ -74,12 +81,14 @@ exports.getRouter = function (options) {
     }
 
     db.connection().then(connection => {
-      connection.db().collection(options.collectionName).findOneAndUpdate(idMongoQuery(options.IdField, req.params.id), { $set: req.body }).then(dbResponse => {
-        if (dbResponse.ok === 1) {
-          mhubConnection.publishUpdateMsg(options.mhubNamespace)
-          res.sendStatus(204)
-        }
-      })
+      return connection.db().collection(options.collectionName)
+        .findOneAndUpdate(idMongoQuery(options.IdField, req.params.id), { $set: req.body })
+        .then(dbResponse => {
+          if (dbResponse.ok === 1) {
+            mhubConnection.publishUpdateMsg(options.mhubNamespace)
+            res.sendStatus(204)
+          }
+        })
     }).catch(err => {
       MsLogger.error(err)
       res.sendStatus(500)
@@ -97,24 +106,28 @@ exports.getRouter = function (options) {
     }
 
     db.connection().then(connection => {
-      connection.db().collection(options.collectionName).findOne(idMongoQuery(options.IdField, req.body[options.IdField])).then(data => {
-        if (data) {
-          res.status(400)
-          res.send('Object already exists')
-          return
-        }
-
-        if (typeof req.body._id === 'string') {
-          delete req.body._id
-        }
-
-        connection.db().collection(options.collectionName).insertOne(req.body).then(a => {
-          if (a.insertedCount > 0) {
-            mhubConnection.publishUpdateMsg(options.mhubNamespace)
-            res.sendStatus(201)
+      return connection.db().collection(options.collectionName)
+        .findOne(idMongoQuery(options.IdField, req.body[options.IdField]))
+        .then(data => {
+          if (data) {
+            res.status(400)
+            res.send('Object already exists')
+            return
           }
+
+          if (typeof req.body._id === 'string') {
+            delete req.body._id
+          }
+
+          return connection.db().collection(options.collectionName)
+            .insertOne(req.body)
+            .then(a => {
+              if (a.insertedCount > 0) {
+                mhubConnection.publishUpdateMsg(options.mhubNamespace)
+                res.sendStatus(201)
+              }
+            })
         })
-      })
     }).catch(err => {
       MsLogger.error(err)
       res.sendStatus(500)
@@ -136,12 +149,14 @@ exports.getRouter = function (options) {
         return
       }
       db.connection().then(connection => {
-        connection.db().collection(options.collectionName).findOneAndDelete(idMongoQuery(options.IdField, req.params.id)).then(dbResponse => {
-          if (dbResponse.ok === 1) {
-            mhubConnection.publishUpdateMsg(options.mhubNamespace)
-            res.sendStatus(200)
-          }
-        })
+        return connection.db().collection(options.collectionName)
+          .findOneAndDelete(idMongoQuery(options.IdField, req.params.id))
+          .then(dbResponse => {
+            if (dbResponse.ok === 1) {
+              mhubConnection.publishUpdateMsg(options.mhubNamespace)
+              res.sendStatus(200)
+            }
+          })
       }).catch(err => {
         MsLogger.error(err)
         res.sendStatus(500)
@@ -156,8 +171,8 @@ exports.getRouter = function (options) {
 
 function idMongoQuery (idField, id) {
   const query = {}
-  if (idField == '_id') {
-    id = ObjectId(id)
+  if (idField === '_id') {
+    id = new ObjectId(id)
   }
   query[idField] = id
   return query
