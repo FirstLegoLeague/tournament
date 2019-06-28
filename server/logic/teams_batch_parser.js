@@ -1,8 +1,8 @@
-'use strict'
+const { Logger } = require('@first-lego-league/ms-logger')
 
 const objectDataParser = require('./object_data_parser')
 
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const MsLogger = new Logger()
 
 exports.parse = function (data, delimiter) {
   let errorStr

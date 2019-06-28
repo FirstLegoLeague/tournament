@@ -1,6 +1,6 @@
-'use strict'
+const Promise = require('bluebird')
 const { MClient } = require('mhub')
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const { Logger } = require('@first-lego-league/ms-logger')
 const { getCorrelationId } = require('@first-lego-league/ms-correlation')
 
 const MHUB_NODES = {
@@ -9,6 +9,8 @@ const MHUB_NODES = {
 }
 
 const MHUB_CLIENT_ID = 'cl-tournament'
+
+const MsLogger = new Logger()
 const mhubClient = new MClient(process.env.MHUB_URI)
 
 const listeners = []
@@ -25,6 +27,9 @@ mhubClient.on('close', () => {
 
 mhubClient.on('open', () => {
   mhubClient.subscribe(loginToMhub(MHUB_NODES.PROTECTED))
+    .catch(err => {
+      throw err
+    })
 })
 
 mhubClient.on('message', msg => {
@@ -55,12 +60,19 @@ function publishUpdateMsg (nameSpace, data = '') {
 function publishMsg (node, topic, data = '') {
   const connectedNode = loginToMhub(node)
   MsLogger.debug(`Publishing message to mhub: ${connectedNode}, ${topic}, With data ${JSON.stringify(data)}`)
-  connect().then(() => {
-    mhubClient.publish(connectedNode, topic, data, {
-      'client-id': MHUB_CLIENT_ID,
-      'correlation-id': getCorrelationId()
+  return Promise.resolve(connect())
+    .then(() => {
+      const headers = {
+        'client-id': MHUB_CLIENT_ID
+      }
+      const correlationId = getCorrelationId()
+
+      if (correlationId) {
+        headers['correlation-id'] = correlationId
+      }
+
+      return mhubClient.publish(connectedNode, topic, data, headers)
     })
-  })
 }
 
 function subscribe (topic, handler) {
@@ -68,19 +80,17 @@ function subscribe (topic, handler) {
 }
 
 function loginToMhub (node) {
-  if (process.env.DEV) {
-    return 'default'
-  }
   if (node === MHUB_NODES.PROTECTED) {
     mhubClient.login('protected-client', process.env.PROTECTED_MHUB_PASSWORD)
+      .catch(err => { throw err })
     return MHUB_NODES.PROTECTED
   }
 }
 
-module.exports = {
+Object.assign(exports, {
   publishUpdateMsg,
   publishMsg,
   subscribe,
   mhubClient,
   MHUB_NODES
-}
+})

@@ -11,11 +11,11 @@ import { Team } from '../models/team'
 export class EditService {
   private editModel: Editable
 
-  constructor (private teamsService: TeamsService, private matchesServices: MatchesService,) {
+  constructor (private teamsService: TeamsService, private matchesServices: MatchesService) {
   }
 
   setEditModel (model) {
-    this.editModel = Object.create(model);
+    this.editModel = Object.create(model)
   }
 
   getEditModel () {

@@ -1,6 +1,4 @@
-'use strict'
-
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const Promise = require('bluebird')
 const path = require('path')
 const fs = require('fs-extra')
 const { base64, img } = require('base64-img-promise')
@@ -23,10 +21,12 @@ function getAllImagesNames () {
 }
 
 function getAllImages () {
-  return getAllImagesNames().then(names => {
-    const images = names.filter(filename => ALLOWED_FORMATS.find(x => x == filename.split('.').pop().toLowerCase())).map(createReturnObject)
-    return Promise.all(images)
-  })
+  return getAllImagesNames()
+    .then(names => {
+      const images = names.filter(filename => ALLOWED_FORMATS.find(x => x === filename.split('.').pop().toLowerCase()))
+        .map(createReturnObject)
+      return Promise.all(images)
+    })
 }
 
 function getImage (name) {
@@ -64,26 +64,20 @@ function deleteImage (name) {
 }
 
 function createReturnObject (imageName) {
-  return new Promise((resolve, reject) => {
-    try {
-      base64(path.resolve(IMAGES_DIR, imageName)).then(data => {
-        const imageData = {
-          name: imageName,
-          image: data
-        }
-        resolve(imageData)
-      })
-    } catch (e) {
-      reject(e)
-    }
-  })
+  return Promise.try(() => base64(path.resolve(IMAGES_DIR, imageName)))
+    .then(data => {
+      return {
+        name: imageName,
+        image: data
+      }
+    })
 }
 
-module.exports = {
+Object.assign(exports, {
   initImagesFolder,
   getAllImages,
   getImage,
   deleteImage,
   saveImageFromBase64,
   saveImageToImagePath
-}
+})

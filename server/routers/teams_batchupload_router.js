@@ -1,16 +1,18 @@
-'use strict'
 const express = require('express')
-const db = require('../utilities/mongo_connection')
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+
+const { Logger } = require('@first-lego-league/ms-logger')
 const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
-const {publishUpdateMsg} = require('../utilities/mhub_connection')
+
+const db = require('../utilities/mongo_connection')
+const { publishUpdateMsg } = require('../utilities/mhub_connection')
 
 const teamsBatchParser = require('../logic/teams_batch_parser')
 
+const MsLogger = new Logger()
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 exports.getRouter = function () {
-  const router = express.Router()
+  const router = new express.Router()
 
   router.get('/batch/parse', (req, res) => {
     if (!req.query.teamsData) {

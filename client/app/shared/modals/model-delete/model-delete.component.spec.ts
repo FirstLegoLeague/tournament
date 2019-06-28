@@ -1,25 +1,25 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ModelDelete } from './model-delete.component';
+import { ModelDelete } from './model-delete.component'
 
 describe('ModelDelete', () => {
-  let component: ModelDelete;
-  let fixture: ComponentFixture<ModelDelete>;
+  let component: ModelDelete
+  let fixture: ComponentFixture<ModelDelete>
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
+    return TestBed.configureTestingModule({
       declarations: [ ModelDelete ]
     })
-    .compileComponents();
-  }));
+    .compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModelDelete);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(ModelDelete)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

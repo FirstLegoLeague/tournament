@@ -1,31 +1,34 @@
-'use strict'
+const Promise = require('bluebird')
 const express = require('express')
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const { Logger } = require('@first-lego-league/ms-logger')
 
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const {convertMatchTimeToToday} = require('../logic/object_data_parser')
-const {offsetMatch} = require('../logic/match_logic')
-const {getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber, getNextMatchForTable} = require('../logic/tournament_status_logic')
+const { convertMatchTimeToToday } = require('../logic/object_data_parser')
+const { offsetMatch } = require('../logic/match_logic')
+const { getCurrentMatch, getNextMatches, getCurrentMatchNumber, setCurrentMatchNumber, getNextMatchForTable } = require('../logic/tournament_status_logic')
 
+const MsLogger = new Logger()
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 exports.getRouter = function () {
-  const router = express.Router()
+  const router = new express.Router()
 
   router.get('/current', (req, res) => {
-    getCurrentMatch().then(data => {
-      if (data) {
-        offsetMatch(convertMatchTimeToToday(data)).then(match => {
-          res.send(match)
-        })
-      } else {
-        res.sendStatus(404)
-      }
-    }).catch(err => {
-      MsLogger.error(err)
-      res.status(500).send('The server encounter a problem while the current match')
-    })
+    getCurrentMatch()
+      .then(data => {
+        if (data) {
+          return offsetMatch(convertMatchTimeToToday(data))
+            .then(match => {
+              res.send(match)
+            })
+        } else {
+          res.sendStatus(404)
+        }
+      }).catch(err => {
+        MsLogger.error(err)
+        res.status(500).send('The server encounter a problem while the current match')
+      })
   })
 
   router.get('/upcoming/:amount?', (req, res) => {
@@ -40,8 +43,11 @@ exports.getRouter = function () {
 
     getNextMatches(amount).then(matches => {
       if (matches) {
-        Promise.all(matches.map(convertMatchTimeToToday).map(offsetMatch)).then(matches => {
-          res.send(matches)
+        return Promise.all(matches
+          .map(convertMatchTimeToToday)
+          .map(offsetMatch)
+        ).then(transformedMatches => {
+          res.send(transformedMatches)
         })
       } else {
         res.sendStatus(404)
@@ -70,7 +76,10 @@ exports.getRouter = function () {
         return getNextMatchForTable(tableId, amount)
           .then(match => {
             if (Array.isArray(match)) {
-              Promise.all(match.map(convertMatchTimeToToday).map(offsetMatch)).then(matches => {
+              return Promise.all(match
+                .map(convertMatchTimeToToday)
+                .map(offsetMatch)
+              ).then(matches => {
                 res.send(matches)
               })
             } else if (!Array.isArray(match)) {
@@ -90,9 +99,13 @@ exports.getRouter = function () {
   })
 
   router.get('/matchNumber', (req, res) => {
-    getCurrentMatchNumber().then(match => {
-      res.json(match)
-    })
+    getCurrentMatchNumber()
+      .then(match => {
+        res.json(match)
+      })
+      .catch(err => {
+        res.status(500).send(err.message)
+      })
   })
 
   router.put('/current', adminAction, (req, res) => {
@@ -101,7 +114,7 @@ exports.getRouter = function () {
         res.send('').status(200)
       }).catch(error => {
         MsLogger.error(error.message)
-        res.status(400).send({error: error.message})
+        res.status(400).send({ error: error.message })
       })
     } else {
       res.sendStatus(415)

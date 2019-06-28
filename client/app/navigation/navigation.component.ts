@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-navigation',
@@ -7,11 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationComponent implements OnInit {
 
-  public links: Array<Object>;
-  public page: String;
-  public loading: Object;
+  public links: Array<Object>
+  public page: String
+  public loading: Object
 
-  constructor() {
+  constructor () {
   	this.links = [
       { href: '/settings', title: 'Tournament Settings', icon: 'fa-cogs' },
       { href: '/images', title: 'Images', icon: 'fa-image' },
@@ -20,14 +20,14 @@ export class NavigationComponent implements OnInit {
   	]
   }
 
-  ngOnInit() {
+  ngOnInit () {
   	this.page = document.location.pathname
-    if(this.page === '/') {
+    if (this.page === '/') {
       document.location.pathname = this.links[0]['href']
     }
   }
 
-  iconClass(link) {
+  iconClass (link) {
   	return this.loading === link ? 'fa-circle-notch fa-spin' : link.icon
   }
 

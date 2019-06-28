@@ -1,16 +1,16 @@
-'use strict'
 const express = require('express')
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
-const {authroizationMiddlware} = require('@first-lego-league/ms-auth')
+const { Logger } = require('@first-lego-league/ms-logger')
+const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
-const {getSetting, getAllSettings, updateSetting, setDefaultSettings, getAllStages} = require('../logic/settings_logic')
+const { getSetting, getAllSettings, updateSetting, setDefaultSettings, getAllStages } = require('../logic/settings_logic')
 
+const MsLogger = new Logger()
 const adminAction = authroizationMiddlware(['admin', 'development'])
 
 setDefaultSettings()
 
 exports.getSettingsRouter = function () {
-  const router = express.Router()
+  const router = new express.Router()
 
   router.get('/all', (req, res) => {
     getAllSettings().then(settings => {

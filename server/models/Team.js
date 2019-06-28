@@ -15,4 +15,4 @@ class Team {
 }
 
 Team.IdField = '_id'
-module.exports = Team
+exports.Team = Team

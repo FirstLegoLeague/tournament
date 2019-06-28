@@ -1,41 +1,42 @@
-'use strict'
-const MsLogger = require('@first-lego-league/ms-logger').Logger()
+const Promise = require('bluebird')
+const { Logger } = require('@first-lego-league/ms-logger')
 
-const {getSetting, updateSetting} = require('./settings_logic')
-const {getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage, getMatchForTable, offsetAndConvertToToday, getFirstMatchInStage} = require('./match_logic')
+const { getSetting, updateSetting } = require('./settings_logic')
+const {
+  getMatchesByTime, getMatchInCurrentStage, isMatchInCurrentStage,
+  getMatchForTable, offsetAndConvertToToday, getFirstMatchInStage
+} = require('./match_logic')
 
-const {publishUpdateMsg, subscribe} = require('../utilities/mhub_connection')
+const { publishUpdateMsg, subscribe } = require('../utilities/mhub_connection')
 
 const CURRENT_STAGE_NAME = 'tournamentStage'
 const CURRENT_MATCH_NAME = 'tournamentCurrentMatch'
 const OFFSET_TIME_NAME = 'scheduleTimeOffset'
 const AMOUNT_OF_MATCHES_TO_MHUB = 2
 
+const MsLogger = new Logger()
 let isLastMatchFinished = true
 
 const clockStartEvent = function () {
   MsLogger.info('Got clock start event')
   if (isLastMatchFinished) {
-    try {
-      getCurrentMatchNumber().then(number => {
+    isLastMatchFinished = false
+    return Promise.resolve()
+      .then(() => getCurrentMatchNumber())
+      .then(number => {
         if (number === 0) {
-          getSetting(CURRENT_STAGE_NAME).then(currStage => {
-            getFirstMatchInStage(currStage).then(match => {
-              setCurrentMatchNumber(match.matchId).then(() => {
-                publishMatchAvailable()
-              })
-            })
-          })
+          return getSetting(CURRENT_STAGE_NAME)
+            .then(currStage => getFirstMatchInStage(currStage))
+            .then(match => setCurrentMatchNumber(match.matchId))
+            .then(() => publishMatchAvailable())
         } else {
-          setCurrentMatchNumber(number + 1).then(() => {
-            publishMatchAvailable()
-          })
+          return setCurrentMatchNumber(number + 1)
+            .then(() => publishMatchAvailable())
         }
       })
-    } catch (e) {
-      MsLogger.warn(`Error when trying to set the next match number: ${e.message}`)
-    }
-    isLastMatchFinished = false
+      .catch(e => {
+        MsLogger.warn(`Error when trying to set the next match number: ${e.message}`)
+      })
   }
 }
 
@@ -81,13 +82,14 @@ function getNextMatches (amountOfMatches) {
     }
 
     if (currentMatchNumber > 0) {
-      return getMatchInCurrentStage(currentMatchNumber).then(match => {
-        if (match) {
-          return getMatchesByTime(match.startTime, amountOfMatches)
-        } else {
-          return Promise.resolve([])
-        }
-      })
+      return getMatchInCurrentStage(currentMatchNumber)
+        .then(match => {
+          if (match) {
+            return getMatchesByTime(match.startTime, amountOfMatches)
+          } else {
+            return []
+          }
+        })
     }
   })
 }
@@ -103,12 +105,13 @@ function getNextMatchForTable (tableId, amountOfMatches = 1) {
 function publishMatchAvailable () {
   getCurrentMatch().then(match => {
     if (match) {
-      offsetAndConvertToToday(match).then(newMatch => {
-        publishUpdateMsg('CurrentMatch', newMatch)
-      })
+      return offsetAndConvertToToday(match)
+        .then(newMatch => {
+          publishUpdateMsg('CurrentMatch', newMatch)
+        })
     } else {
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
-        publishUpdateMsg('CurrentMatch', {matchId: 0, stage: stage, startTime: new Date().getTime()})
+        publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().getTime() })
       })
     }
   }).catch(error => {
@@ -116,9 +119,8 @@ function publishMatchAvailable () {
   })
 
   getNextMatches(AMOUNT_OF_MATCHES_TO_MHUB).then(matches => {
-    Promise.all(matches.map(offsetAndConvertToToday)).then(offsetMatches => {
-      publishUpdateMsg('UpcomingMatches', offsetMatches)
-    })
+    return Promise.all(matches.map(offsetAndConvertToToday))
+      .then(offsetMatches => publishUpdateMsg('UpcomingMatches', offsetMatches))
   }).catch(error => {
     MsLogger.error(`Error in "upcoming matches" ${error}`)
   })
@@ -141,10 +143,10 @@ function setCurrentMatchNumber (newMatch) {
   })
 }
 
-module.exports = {
+Object.assign(exports, {
   getCurrentMatch,
   getNextMatches,
   getCurrentMatchNumber,
   setCurrentMatchNumber,
   getNextMatchForTable
-}
+})

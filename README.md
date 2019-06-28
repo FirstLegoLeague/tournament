@@ -1,3 +1,8 @@
+[![npm](https://img.shields.io/npm/v/@first-lego-league/tournament.svg)](https://www.npmjs.com/package/@first-lego-league/tournament)
+[![codecov](https://codecov.io/gh/FirstLegoLeague/tournament/branch/master/graph/badge.svg)](https://codecov.io/gh/FirstLegoLeague/tournament)
+[![Build status](https://ci.appveyor.com/api/projects/status/5bpjj78yjb5xcab9/branch/master?svg=true)](https://ci.appveyor.com/project/2roy999/tournament/branch/master)
+[![GitHub](https://img.shields.io/github/license/FirstLegoLeague/tournament.svg)](https://github.com/FirstLegoLeague/tournament/blob/master/LICENSE)
+
 # Tournament Module
 
 This module is used as an API that handles all the tournament specific data.

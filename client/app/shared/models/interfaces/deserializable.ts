@@ -1,3 +1,3 @@
 export interface Deserializable {
-  deserialize(input: any): this;
+  deserialize (input: any): this
 }

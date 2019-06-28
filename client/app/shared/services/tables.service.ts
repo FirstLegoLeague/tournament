@@ -1,60 +1,59 @@
-import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {forkJoin} from 'rxjs/observable/forkJoin';
-import {RequestService} from './request.service';
-import {Table} from '../models/table';
-import {map} from "rxjs/operators";
+import { Injectable } from '@angular/core'
+import { Observable, of } from 'rxjs'
+import { forkJoin } from 'rxjs/observable/forkJoin'
+import { RequestService } from './request.service'
+import { Table } from '../models/table'
+import { map } from 'rxjs/operators'
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class TablesService {
 
-    private initStarted: boolean = false;
-    public tables: Table[] = [];
-    public editingTables: Table[] = [];
+  private initStarted: boolean = false
+  public tables: Table[] = []
+  public editingTables: Table[] = []
 
-    constructor(private requests: RequestService) {
-    }
+  constructor (private requests: RequestService) {
+  }
 
-    init() {
-        return this.reload();
-    }
+  init () {
+    return this.reload()
+  }
 
-    reload() {
-        return this.requests.get('/table/all').pipe(map((tables: Table[]) => {
-            this.tables = tables.map(table => new Table().deserialize(table));
-            this.editingTables = tables.map(table => new Table().deserialize(table));
-            return this.tables;
-        }))
-    }
+  reload () {
+    return this.requests.get('/table/all').pipe(map((tables: Table[]) => {
+      this.tables = tables.map(table => new Table().deserialize(table))
+      this.editingTables = tables.map(table => new Table().deserialize(table))
+      return this.tables
+    }))
+  }
 
-    save(): Observable<any> {
-        const tablesToDelete = this.tables.filter(table => this.editingTables.every(editingTable => editingTable.tableId !== table.tableId));
-        const tablesToCreate = this.editingTables.filter(table => isNaN(table.tableId));
-        const tablesToUpdate = this.editingTables.filter(editingTable =>
+  save (): Observable<any> {
+    const tablesToDelete = this.tables.filter(table => this.editingTables.every(editingTable => editingTable.tableId !== table.tableId))
+    const tablesToCreate = this.editingTables.filter(table => isNaN(table.tableId))
+    const tablesToUpdate = this.editingTables.filter(editingTable =>
             isFinite(editingTable.tableId) && editingTable.tableName !== this.tables.find(table => table.tableId === editingTable.tableId).tableName)
         // Add numbers to new tables
-        let lastTableId = this.lastTableId();
-        tablesToCreate.forEach((table, index) => {
-            table.tableId = (lastTableId + 1 + index)
-        })
+    let lastTableId = this.lastTableId()
+    tablesToCreate.forEach((table, index) => {
+      table.tableId = (lastTableId + 1 + index)
+    })
 
-        const tablesToDeleteObservables = tablesToDelete.map(table => this.requests.delete(`/table/${table.id()}`, {responseType: 'text'}))
-        const tablesToCreateObservables = tablesToCreate.map(table => this.requests.post('/table/', table.body(), {responseType: 'text'}))
-        const tablesToUpdateObservables = tablesToUpdate.map(table => this.requests.put(`/table/${table.id()}`, table.body()))
+    const tablesToDeleteObservables = tablesToDelete.map(table => this.requests.delete(`/table/${table.id()}`, { responseType: 'text' }))
+    const tablesToCreateObservables = tablesToCreate.map(table => this.requests.post('/table/', table.body(), { responseType: 'text' }))
+    const tablesToUpdateObservables = tablesToUpdate.map(table => this.requests.put(`/table/${table.id()}`, table.body()))
 
-        return forkJoin(tablesToDeleteObservables.concat(tablesToCreateObservables).concat(tablesToUpdateObservables))
+    return forkJoin(tablesToDeleteObservables.concat(tablesToCreateObservables).concat(tablesToUpdateObservables))
+  }
+
+  lastTableId () {
+    let lastTableId = Math.max.apply(Math, this.tables.map(table => table.tableId))
+    if (lastTableId < 0) {
+      return 0
     }
-
-    lastTableId() {
-        let lastTableId = Math.max.apply(Math, this.tables.map(table => table.tableId))
-        if (lastTableId < 0) {
-            return 0
-        }
-        return lastTableId
-    }
-
+    return lastTableId
+  }
 
 }
