@@ -4,13 +4,20 @@
   "main": "index.js",
   "repository": "git@github.com:FirstLegoLeague/tournament.git",
   "author": "Tal Taub <taltaub22@gmail.com>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "scripts": {
     "lint": "eslint ./server && ng lint client",
     "prepack": "ng build --prod",
     "start": "ng build && devl",
     "build": "ng build"
   },
+  "files": [
+    "server",
+    "dist/client",
+    "index.js",
+    "module.yml",
+    "yarn.lock"
+  ],
   "engines": {
     "node": ">=8.x"
   },
@@ -63,13 +70,13 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "jasmine-core": "~2.99.1",
+    "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~1.7.1",
+    "karma": "~4.1.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.0",
-    "karma-jasmine": "~1.1.1",
-    "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-jasmine": "~2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.2",
     "ngx-file-drop": "^4.0.6",
     "protractor": "~5.4.2",
     "rxjs": "^6.0.0",
@@ -78,6 +85,6 @@
     "tslint": "~5.18.0",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^2.7.2",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.9.1"
   }
 }
