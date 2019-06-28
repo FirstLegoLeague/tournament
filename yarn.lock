@@ -337,17 +337,10 @@
     jsonwebtoken "^8.5.1"
     randomatic "^3.1.1"
 
-<<<<<<< HEAD
-"@first-lego-league/ms-logger@1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-logger/-/ms-logger-1.4.1.tgz#30950557b78689a51c884a6e1f41f9c493931875"
-  integrity sha512-KWyfcyMIWr6PnOkvYH3WThsnwIn5rsCzPrT08SrUlQUBCXM7RFNALxj4AD+Vqad3I4/HyAtarjoTcmGJ8tq1UQ==
-=======
 "@first-lego-league/ms-logger@2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@first-lego-league/ms-logger/-/ms-logger-2.0.0.tgz#2a9e19e4277b62d81621806434f4d468f6b4d805"
   integrity sha512-Zh9edCBhr6G4sl9HmuR7x/vyt60fs/zGtWMfKFFLeJlb6vF0/504OCZLyUI3IDTMirNhc/H4I+jHsab08daQng==
->>>>>>> 31180b311cdd0f2e2979ea775cc649a80d8eb18c
   dependencies:
     body-parser "^1.19.0"
     on-finished "^2.3.0"
