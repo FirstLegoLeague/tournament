@@ -35,8 +35,10 @@ export class DataUpload {
                 fileReader.onload = (e) => {
                     this.content = fileReader.result
                     if (this.content.startsWith("Version Number", 0)) {
+                        this.fileType = FileType.Schedule
                         this.parseSchedule()
                     } else {
+                        this.fileType = FileType.TeamList
                         this.parseTeamList();
                     }
                 }
@@ -79,7 +81,6 @@ export class DataUpload {
     }
 
     private parseSchedule() {
-        this.fileType = FileType.Schedule
         this.parser.parseTournamentData(this.content).subscribe((data: any) => {
             if(data['error']){
                 this.logger.error(`Parsing of Schedule file failed.\n${data['error']}.`)
@@ -100,7 +101,6 @@ export class DataUpload {
     }
 
     private parseTeamList() {
-        this.fileType = FileType.TeamList
         this.parser.parseTeams(this.content).subscribe((data: any) => {
             if(data['error']){
                 this.logger.error(`Parsing of teams file failed.\n${data['error']}.`)
