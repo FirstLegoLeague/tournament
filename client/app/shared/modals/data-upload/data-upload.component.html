@@ -1,13 +1,13 @@
-<div id="tournament-data-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal
+<div id="data-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal
      data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-    <h2>Import tournament schedule</h2>
+    <h2>Import tournament data</h2>
     <div class="dimmer">
         <div class="big loader"></div>
     </div>
 
     <file-drop class="expanded button" *ngIf="!data" [ngClass]="{ 'hollow': !fileHovering }"
                (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop
-        your Tournament Scheduler CSV file here
+        your CSV file here
     </file-drop>
 
     <div class="grid-x align-center button-group">
@@ -57,12 +57,21 @@
                     </tr>
                 </table>
             </div>
-
         </div>
-
-
+        
     </div>
 
-    <button id="tournament-data-close-button" (click)="clearModal()" class="close-button" data-close aria-label="Close modal" type="button">
+    <table *ngIf="teams">
+        <tr>
+          <th>Number</th>
+          <th>Name</th>
+        </tr>
+        <tr *ngFor="let team of teams">
+          <td>{{team.number}}</td>
+          <td>{{team.name}}</td>
+        </tr>
+    </table>
+
+    <button id="data-close-button" class="close-button" (click)="clearModal()" data-close aria-label="Close modal" type="button">
         <span aria-hidden="true">&times;</span>
     </button>
