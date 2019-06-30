@@ -17,7 +17,6 @@ describe('DataUpload', () => {
     .compileComponents()
     .catch(err => handler.handleError(err))
     .then(() => logger.error('Could not compile components'))
-    .catch(() => 'Obligatory catch')
   }))
 
   beforeEach(() => {

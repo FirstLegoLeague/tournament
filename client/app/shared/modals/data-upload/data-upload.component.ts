@@ -22,7 +22,11 @@ export class DataUpload {
   public teams: Array<Team>
   public fileType: FileType
 
-  constructor (private parser: ParserService, private teamsService: TeamsService, private tournamentDataService: TournamentDataService, private notifications: Notifications, private logger: LoggerService) {
+  constructor (private parser: ParserService,
+              private teamsService: TeamsService,
+              private tournamentDataService: TournamentDataService,
+              private notifications: Notifications,
+              private logger: LoggerService) {
   }
 
   public dropped (event: UploadEvent) {
@@ -80,7 +84,8 @@ export class DataUpload {
   }
 
   private parseSchedule () {
-    this.parser.parseTournamentData(this.content).subscribe((data: any) => {
+    this.parser.parseTournamentData(this.content)
+    .subscribe((data: any) => {
       if (data['error']) {
         this.logger.error(`Parsing of Schedule file failed.\n${data['error']}.`)
         this.notifications.error(`Parsing of Schedule file failed.\n${data['error']}.`)
@@ -100,7 +105,8 @@ export class DataUpload {
   }
 
   private parseTeamList () {
-    this.parser.parseTeams(this.content).subscribe((data: any) => {
+    this.parser.parseTeams(this.content)
+    .subscribe((data: any) => {
       if (data['error']) {
         this.logger.error(`Parsing of teams file failed.\n${data['error']}.`)
         this.notifications.error(`Parsing of teams file failed.\n${data['error']}.`)
@@ -118,12 +124,14 @@ export class DataUpload {
   }
 
   private uploadSchedule () {
-    this.tournamentDataService.upload(this.content).subscribe(() => {
+    this.tournamentDataService.upload(this.content)
+    .subscribe(() => {
       this.logger.info('Schedule file imported')
       this.notifications.success('Schedule file imported')
       this.close()
       this.loading = false
-      this.tournamentDataService.reload().subscribe()
+      this.tournamentDataService.reload()
+      .subscribe()
     }, error => {
       this.logger.error('Schedule file import failed:' + error)
       this.notifications.error('Schedule file import failed')
@@ -133,12 +141,14 @@ export class DataUpload {
   }
 
   private uploadTeamList () {
-    this.teamsService.uploadBatch(this.content).subscribe(() => {
+    this.teamsService.uploadBatch(this.content)
+    .subscribe(() => {
       this.logger.info('Teams imported')
       this.notifications.success('Teams imported')
       this.close()
       this.loading = false
-      this.tournamentDataService.reload().subscribe()
+      this.tournamentDataService.reload()
+      .subscribe()
     }, error => {
       this.logger.error('Teams import failed:' + error)
       this.notifications.error('Teams import failed')
