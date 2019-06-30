@@ -2,7 +2,27 @@
     <li><tournament-status></tournament-status></li>
 
     <li [ngClass]="{'disabled': hasData}">
-        <a class="button" data-open="data-upload">Import</a>
+        <a class="button">Import</a>
+        <ul class="menu">
+            <li class="grid-x grid-padding-x">
+                <div class="cell small-2" style="align-items: center;">
+                    <span data-tooltip class="top" tabindex="2"
+                          title="Import Team Tournament Schedule CSV Export file"><i class="far fa-question-circle"></i></span>
+                </div>
+                <div class="cell small-10">
+                    <a data-open="tournament-data-upload">Import schedule file</a>
+                </div>
+            </li>
+            <li class="grid-x grid-padding-x">
+                <div class="cell small-2" style="align-items: center;">
+                <span data-tooltip class="top" tabindex="2" title="Import CSV file with team number and name columns"><i
+                        class="far fa-question-circle"></i></span>
+                </div>
+                <div class="cell small-10">
+                    <a data-open="teams-upload">Import team list</a>
+                </div>
+            </li>
+        </ul>
     </li>
 
     <li>
