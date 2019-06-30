@@ -11,8 +11,7 @@ import { GlobalActions } from './global-actions/global-actions.component'
 import { TeamsComponent } from './pages/teams/teams.component'
 import { MatchesComponent } from './pages/matches/matches.component'
 
-import { TeamsUpload } from './shared/modals/teams-upload/teams-upload.component'
-import { TournamentDataUpload } from './shared/modals/tournament-data-upload/tournament-data-upload.component'
+import { DataUpload } from './shared/modals/data-upload/data-upload.component'
 import { ImageUploadComponent } from './shared/modals/image-upload/image-upload.component'
 import { ModelEdit } from './shared/modals/model-edit/model-edit.component'
 import { ModelDelete } from './shared/modals/model-delete/model-delete.component'
@@ -43,8 +42,7 @@ const appRoutes = [
     GlobalActions,
     TeamsComponent,
     MatchesComponent,
-    TeamsUpload,
-    TournamentDataUpload,
+    DataUpload,
     ImageUploadComponent,
     ModelEdit,
     ModelDelete,
