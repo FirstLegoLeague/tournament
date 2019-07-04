@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { TeamsUpload } from './teams-upload.component'
+import { DataUpload } from './data-upload.component'
 
-describe('TeamsUpload', () => {
-  let component: TeamsUpload
-  let fixture: ComponentFixture<TeamsUpload>
+describe('DataUpload', () => {
+  let component: DataUpload
+  let fixture: ComponentFixture<DataUpload>
 
   beforeEach(async(() => {
     return TestBed.configureTestingModule({
-      declarations: [ TeamsUpload ]
+      declarations: [DataUpload]
     })
     .compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TeamsUpload)
+    fixture = TestBed.createComponent(DataUpload)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
