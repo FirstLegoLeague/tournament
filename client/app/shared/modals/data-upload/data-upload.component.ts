@@ -1,10 +1,11 @@
 import { Component } from '@angular/core'
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop'
 
+import { FileType } from '../../enums/file-type'
+import { Team } from '../../models/team'
 import { ParserService } from '../../services/parser.service'
 import { TournamentDataService } from '../../services/tournament-data.service'
 import { TeamsService } from '../../services/teams.service'
-import { Team } from '../../models/team'
 import { Notifications } from '../../services/notifications.service'
 import { LoggerService } from '../../services/logger.service'
 

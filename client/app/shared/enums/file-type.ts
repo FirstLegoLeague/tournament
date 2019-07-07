@@ -1,4 +1,4 @@
-enum FileType {
+export enum FileType {
     Schedule,
     TeamList
 }
