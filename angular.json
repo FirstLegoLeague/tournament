@@ -23,9 +23,11 @@
               "client/assets"
             ],
             "styles": [
-              "client/styles.css"
+              "node_modules/@first-lego-league/user-interface/current/app.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@first-lego-league/user-interface/current/app.js"
+            ]
           },
           "configurations": {
             "production": {

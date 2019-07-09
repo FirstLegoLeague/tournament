@@ -1,41 +1,22 @@
-<div class="top-bar secondary">
-
-    <div class="top-bar-right">
-        <ul class="menu">
-            <li>
-                <button class="button" data-open="image-upload"><i class="fas fa-image"></i> Add Image
-                </button>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<div class="top-bar-page grid-x grid-padding-x grid-padding-y">
-    <div class="large-10 large-offset-1 cell">
-        <div class="callout" [ngClass]="{'loading':loading}">
-
-            <div class="dimmer">
-                <div class="big loader"></div>
+<div class="ui one column padded grid">
+    <div class="column">
+        <div class="ui centered cards">
+            <div class="card" *ngFor="let image of images()" [ngClass]="{'loading':loading}">
+                <div class="image content">
+                    <img src="{{image.image}}">
+                </div>
+                <div class="extra content">
+                    <i class="ui red link trash right floated icon"
+                       (click)="setDeleteModel(image)">
+                    </i>
+                    <div class="header">{{image.name}}</div>
+                </div>
             </div>
-
-            <div [ngClass]="{'hide':loading}">
-                <div class="grid-x small-1 medium-up-3">
-                    <div *ngFor="let image of images()" class="cell grid-y">
-                        <div class="cell">
-                            <div class="card grid-y image-container">
-                                <div class="card-divider cell shrink">
-                                    {{image.name}}
-                                </div>
-                                <div class="cell auto align-center">
-                                    <img src="{{image.image}}">
-                                </div>
-                                <div class="card-section cell shrink">
-                                    <button class="button trash-button" data-open="model-delete"
-                                            (click)="setDeleteModel(image)"><i
-                                            class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        </div>
+            <div class="link card">
+                <div class="content">
+                    <div class="ui icon header">
+                        <i class="ui huge image icon"></i>
+                        Add image
                     </div>
                 </div>
             </div>
