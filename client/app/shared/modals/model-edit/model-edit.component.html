@@ -5,7 +5,7 @@
   </div>
 
   <div *ngIf="model()">
-    <div *ngFor="let field of model().fields()">
+    <div *ngFor="let field of model().fields(); trackBy: trackByField">
       <label>{{field.display}}
         <input *ngIf="isInputType(field.type)"
                 type="{{field.type}}"
