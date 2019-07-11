@@ -1,7 +1,32 @@
-#matches .actions .button {
-	margin: 0;
+table.ui.scrollable.table {
+    height: 100%;
+    display: block;
+    empty-cells: show;
+    border-spacing: 0;
 }
 
-.top-bar .menu > :not(:first-child) {
-    margin-left: 1em;
+table.ui.scrollable.table thead {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 2.3rem;
+}
+
+table.ui.scrollable.table tbody {
+    display: block;
+    position: relative;
+    width: 100%;
+    overflow-y: scroll;
+    height: calc(100% - 2.3rem);
+}
+
+table.ui.scrollable.table tr {
+    width: 100%;
+    display: flex;
+}
+
+table.ui.scrollable.table tr {
+    flex-basis: 100%;
+    flex-grow: 1;
+    display: block;
 }

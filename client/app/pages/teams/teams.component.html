@@ -1,26 +1,54 @@
-<div class="top-bar secondary">
-
-    <div class="top-bar-left">
-        <ul class="menu">
-            <li>
+<div class="ui page sub menu grid">
+    <div class="row">
+        <div class="eight wide column">
+            <div class="ui fluid input">
                 <input type="text" id="search-filter" [(ngModel)]="filter"
                        placeholder="Search for team number using # or for team name by typing">
-            </li>
-        </ul>
-    </div>
-
-    <div class="top-bar-right">
-        <ul class="menu">
-            <li>
-                <button class="button" data-open="model-edit" (click)="setEditModel(newTeam())"><i
-                        class="fas fa-plus-square"></i> Team
-                </button>
-            </li>
-        </ul>
+            </div>
+        </div>
+        <div class="eight wide right aligned column">
+            <button class="ui primary button" (click)="setEditModel(newTeam())">
+                <i class="ui file alternate outline icon"></i> Team
+            </button>
+        </div>
     </div>
 </div>
 
+<div class="ui container">
+    <div class="ui padded grid" id="teams">
+        <div class="column">
+            <div class="ui segment">
+                <table class="ui single line very basic scrollable table">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Name</th>
+                            <th *ngIf="showAffiliation()">Affiliation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let team of (teams() | teamPipe: filter)">
+                            <td>{{team.number}}</td>
+                            <td [innerHTML]="team.name | boldPartString: filter"></td>
+                            <td *ngIf="showAffiliation()">{{team.affiliation}}</td>
+                            <td class="actions">
+                                <div class="button" data-open="model-edit" (click)="setEditModel(team)">
+                                    <i class="fa fa-edit"></i>
+                                </div>
+                                <div class="alert button" data-open="model-delete" (click)="setDeleteModel(team)">
+                                    <i class="fa fa-trash-alt"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- 
 <div class="top-bar-page grid-x grid-padding-x grid-padding-y">
     <div class="large-10 large-offset-1 cell">
         <div [ngClass]="{'loading':loading}">
@@ -55,3 +83,4 @@
         </div>
     </div>
 </div>
+ -->
