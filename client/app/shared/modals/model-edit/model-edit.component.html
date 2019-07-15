@@ -4,7 +4,7 @@
   </div>
 
   <div class="content" *ngIf="model()">
-    <div class="ui form">
+    <div class="ui inverted form">
       <div class="field" *ngFor="let field of model().fields()">
         <label>{{field.display}}</label>
         <input *ngIf="isInputType(field.type)"

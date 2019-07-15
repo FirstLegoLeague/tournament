@@ -2,13 +2,13 @@
   <i class="ui clipboard icon"></i>
   <span class="hover text">Manage tables</span>
 </div>
-<sm-modal class="basic tables-modal small" [ngClass]="{ 'loading': loading }" #tablesModal>
+<sm-modal class="basic tables-modal small" [ngClass]="{ 'loading': loading }" title="Manage tables" #tablesModal>
   <modal-content>
-    <div class="ui header">Manage tables</div>
     <div *ngIf="tables().length === 0">
       Set names for different tournament tables.
-      <br>
-      These names will appear on the scoresheets
+      <br/>
+      These names will appear on the scoresheets.
+      <br/>
     </div>
 
     <div class="ui form">
