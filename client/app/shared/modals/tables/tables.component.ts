@@ -3,6 +3,8 @@ import { TablesService } from '../../services/tables.service'
 import { Notifications } from '../../services/notifications.service'
 import { Table } from '../../models/table'
 
+declare var jQuery: any
+
 @Component({
   selector: 'tables',
   templateUrl: './tables.component.html',
@@ -60,8 +62,7 @@ export class Tables implements OnInit {
   }
 
   close () {
-    let closeButton: HTMLElement = document.querySelector('#tables [data-close]')
-    closeButton.click()
+    jQuery('.tables-modal').modal('hide')
   }
 
 }

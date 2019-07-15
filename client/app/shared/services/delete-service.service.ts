@@ -8,6 +8,8 @@ import { Match } from '../models/match'
 import { Team } from '../models/team'
 import { Image } from '../models/image'
 
+declare var jQuery: any
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +21,7 @@ export class DeleteService {
 
   setDeleteModel (model) {
     this.deleteModel = model
+    jQuery('#delete-modal').modal().modal('show')
   }
 
   getDeleteModel () {

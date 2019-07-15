@@ -5887,6 +5887,11 @@ neo-async@^2.5.0, neo-async@^2.6.0:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
 
+ng-semantic@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/ng-semantic/-/ng-semantic-1.1.13.tgz#4a82560a5750fb1211cb12683edacd7ce5690a85"
+  integrity sha1-SoJWCldQ+xIRyxJoPtrNfOVpCoU=
+
 ng2-file-upload@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/ng2-file-upload/-/ng2-file-upload-1.3.0.tgz#d90f8f568f62383462175f8bdfa0096b131f277a"

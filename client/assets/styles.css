@@ -1,0 +1,28 @@
+.modal > .close.icon {
+    display: none;
+}
+
+file-drop.segment {
+	height: 18rem;
+}
+
+file-drop.segment > .drop-zone, #image-upload file-drop > .drop-zone {
+	margin: 0;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+}
+
+file-drop.segment > .drop-zone > .content {
+	height: 100%;
+}
+
+file-drop.segment.filled {
+	height: 60vh;
+}
+
+file-drop.segment.filled .content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-items: start;
+}

@@ -1,35 +1,39 @@
-<div id="tables" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-  <h2>Manage tables</h2>
-  <div class="dimmer">
-    <div class="big loader"></div>
-  </div>
+<div class="icon link item" (click)="tablesModal.show()">
+  <i class="ui clipboard icon"></i>
+  <span class="hover text">Manage tables</span>
+</div>
+<sm-modal class="basic tables-modal small" [ngClass]="{ 'loading': loading }" #tablesModal>
+  <modal-content>
+    <div class="ui header">Manage tables</div>
+    <div *ngIf="tables().length === 0">
+      Set names for different tournament tables.
+      <br>
+      These names will appear on the scoresheets
+    </div>
 
-  <div class="grid-x grid-padding-y">
-      <div *ngIf="tables().length === 0" class="cell grid-x grid-padding-x">
-          Set names for different tournament tables.
-          <br>
-          These names will appear on the scoresheets
-      </div>
-
-    <div *ngFor="let table of tables(); index as index" id="table-{{index}}" class="cell grid-x grid-padding-x">
-      <input class="cell small-10" (keyup)="tableChanged(table)" [(ngModel)]="table.tableName">
-      <div class="cell small-2">
-        <div class="alert clear button" (click)="removeTable(table)">
-          <i class="fa fa-times"></i>
+    <div class="ui form">
+      <div *ngFor="let table of tables(); index as index" id="table-{{index}}" class="field">
+        <div class="ui fluid action input">
+          <input (keyup)="tableChanged(table)" [(ngModel)]="table.tableName">
+          <div class="ui red icon button" (click)="removeTable(table)">
+            <i class="ui trash icon"></i>
+            <div class="hover text">Remove table</div>
+          </div>
         </div>
       </div>
+      <div class="cell grid-x grid-padding-x">
+        <input class="cell small-10" (keyup)="tableChanged(newTable)" [(ngModel)]="newTable.tableName">
+      </div>
     </div>
-    <div class="cell grid-x grid-padding-x">
-      <input class="cell small-10" (keyup)="tableChanged(newTable)" [(ngModel)]="newTable.tableName">
+  </modal-content>
+  <modal-actions>
+    <div class="ui primary inverted button" (click)="save()">
+      <i class="ui save icon"></i>
+      Save
     </div>
-  </div>
-
-  <div class="grid-x align-center button-group">
-    <div class="secondary button" (click)="cancel()">Cancel</div>
-    <div class="button" (click)="save()">Save changes</div>
-  </div>
-
-  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
+    <div class="ui red inverted button" (click)="close()">
+      <i class="ui trash icon"></i>
+      Cancel
+    </div>
+  </modal-actions>
+</sm-modal>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { FileDropModule } from 'ngx-file-drop'
+import { NgSemanticModule } from 'ng-semantic'
 
 import { AppComponent } from './app.component'
 import { NavigationComponent } from './navigation/navigation.component'
@@ -12,13 +13,13 @@ import { TeamsComponent } from './pages/teams/teams.component'
 import { MatchesComponent } from './pages/matches/matches.component'
 
 import { DataUpload } from './shared/modals/data-upload/data-upload.component'
-import { ImageUploadComponent } from './shared/modals/image-upload/image-upload.component'
 import { ModelEdit } from './shared/modals/model-edit/model-edit.component'
 import { ModelDelete } from './shared/modals/model-delete/model-delete.component'
 import { Tables } from './shared/modals/tables/tables.component'
 import { TournamentStatusComponent } from './global-actions/tournament-status/tournament-status.component'
 import { TournamentSettingsComponent } from './pages/tournament-settings/tournament-settings.component'
 import { ImagesComponent } from './pages/images/images.component'
+import { ImageUploadComponent } from './pages/images/image-upload/image-upload.component'
 import { RequestInterceptor } from './shared/services/request-interceptor'
 import { ErrorLogger } from './shared/services/error-logger'
 import { TeamPipe } from './pages/teams/pipes/team.pipe'
@@ -58,6 +59,7 @@ const appRoutes = [
     UpperCaseFirstLetterPipe
   ],
   imports: [
+    NgSemanticModule,
     FormsModule,
     BrowserModule,
     HttpClientModule,

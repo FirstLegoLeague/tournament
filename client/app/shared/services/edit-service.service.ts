@@ -5,6 +5,8 @@ import { MatchesService } from './matches.service'
 import { Match } from '../models/match'
 import { Team } from '../models/team'
 
+declare var jQuery: any
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +18,7 @@ export class EditService {
 
   setEditModel (model) {
     this.editModel = Object.create(model)
+    jQuery('#edit-modal').modal().modal('show')
   }
 
   getEditModel () {

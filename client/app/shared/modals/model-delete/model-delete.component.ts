@@ -1,7 +1,11 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
+import { SemanticModalComponent } from 'ng-semantic'
+
 import { Deletable, DeletableModalService } from '../../models/interfaces/modal-model'
 import { Notifications } from '../../services/notifications.service'
 import { DeleteService } from '../../services/delete-service.service'
+
+declare var jQuery: any
 
 @Component({
   selector: 'model-delete',
@@ -11,6 +15,7 @@ import { DeleteService } from '../../services/delete-service.service'
 export class ModelDelete {
 
   loading: boolean
+  @ViewChild("deleteModal") modal: SemanticModalComponent;
 
   constructor (private deleteService: DeleteService, private notifications: Notifications) {
   }
@@ -39,9 +44,12 @@ export class ModelDelete {
     })
   }
 
+  open () {
+    jQuery('#delete-modal').modal().modal('show')
+  }
+
   close () {
-    let closeButton: HTMLElement = document.querySelector('#model-delete [data-close]')
-    closeButton.click()
+    jQuery('#delete-modal').modal().modal('hide')
   }
 
   reload () {

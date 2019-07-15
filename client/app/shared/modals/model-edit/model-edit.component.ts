@@ -3,6 +3,8 @@ import { Editable, EditableModalService } from '../../models/interfaces/modal-mo
 import { Notifications } from '../../services/notifications.service'
 import { EditService } from '../../services/edit-service.service'
 
+declare var jQuery: any
+
 @Component({
   selector: 'model-edit',
   templateUrl: './model-edit.component.html',
@@ -37,8 +39,7 @@ export class ModelEdit {
   }
 
   close () {
-    let closeButton: HTMLElement = document.querySelector('#model-edit [data-close]')
-    closeButton.click()
+    jQuery('#delete-modal').modal().modal('hide')
   }
 
   reload () {
