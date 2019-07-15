@@ -97,7 +97,7 @@ export class DataUpload implements OnInit {
     this.teams = null
   }
 
-  public timeString(dateString) {
+  public timeString (dateString) {
     return dateString.match(/T(.+)Z/)[1]
   }
 
