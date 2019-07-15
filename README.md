@@ -10,52 +10,59 @@ Data like  teams, matches, table names and more.
 
 ## The API
 
-The API is REST based, And those are the available models.
- - team
-    ```json
-   {
-        number: number,
-        name: string,
-        affiliation: string, // optional
-        cityState: string, // optional
-        country: string, // optional
-        coach1: string, // optional
-        coach2: string, // optional
-        judgingGroup: number // optional
-        pitNumber: number, // optional
-        pitLocation: number, // optional
-        translationNeeded: boolean // optional
-    }
-    ```
- - match
-     ```json
+The API is REST based, The available models are detailed below.
+
+- team
+
+```json
+{
+    number: number,
+    name: string,
+    affiliation: string, // optional
+    cityState: string, // optional
+    country: string, // optional
+    coach1: string, // optional
+    coach2: string, // optional
+    judgingGroup: number // optional
+    pitNumber: number, // optional
+    pitLocation: number, // optional
+    translationNeeded: boolean // optional
+}
+```
+
+- match
+
+```json
+{
+  matchId: number,
+  startTime: date,
+  endTime: date,
+  stage: string,
+  matchTeams: [
     {
-      matchId: number,
-      startTime: date,
-      endTime: date,
-      stage: string,
-      matchTeams: [
-        {
-          teamNumber: number,
-          tableId: number
-        }
-      ]
+      teamNumber: number,
+      tableId: number
     }
-    ```
- - table
-    ```json
-    {
-     tableId: number,
-     tableName: string
-    }
-    ```
- 
- And this are the available endpoints for those models:
- - GET ```/model/all```    - return all the objects
- - GET ```/model/:id```    - return the object with that id
- - POST ```/model```       - add a new object (as described later)
- - PUT ```/model/:id```    - edit the object with that id
- - DELETE ``/model/:id``   - delete the object with that id
+  ]
+}
+```
+
+- table
+
+```json
+{
+  tableId: number,
+  tableName: string
+}
+```
+
+And this are the available endpoints for those models:
+
+- GET ```/model/all```    - return all the objects
+- GET ```/model/:id```    - return the object with that id
+- POST ```/model```       - add a new object (as described later)
+- PUT ```/model/:id```    - edit the object with that id
+- DELETE ``/model/:id``   - delete the object with that id
 
 There are 2 more APIs available, the Images API and the Tournament Settings API
 
@@ -65,23 +72,28 @@ Used to retrieve images for the Display.
 Please be noted that the images are retrieved and sent with Base64 encoding.
 
 The endpoint is ``/image`` and the available options are:
-   - GET ``/all`` - returns an array of all the images.
-   - GET ``/:imageName`` - returns the image with the specified name The response structure: 
-        ```
-        {
-           imageName: image-name,
-          image: base64 encoding image 
-        }
-        ```
-   - POST ``/`` - Used to add a new image. 
-    Body with that structure: 
-        ```
-        {
-          imageName: image-name,
-          image: 
-        }
-        ```
-   - DELETE ``/:imageName`` - Used to delete an image
+
+- GET ``/all`` - returns an array of all the images.
+- GET ``/:imageName`` - returns the image with the specified name The response structure:
+
+```json
+{
+  imageName: image-name,
+  image: base64 encoding image
+}
+```
+
+- POST ``/`` - Used to add a new image.
+Body with that structure:
+
+```json
+{
+  imageName: image-name,
+  image:
+}
+```
+
+- DELETE ``/:imageName`` - Used to delete an image
 
 ### The Tournament Settings API
 
@@ -91,14 +103,28 @@ There is no option to add a setting with this api. This API is for reading and u
 - PUT ``/settings/:settingName`` - Updates the setting with settingName, The body of the request:
 
 ```
+
   {
      setting: settingContent
   }
+
 ```
 
 **Be aware that reading the data is available for all, but updating/deleting/inserting only for certain users.**
 
  ---------------------------------------
+
+## Development environment
+
+This module uses the Yarn package manager. To run the module in a development environment
+
+- type `yarn` to install all the dependencies of the project (module).
+- type `yarn start` to start the server. The server listens on port 3000.
+
+Two points to note:
+
+1. MongoDB must be available on your system PATH i.e. PATH must include the path to `mongod.exe`. MongoDb is started by `yarn start` so it must not be running already.
+2. The `mhub` server is started by `yarn start`. It too must not be already running (which will happen if an installed version of the TMS Scoring Software is running).
 
 ## Publishing to NPM
 
@@ -116,7 +142,7 @@ Notes:
 
 ## Adding new version to the `launcher`
 
-Please see the [Launcher README](https://github.com/FirstLegoLeague/Launcher/blob/readme-update/README.md#module-updates) for instructions on how to include your update in the `launcher` build.
+Please see the [launcher README](https://github.com/FirstLegoLeague/Launcher/blob/readme-update/README.md#module-updates) for instructions on how to include your update in the `launcher` build.
 
 ## Contributing
 
@@ -132,4 +158,4 @@ The best way to work on a feature or a bug is to follow these steps:
 - work
 - test
 - create a pull request to merge your development branch into a branch in the base repo
-- we will review your pull request, when ok, we will merge it into master 
+- we will review your pull request, when ok, we will merge it into master
