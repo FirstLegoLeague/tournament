@@ -61,6 +61,10 @@ export class Tables implements OnInit {
     })
   }
 
+  open () {
+    jQuery('.tables-modal').modal().modal('show')
+  }
+
   close () {
     jQuery('.tables-modal').modal('hide')
   }

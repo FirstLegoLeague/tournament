@@ -1,9 +1,9 @@
-<a class="icon link item" [ngClass]="{'disabled': hasData}" (click)="dataUpload.show()">
+<a class="icon link item" [ngClass]="{'disabled': hasData}" (click)="open()">
     <i class="ui upload icon"></i>
     <div class="hover text">Import</div>
 </a>
-<sm-modal class="basic data-upload small" [ngClass]="{ 'loading': loading }" #dataUpload>
-    <modal-content>
+<div class="ui basic data-upload small modal" [ngClass]="{ 'loading': loading }">
+    <div class="content">
         <file-drop class="ui placeholder segment" [ngClass]="{ 'hollow': !fileHovering, 'filled': data || teams }"
                (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">
             <div class="ui icon header" *ngIf="!teams && !data">
@@ -77,13 +77,13 @@
                 </div>
             </div>
         </file-drop>
-    </modal-content>
-    <modal-actions>
+    </div>
+    <div class="actions">
         <div class="ui base primary inverted button" (click)="upload($event)" [ngClass]="{ 'disabled': !data && !teams }">
             <i class="ui upload icon"></i>Import
         </div>
         <div class="ui base red inverted close button">
             <i class="ui close icon"></i>Cancel
         </div>
-    </modal-actions>
-</sm-modal>
+    </div>
+</div>

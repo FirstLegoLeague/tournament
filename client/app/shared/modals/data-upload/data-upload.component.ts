@@ -84,6 +84,10 @@ export class DataUpload implements OnInit {
     this.fileHovering = false
   }
 
+  public open () {
+    jQuery('.data-upload').modal().modal('show')
+  }
+
   public close () {
     jQuery('.data-upload').modal('hide')
   }

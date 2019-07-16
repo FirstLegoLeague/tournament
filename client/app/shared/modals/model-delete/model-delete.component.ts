@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core'
-import { SemanticModalComponent } from 'ng-semantic'
 
 import { Deletable, DeletableModalService } from '../../models/interfaces/modal-model'
 import { Notifications } from '../../services/notifications.service'
@@ -15,7 +14,6 @@ declare var jQuery: any
 export class ModelDelete {
 
   loading: boolean
-  @ViewChild('deleteModal') modal: SemanticModalComponent
 
   constructor (private deleteService: DeleteService, private notifications: Notifications) {
   }

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { FileDropModule } from 'ngx-file-drop'
-import { NgSemanticModule } from 'ng-semantic'
 
 import { AppComponent } from './app.component'
 import { NavigationComponent } from './navigation/navigation.component'
@@ -59,7 +58,6 @@ const appRoutes = [
     UpperCaseFirstLetterPipe
   ],
   imports: [
-    NgSemanticModule,
     FormsModule,
     BrowserModule,
     HttpClientModule,
