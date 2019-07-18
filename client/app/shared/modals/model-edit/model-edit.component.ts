@@ -49,4 +49,8 @@ export class ModelEdit {
     return ['text', 'time'].some(type => type === checkedType)
   }
 
+  trackByDisplay (index, field) {
+    return field.display
+  }
+
 }
