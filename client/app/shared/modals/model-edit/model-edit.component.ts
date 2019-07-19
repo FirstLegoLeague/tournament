@@ -39,7 +39,7 @@ export class ModelEdit {
   }
 
   close () {
-    jQuery('#delete-modal').modal().modal('hide')
+    jQuery('#edit-modal').modal().modal('hide')
   }
 
   reload () {
