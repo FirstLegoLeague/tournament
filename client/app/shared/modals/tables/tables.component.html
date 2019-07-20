@@ -23,12 +23,12 @@
           </div>
         </div>
       </div>
-      <div class="cell grid-x grid-padding-x">
-        <input class="cell small-10" (keyup)="tableChanged(newTable)" [(ngModel)]="newTable.tableName">
+      <div class="field">
+        <input (keyup)="tableChanged(newTable)" [(ngModel)]="newTable.tableName">
       </div>
     </div>
   </div>
-  <div class="action">
+  <div class="actions">
     <div class="ui primary inverted button" (click)="save()">
       <i class="ui save icon"></i>
       Save

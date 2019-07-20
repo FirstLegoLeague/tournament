@@ -22,10 +22,10 @@
     "node": ">=8.x"
   },
   "dependencies": {
-    "@first-lego-league/ms-auth": "1.4.1",
-    "@first-lego-league/ms-correlation": "1.0.1",
-    "@first-lego-league/ms-logger": "2.0.0",
-    "@first-lego-league/user-interface": "2.0.3",
+    "@first-lego-league/ms-auth": "^1.4.1",
+    "@first-lego-league/ms-correlation": "^1.0.1",
+    "@first-lego-league/ms-logger": "^2.0.0",
+    "@first-lego-league/user-interface": "^2.0.3",
     "base64-img-promise": "^1.0.5",
     "bluebird": "^3.5.5",
     "body-parser": "^1.18.3",

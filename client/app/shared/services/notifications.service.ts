@@ -10,7 +10,6 @@ export class Notifications {
   }
 
   notify (message: string, level: string) {
-    // tslint:disable-next-line:no-unused-expression
     toastr[level](message)
   }
 
