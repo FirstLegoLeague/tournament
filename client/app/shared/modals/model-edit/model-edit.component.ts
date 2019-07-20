@@ -41,7 +41,7 @@ export class ModelEdit {
   }
 
   open () {
-   this.modal.open()
+    this.modal.open()
   }
 
   close () {

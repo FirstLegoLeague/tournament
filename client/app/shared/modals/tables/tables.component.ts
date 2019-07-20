@@ -63,7 +63,7 @@ export class Tables implements OnInit {
   }
 
   open () {
-   this.modal.open()
+    this.modal.open()
   }
 
   close () {

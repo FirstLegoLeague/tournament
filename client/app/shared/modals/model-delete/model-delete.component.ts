@@ -44,7 +44,7 @@ export class ModelDelete {
   }
 
   open () {
-   this.modal.open()
+    this.modal.open()
   }
 
   close () {

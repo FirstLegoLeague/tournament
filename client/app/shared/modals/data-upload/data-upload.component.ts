@@ -89,7 +89,7 @@ export class DataUpload implements OnInit {
   }
 
   open () {
-   this.modal.open()
+    this.modal.open()
   }
 
   close () {
