@@ -2,8 +2,7 @@ import { Component } from '@angular/core'
 import { Editable, EditableModalService } from '../../models/interfaces/modal-model'
 import { Notifications } from '../../services/notifications.service'
 import { EditService } from '../../services/edit-service.service'
-
-declare var jQuery: any
+import { ModalsService } from '../../services/modals.service'
 
 @Component({
   selector: 'model-edit',
@@ -14,8 +13,11 @@ declare var jQuery: any
 export class ModelEdit {
 
   loading: boolean
+  modal: any
 
-  constructor (private editModalsService: EditService, private notifications: Notifications) { }
+  constructor (private editModalsService: EditService, private notifications: Notifications, private modalsService: ModalsService) {
+    this.modal = modalsService.modal('edit-modal')
+  }
 
   model () {
     return this.editModalsService.getEditModel()
@@ -38,8 +40,12 @@ export class ModelEdit {
     })
   }
 
+  open () {
+   this.modal.open()
+  }
+
   close () {
-    jQuery('#edit-modal').modal().modal('hide')
+    this.modal.close()
   }
 
   reload () {

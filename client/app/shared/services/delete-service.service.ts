@@ -4,24 +4,29 @@ import { TeamsService } from './teams.service'
 import { MatchesService } from './matches.service'
 import { ImagesService } from './images.service'
 import { TournamentDataService } from './tournament-data.service'
+import { ModalsService } from './modals.service'
 import { Match } from '../models/match'
 import { Team } from '../models/team'
 import { Image } from '../models/image'
-
-declare var jQuery: any
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeleteService {
   private deleteModel: Deletable
+  modal: any
 
-  constructor (private teamsService: TeamsService, private matchesServices: MatchesService, private imagesService: ImagesService, private tournamentDataService: TournamentDataService) {
+  constructor (private teamsService: TeamsService,
+               private matchesServices: MatchesService,
+               private imagesService: ImagesService,
+               private tournamentDataService: TournamentDataService,
+               private modalsService: ModalsService) {
+    this.modal = modalsService.modal('delete-modal')
   }
 
   setDeleteModel (model) {
     this.deleteModel = model
-    jQuery('#delete-modal').modal().modal('show')
+    this.modal.open()
   }
 
   getDeleteModel () {

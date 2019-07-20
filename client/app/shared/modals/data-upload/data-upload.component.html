@@ -2,7 +2,7 @@
     <i class="ui upload icon"></i>
     <div class="hover text">Import</div>
 </a>
-<div class="ui basic data-upload small modal" [ngClass]="{ 'loading': loading }">
+<div id="data-upload" class="ui basic small modal" [ngClass]="{ 'loading': loading }">
     <div class="content">
         <file-drop class="ui placeholder segment" [ngClass]="{ 'hollow': !fileHovering, 'filled': data || teams }"
                (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">

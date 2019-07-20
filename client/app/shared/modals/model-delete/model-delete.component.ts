@@ -3,8 +3,7 @@ import { Component, ViewChild } from '@angular/core'
 import { Deletable, DeletableModalService } from '../../models/interfaces/modal-model'
 import { Notifications } from '../../services/notifications.service'
 import { DeleteService } from '../../services/delete-service.service'
-
-declare var jQuery: any
+import { ModalsService } from '../../services/modals.service'
 
 @Component({
   selector: 'model-delete',
@@ -14,8 +13,10 @@ declare var jQuery: any
 export class ModelDelete {
 
   loading: boolean
+  modal: any
 
-  constructor (private deleteService: DeleteService, private notifications: Notifications) {
+  constructor (private deleteService: DeleteService, private notifications: Notifications, private modalsService: ModalsService) {
+    this.modal = modalsService.modal('delete-modal')
   }
 
   model () {
@@ -43,11 +44,11 @@ export class ModelDelete {
   }
 
   open () {
-    jQuery('#delete-modal').modal().modal('show')
+   this.modal.open()
   }
 
   close () {
-    jQuery('#delete-modal').modal().modal('hide')
+    this.modal.close()
   }
 
   reload () {

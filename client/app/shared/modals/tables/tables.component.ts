@@ -2,8 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core'
 import { TablesService } from '../../services/tables.service'
 import { Notifications } from '../../services/notifications.service'
 import { Table } from '../../models/table'
-
-declare var jQuery: any
+import { ModalsService } from '../../services/modals.service'
 
 @Component({
   selector: 'tables',
@@ -14,8 +13,10 @@ export class Tables implements OnInit {
 
   public loading: boolean
   public newTable: Table
+  modal: any
 
-  constructor (private tablesService: TablesService, private notifications: Notifications, private renderer: Renderer2) {
+  constructor (private tablesService: TablesService, private notifications: Notifications, private renderer: Renderer2, private modalsService: ModalsService) {
+    this.modal = modalsService.modal('tables-modal')
     this.newTable = new Table()
   }
 
@@ -62,11 +63,10 @@ export class Tables implements OnInit {
   }
 
   open () {
-    jQuery('.tables-modal').modal().modal('show')
+   this.modal.open()
   }
 
   close () {
-    jQuery('.tables-modal').modal('hide')
+    this.modal.close()
   }
-
 }

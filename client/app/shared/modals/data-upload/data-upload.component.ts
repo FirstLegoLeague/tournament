@@ -10,6 +10,7 @@ import { TeamsService } from '../../services/teams.service'
 import { MatchesService } from '../../services/matches.service'
 import { Notifications } from '../../services/notifications.service'
 import { LoggerService } from '../../services/logger.service'
+import { ModalsService } from '../../services/modals.service'
 
 declare var jQuery: any
 
@@ -27,13 +28,16 @@ export class DataUpload implements OnInit {
   public teams: Array<Team>
   public fileType: FileType
   @Input() public hasData: boolean = true
+  modal: any
 
   constructor (private parser: ParserService,
               private teamsService: TeamsService,
               private matchService: MatchesService,
               private tournamentDataService: TournamentDataService,
               private notifications: Notifications,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private modalsService: ModalsService) {
+    this.modal = modalsService.modal('data-upload')
   }
 
   ngOnInit () {
@@ -84,12 +88,12 @@ export class DataUpload implements OnInit {
     this.fileHovering = false
   }
 
-  public open () {
-    jQuery('.data-upload').modal().modal('show')
+  open () {
+   this.modal.open()
   }
 
-  public close () {
-    jQuery('.data-upload').modal('hide')
+  close () {
+    this.modal.close()
   }
 
   public clearModal () {

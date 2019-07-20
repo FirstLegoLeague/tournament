@@ -2,23 +2,24 @@ import { Injectable } from '@angular/core'
 import { Editable } from '../models/interfaces/modal-model'
 import { TeamsService } from './teams.service'
 import { MatchesService } from './matches.service'
+import { ModalsService } from './modals.service'
 import { Match } from '../models/match'
 import { Team } from '../models/team'
-
-declare var jQuery: any
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditService {
   private editModel: Editable
+  modal: any
 
-  constructor (private teamsService: TeamsService, private matchesServices: MatchesService) {
+  constructor (private teamsService: TeamsService, private matchesServices: MatchesService, private modalsService: ModalsService) {
+    this.modal = modalsService.modal('edit-modal')
   }
 
   setEditModel (model) {
     this.editModel = Object.create(model)
-    jQuery('#edit-modal').modal().modal('show')
+    this.modal.open()
   }
 
   getEditModel () {

@@ -1,4 +1,4 @@
 <a *ngFor="let link of links" class="ui icon item" [ngClass]="{ 'active': page === link.href }" href="{{link.href}}" (click)="loading = link">
-  <i class="ui icon" [ngClass]="iconClass(link)"></i>
+  <i class="ui icon" [ngClass]="loadingOrIconClass(link)"></i>
   <div class="hover text">{{link.title}}</div>
 </a>

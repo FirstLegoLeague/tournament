@@ -27,7 +27,7 @@ export class NavigationComponent implements OnInit {
     }
   }
 
-  iconClass (link) {
+  loadingOrIconClass (link) {
   	return this.loading === link ? 'notched circle loading' : link.icon
   }
 
