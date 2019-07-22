@@ -1,0 +1,468 @@
+openapi: 3.0.0
+info:
+  title: FIRST LEGO League TMS - tournoment module
+  version: 2.0.0
+servers:
+  - url: http://localhost:3000/
+    description: Development server
+paths:
+  /team:
+    post:
+      summary: Creates a new team
+      tags:
+        - team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/team'
+      responses:
+        '200':
+          description: Team created successfully
+  /team/all:
+    get:
+      summary: Get all teams
+      tags:
+        - team
+      responses:
+        '200':
+          description: The teams retrived successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/team'
+  /team/{id}:
+    get:
+      summary: Get team
+      tags:
+        - team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/mongoid'
+      responses:
+        '200':
+          description: The team retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team'
+    put:
+      summary: Edit team
+      tags:
+        - team
+      parameters: 
+        - name: id
+          in: path
+          schema:
+            $ref: '#/components/schemas/mongoid'
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/team'
+      responses:
+        '200':
+          description: Team changed successfully
+    delete:
+      summary: Delete team
+      tags:
+        - team
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/mongoid'
+      responses:
+        '200':
+          description: Team deleted successfully
+  /match:
+    post:
+      summary: Creates a new match
+      tags:
+        - match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/match'
+      responses:
+        '200':
+          description: Match created successfully
+  /match/all:
+    get:
+      summary: Get all matches
+      tags:
+        - match
+      responses:
+        '200':
+          description: The matches retrived successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/match'
+  /match/{id}:
+    get:
+      summary: Get match
+      tags:
+        - match
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/mongoid'
+      responses:
+        '200':
+          description: The match retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/match'
+    put:
+      summary: Edit match
+      tags:
+        - match
+      parameters: 
+        - name: id
+          in: path
+          schema:
+            $ref: '#/components/schemas/mongoid'
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/match'
+      responses:
+        '200':
+          description: The match changed successfully
+    delete:
+      summary: Delete match
+      tags:
+        - match
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/mongoid'
+      responses:
+        '200':
+          description: The match deleted successfully
+  /table:
+    post:
+      summary: Creates a new table
+      tags:
+        - table
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/table'
+      responses:
+        '200':
+          description: The table created successfully
+  /table/all:
+    get:
+      summary: Get all tables
+      tags:
+        - table
+      responses:
+        '200':
+          description: The tables retrived successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/match'
+  /table/{id}:
+    get:
+      summary: Get table
+      tags:
+        - table
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/mongoid'
+      responses:
+        '200':
+          description: The table retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/table'
+    put:
+      summary: Edit table
+      tags:
+        - table
+      parameters: 
+        - name: id
+          in: path
+          schema:
+            $ref: '#/components/schemas/mongoid'
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/table'
+      responses:
+        '200':
+          description: The table changed successfully
+    delete:
+      summary: Delete table
+      tags:
+        - table
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/mongoid'
+      responses:
+        '200':
+          description: The table deleted successfully
+  /image/all:
+    get:
+      summary: Get all images
+      tags:
+        - image
+      responses:
+        '200':
+          description: The images retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+  /image:
+    post:
+      summary: Create a new image
+      tags:
+        - image
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/image'
+      responses:
+        '200':
+          description: The image created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+  /image/{name}:
+    get:
+      summary: Get image
+      tags:
+        - image
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The image retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+    delete:
+      summary: Delete image
+      tags:
+        - image
+      parameters: 
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The image deleted successfully
+  /settings/{settingName}:
+    get:
+      summary: Get setting value
+      tags:
+        - settings
+      parameters:
+        - name: settingName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The setting retrieved successfully
+          content:
+            application/json:
+              schema: {}
+              example: anything
+    delete:
+      summary: Get setting value
+      tags:
+        - settings
+      parameters:
+        - name: settingName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The setting deleted successfully
+components:
+  schemas:
+    team:
+      title: Team
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/mongoid'
+        number:
+          type: integer
+        name:
+          type: string
+        affiliation:
+          type: string
+        cityState:
+          type: string
+        country:
+          type: string
+        coach1:
+          type: string
+        coach2:
+          type: string
+        judgingGroup:
+          type: integer
+        pitNumer:
+          type: integer
+        pitLocation:
+          type: integer
+        translationNeeded:
+          type: boolean
+          default: false
+      required:
+        - _id
+        - number
+        - name
+      example:
+        _id: '5d219761129ec6470be72544'
+        number: 23,
+        name: 'The full info team'
+        affiliation: 'Highschool 1'
+        cityState: 'New York'
+        coach1: 'Jon Snow'
+        coach2: 'Jane Doe'
+        judgingGroup: 1
+        pitNumber: 1
+        pitLocation: 1
+        translationNeeded: true
+    match:
+      title: Match
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/mongoid'
+        matchId:
+          type: integer
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        stage:
+          type: string
+        matchTeams:
+          type: array
+          items:
+            type: object
+            properties:
+              teamNumber:
+                type: integer
+              tableId:
+                type: integer
+            required: 
+              - teamNumber
+              - tableId
+      required: 
+        - _id
+        - matchId
+        - startTime
+        - endTime
+        - stage
+        - matchTeams
+      example:
+        _id: '5d219761129ec6470be72554'
+        matchId: 1
+        startTime: '1970-01-01T07:30:00.000Z'
+        endTime: '1970-01-01T07:35:00.000Z'
+        stage: 'practice'
+        matchTeams:
+          - teamNumber: 10
+            tableId: 0
+          - teamNumber: 3
+            tableId: 1
+    table:
+      title: Table
+      type: object
+      properties:
+        _id:
+          $ref: '#/components/schemas/mongoid'
+        tableId:
+          type: integer
+        tableName:
+          type: string
+      required: 
+        - _id
+        - tableId
+        - tableName
+      example:
+        _id: '5d219761129ec6470be72543'
+        tableId: 1
+        tableName: Blue Table
+    mongoid:
+      title: MongoId
+      type: string
+      format: mongoId
+      pattern: '^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)'
+      readOnly: true
+    image:
+      title: Image
+      type: object
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          format: uri
+      required: 
+        - name
+        - image
+      example: 
+        name: 'FLL-logo.png'
+        image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAAQABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAwQH/8QAKBAAAQMCBAQHAAAAAAAAAAAAAQIDEQQFAAYSIRMUMUEVFiMzUWGx/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQP/xAAfEQEAAAUFAQAAAAAAAAAAAAABAAIDESEEEjFhgfD/2gAMAwEAAhEDEQA/ANKuGYOSvSKbhg0jSU849PslZhv83+jOHbzHbXbp4ch4lZOkOR6al90BXTVHbEPlYliqRVVTlYKt8vOpCuDJiIlO5EbQfjtgU5aqFtU9oUltu0sq4qjr1PLVqJCZgQOm/WNpw0gb74pqGQJSllOe/s+Wj//Z'
+      
+            
