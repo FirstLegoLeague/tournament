@@ -22,7 +22,7 @@ file-drop.segment.filled {
 }
 
 file-drop.segment.filled .content {
-    overflow-y: auto;
-    overflow-x: hidden;
-    align-items: start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-items: start;
 }
