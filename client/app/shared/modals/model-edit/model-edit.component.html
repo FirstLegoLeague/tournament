@@ -5,7 +5,7 @@
 
   <div class="content" *ngIf="model()">
     <div class="ui inverted form">
-      <div class="field" *ngFor="let field of model().fields(); trackBy: trackByField">
+      <div class="field" *ngFor="let field of model().fields(); trackBy: trackByDisplay">
         <label>{{field.display}}</label>
         <input *ngIf="isInputType(field.type)"
                 type="{{field.type}}"

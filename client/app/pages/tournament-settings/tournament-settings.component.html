@@ -1,13 +1,6 @@
 <div class="ui padded grid">
     <div class="column">
         <div class="ui raised text container segment" [ngClass]="{ 'loading': loading }">
-            <div class="ui header">
-                <i class="cogs icon"></i>
-                <div class="content">
-                    Settings
-                </div>
-            </div>
-
             <div *ngIf="!loading">
                 <div class="ui dividing header">Tournament State</div>
                 <div class="ui form">
