@@ -54,7 +54,7 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
-    "@first-lego-league/dev-launcher": "^0.1.2",
+    "@first-lego-league/dev-launcher": "^0.3.0",
     "@first-lego-league/eslint-config": "^1.0.0",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
