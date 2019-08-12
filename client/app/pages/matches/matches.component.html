@@ -1,66 +1,54 @@
-<div class="top-bar secondary">
-
-    <div class="top-bar-left">
-        <ul class="menu">
-            <input type="text" [(ngModel)]="filter" placeholder="Search for team number">
-        </ul>
-    </div>
-
-    <div class="top-bar-right">
-        <ul class="menu">
-            <li>
-                <button class="button" data-open="tables"><i class="fas fa-table"></i> Manage tables</button>
-            </li>
-            <li>
-                <button class="button" data-open="model-edit" (click)="setEditModel(newMatch())"><i
-                        class="fas fa-plus-square"></i> Match
-                </button>
-            </li>
-        </ul>
+<div class="ui page sub menu grid">
+    <div class="row">
+        <div class="eight wide column">
+            <div class="ui fluid input">
+                <input type="text" [(ngModel)]="filter" placeholder="Search for team number">
+            </div>
+        </div>
+        <div class="eight wide right aligned column">
+            <div class="ui compact icon menu">
+                <tables></tables>
+                <div class="icon link item" (click)="setEditModel(newMatch())">
+                    <i class="ui file alternate outline primary icon"></i>
+                    <span class="hover text">New Match</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-
-<div class="top-bar-page grid-x grid-padding-x grid-padding-y">
-    <div class="large-10 large-offset-1 cell">
-        <div [ngClass]="{'loading':loading}">
-
-            <div class="dimmer">
-                <div class="big loader"></div>
-            </div>
-
-            <div [ngClass]="{'hide':loading}">
-
-                <table id="matches" class="centralized">
-                    <tr>
-                        <th>Id</th>
-                        <th>Stage</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th *ngFor="let table of tables()">
-                            {{table.tableName}} (Table {{table.tableId + 1}})
-                        </th>
-                        <th *ngFor="let missingTable of missingFieldsArray(amountofMissingHeaderFields())"></th>
-                        <th>Action</th>
-                    </tr>
-                    <tr *ngFor="let match of (matches() | teamMatchesPipe: filter)">
-                        <td>{{match.matchId}}</td>
-                        <td>{{match.stage | upperCaseFirstLetter}}</td>
-                        <td>{{match.startTime | date : 'shortTime'}}</td>
-                        <td>{{match.endTime | date : 'shortTime'}}</td>
-                        <td *ngFor="let matchTeam of match.matchTeams"
-                            [innerHTML]="matchTeam.teamNumber | boldPartNumber : filter">
-                        </td>
-                        <td *ngFor="let field of missingFieldsArray(amountOfMissingFields())"></td>
-                        <td class="actions">
-                            <div class="button" data-open="model-edit" (click)="setEditModel(match)">
-                                <i class="fa fa-edit"></i>
-                            </div>
-                            <div class="alert button" data-open="model-delete" (click)="setDeleteModel(match)">
-                                <i class="fa fa-trash-alt"></i>
-                            </div>
-                        </td>
-                    </tr>
+<div class="ui container">
+    <div class="ui padded grid" id="matches">
+        <div class="column">
+            <div class="ui segment">
+                <table class="ui single line very basic scrollable table">
+                    <thead class="center aligned">
+                        <tr>
+                            <th>Stage</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th *ngFor="let table of tables()">
+                                {{table.tableName}} (Table {{table.tableId + 1}})
+                            </th>
+                            <th *ngFor="let missingTable of missingFieldsArray(amountofMissingHeaderFields())"></th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let match of (matches() | teamMatchesPipe: filter)">
+                            <td>{{match.stage | upperCaseFirstLetter}}</td>
+                            <td>{{match.startTime | date : 'shortTime'}}</td>
+                            <td>{{match.endTime | date : 'shortTime'}}</td>
+                            <td *ngFor="let matchTeam of match.matchTeams"
+                                [innerHTML]="matchTeam.teamNumber | boldPartNumber : filter">
+                            </td>
+                            <td *ngFor="let field of missingFieldsArray(amountOfMissingFields())"></td>
+                            <td class="center aligned">
+                                <i class="ui primary edit link icon" (click)="setEditModel(match)"></i>
+                                <i class="ui red trash link icon" (click)="setDeleteModel(match)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

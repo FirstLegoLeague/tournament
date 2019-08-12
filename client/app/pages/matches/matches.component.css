@@ -1,7 +1,11 @@
-#matches .actions .button {
-	margin: 0;
+#matches {
+    height: 100%;
 }
 
-.top-bar .menu > :not(:first-child) {
-    margin-left: 1em;
+#matches > .column {
+    height: 100%;
+}
+
+#matches > .column > .segment {
+    height: 100%;
 }

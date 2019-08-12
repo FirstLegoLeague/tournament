@@ -1,0 +1,12 @@
+<div id="image-upload" [ngClass]="{ 'loading': loading }">
+  <file-drop [ngClass]="{ 'hollow': !fileHovering }" (onFileOver)="fileOver($event)"
+             (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">
+    <div class="ui icon header">
+        <i class="ui huge image icon"></i>
+        Drop image file here
+    </div>
+  </file-drop>
+  <div *ngIf="image">
+    <img src={{this.image.image}}/>
+  </div>
+</div>

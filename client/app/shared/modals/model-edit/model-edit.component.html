@@ -1,30 +1,34 @@
-<div id="model-edit" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-  <h2 *ngIf="model()">Edit {{model().title()}}</h2>
-  <div class="dimmer">
-    <div class="big loader"></div>
+<div id="edit-modal" class="ui small basic modal" [ngClass]="{ 'loading': loading }">
+  <div class="ui header" *ngIf="model()">
+    Edit {{model().title()}}
   </div>
 
-  <div *ngIf="model()">
-    <div *ngFor="let field of model().fields(); trackBy: trackByField">
-      <label>{{field.display}}
+  <div class="content" *ngIf="model()">
+    <div class="ui inverted form">
+      <div class="field" *ngFor="let field of model().fields(); trackBy: trackByDisplay">
+        <label>{{field.display}}</label>
         <input *ngIf="isInputType(field.type)"
                 type="{{field.type}}"
                 value="{{field.get()}}"
                 (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"
-                [disabled]="field.editable == false && model().savedInDB()"/>
-          <select *ngIf="field.type == 'select' && field.options.length > 0"
-                  (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"  >
-              <option *ngFor="let option of field.options" value="{{option.value}}"  [selected]="option.value == field.get()">{{option.display}}</option>
-          </select>
-      </label>
+                [ngClass]="{ 'disabled': field.editable == false && model().savedInDB() }"/>
+        <select *ngIf="field.type == 'select' && field.options.length > 0"
+                (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"  >
+            <option *ngFor="let option of field.options" value="{{option.value}}"  [selected]="option.value == field.get()">{{option.display}}</option>
+        </select>
+        
+    </div>
     </div>
   </div>
 
-  <div class="grid-x align-center button-group">
-    <button class="button" (click)="save()">Save</button>
+  <div class="actions">
+    <div class="ui primary inverted button" (click)="save()">
+      <i class="ui save icon"></i>
+      Save
+    </div>
+    <div class="ui red inverted button" (click)="close()">
+      <i class="ui trash icon"></i>
+      Cancel
+    </div>
   </div>
-
-  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
-    <span aria-hidden="true">&times;</span>
-  </button>
 </div>

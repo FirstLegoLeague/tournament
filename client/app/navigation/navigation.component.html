@@ -1,9 +1,4 @@
-<ul class="menu">
-  <li class="menu-text">Tournament</li>
-  <li *ngFor="let link of links" [ngClass]="{ 'is-active': page === link.href }">
-  	<a href="{{link.href}}" (click)="loading = link">
-  	  <i class="fa" [ngClass]="iconClass(link)"></i>
-       {{link.title}}
-  	</a>
-  </li>
-</ul>
+<a *ngFor="let link of links" class="ui link item" routerLink="{{link.href}}" routerLinkActive="active">
+  <i class="ui icon" [ngClass]="loadingOrIconClass(link)"></i>
+  {{link.title}}
+</a>

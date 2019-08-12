@@ -82,9 +82,6 @@ app.use('/table', crudRouter({
 app.use(authenticationMiddlewareToUse)
 
 app.use(express.static(path.join(__dirname, 'dist/client')))
-// Design files
-app.use('/design', express.static(path.resolve(__dirname, 'node_modules/@first-lego-league/user-interface/current/assets')))
-app.use('/webfonts', express.static(path.resolve(__dirname, 'node_modules/@first-lego-league/user-interface/current/assets/fonts')))
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/client/index.html'))
