@@ -1,77 +1,89 @@
-<div id="data-upload" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal
-     data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-    <h2>Import tournament data</h2>
-    <div class="dimmer">
-        <div class="big loader"></div>
-    </div>
-
-    <file-drop class="expanded button" *ngIf="!data" [ngClass]="{ 'hollow': !fileHovering }"
-               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">Drop
-        your CSV file here
-    </file-drop>
-
-    <div class="grid-x align-center button-group">
-        <button class="button" *ngIf="data" (click)="upload($event)">Import</button>
-    </div>
-
-    <div class="grid-x" *ngIf="data">
-
-        <div id="data-grid" *ngIf="data" class="grid-x">
-            <div class="cell small-3">
-                <table>
-                    <tr>
-                        <th>Tables</th>
-                    </tr>
-                    <tr *ngFor="let table of data.tables">
-                        <td>{{table.tableName}}</td>
-                    </tr>
-                </table>
+<a class="icon link item" [ngClass]="{'disabled': hasData}" (click)="open()">
+    <i class="ui upload icon"></i>
+    <div class="hover text">Import</div>
+</a>
+<div id="data-upload" class="ui basic small modal" [ngClass]="{ 'loading': loading }">
+    <div class="content">
+        <file-drop class="ui placeholder segment" [ngClass]="{ 'hollow': !fileHovering, 'filled': data || teams }"
+               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" (onFileDrop)="dropped($event)">
+            <div class="ui icon header" *ngIf="!teams && !data">
+                <i class="excel file outline icon"></i>
+                Drop your teams list or scheduele file here.
             </div>
-
-            <div class="cell small-9">
-                <table>
+            <table class="ui table" *ngIf="teams">
+                <thead>
                     <tr>
-                        <th>Teams</th>
+                        <th>Number</th>
+                        <th>Name</th>
                     </tr>
-                    <tr *ngFor="let team of data.teams">
+                </thead>
+                <tbody>
+                    <tr *ngFor="let team of teams">
                         <td>{{team.number}}</td>
                         <td>{{team.name}}</td>
                     </tr>
-                </table>
+                </tbody>
+            </table>
+            <div class="ui grid" *ngIf="data">
+                <div class="four wide column">
+                    <table class="ui table">
+                        <thead>
+                            <tr>
+                                <th>Tables</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let table of data.tables">
+                                <td>{{table.tableName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="twelve wide column">
+                    <table class="ui table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Teams</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let team of data.teams">
+                                <td>{{team.number}}</td>
+                                <td>{{team.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="sixteen wide column">
+                    <table class="ui table">
+                        <thead>
+                            <tr>
+                                <th colspan="3">Matches</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let match of data.practiceMatches">
+                                <td>{{match.stage}} {{match.matchId}}</td>
+                                <td>{{timeString(match.endTime)}}</td>
+                                <td>{{timeString(match.endTime)}}</td>
+                            </tr>
+                            <tr *ngFor="let match of data.rankingMatches">
+                                <td>{{match.stage}} {{match.matchId}}</td>
+                                <td>{{timeString(match.endTime)}}</td>
+                                <td>{{timeString(match.endTime)}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-            <div class="cell small-12">
-                <table>
-                    <tr>
-                        <th>Matches</th>
-                    </tr>
-                    <tr *ngFor="let match of data.practiceMatches">
-                        <td>{{match.stage}} {{match.matchId}}</td>
-                        <td>{{timeString(match.endTime)}}</td>
-                        <td>{{timeString(match.endTime)}}</td>
-                    </tr>
-                    <tr *ngFor="let match of data.rankingMatches">
-                        <td>{{match.stage}} {{match.matchId}}</td>
-                        <td>{{timeString(match.endTime)}}</td>
-                        <td>{{timeString(match.endTime)}}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        
+        </file-drop>
     </div>
-
-    <table *ngIf="teams">
-        <tr>
-          <th>Number</th>
-          <th>Name</th>
-        </tr>
-        <tr *ngFor="let team of teams">
-          <td>{{team.number}}</td>
-          <td>{{team.name}}</td>
-        </tr>
-    </table>
-
-    <button id="data-close-button" class="close-button" (click)="clearModal()" data-close aria-label="Close modal" type="button">
-        <span aria-hidden="true">&times;</span>
-    </button>
+    <div class="actions">
+        <div class="ui base primary button" (click)="upload($event)" [ngClass]="{ 'disabled': !data && !teams }">
+            <i class="ui upload icon"></i>Import
+        </div>
+        <div class="ui base red inverted close button">
+            <i class="ui close icon"></i>Cancel
+        </div>
+    </div>
+</div>

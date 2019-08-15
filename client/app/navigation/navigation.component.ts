@@ -13,10 +13,10 @@ export class NavigationComponent implements OnInit {
 
   constructor () {
   	this.links = [
-      { href: '/settings', title: 'Tournament Settings', icon: 'fa-cogs' },
-      { href: '/images', title: 'Images', icon: 'fa-image' },
-      { href: '/teams', title: 'Teams', icon: 'fa-users' },
-      { href: '/matches', title: 'Matches', icon: 'fa-clipboard-list' }
+      { href: '/settings', title: 'Tournament Settings', icon: 'cogs' },
+      { href: '/images', title: 'Images', icon: 'image outline' },
+      { href: '/teams', title: 'Teams', icon: 'users' },
+      { href: '/matches', title: 'Matches', icon: 'calendar alternate outline' }
   	]
   }
 
@@ -27,8 +27,8 @@ export class NavigationComponent implements OnInit {
     }
   }
 
-  iconClass (link) {
-  	return this.loading === link ? 'fa-circle-notch fa-spin' : link.icon
+  loadingOrIconClass (link) {
+  	return this.loading === link ? 'notched circle loading' : link.icon
   }
 
 }

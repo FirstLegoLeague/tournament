@@ -19,13 +19,16 @@
             "polyfills": "client/polyfills.ts",
             "tsConfig": "client/tsconfig.app.json",
             "assets": [
-              "client/favicon.ico",
+              { "glob": "first-favicon.ico", "input": "./node_modules/@first-lego-league/user-interface/current/assets/images", "output": "./assets" },
               "client/assets"
             ],
             "styles": [
-              "client/styles.css"
+              "node_modules/@first-lego-league/user-interface/current/app.css",
+              "client/assets/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/@first-lego-league/user-interface/current/app.js"
+            ]
           },
           "configurations": {
             "production": {

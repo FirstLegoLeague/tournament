@@ -10,8 +10,7 @@ export class Notifications {
   }
 
   notify (message: string, level: string) {
-    // tslint:disable-next-line:no-unused-expression
-    new Foundation.Notification(message, level)
+    toastr[level](message)
   }
 
   success (message: string) {
