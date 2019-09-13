@@ -1,5 +1,6 @@
 import { Editable, Deletable } from './interfaces/modal-model'
 import { Deserializable } from './interfaces/deserializable'
+import { Table } from './table'
 
 export type MatchTeam = { teamNumber: number, tableId: number }
 
@@ -11,6 +12,8 @@ export class Match implements Editable, Deletable, Deserializable {
   startTime: string
   endTime: string
   matchTeams: MatchTeam[]
+
+  constructor (private tables: Table[]) {}
 
   id () {
     return this._id
@@ -35,9 +38,9 @@ export class Match implements Editable, Deletable, Deserializable {
 
   fields () {
     const teamFields = []
-    for (let i = 0; i < this.matchTeams.length; ++i) {
+    for (let i = 0; i < this.tables.length; ++i) {
       teamFields.push({
-        display: `Team ${i + 1}`,
+        display: this.tables[i].tableName,
         type: 'text',
         get: () => this.matchTeams[i].teamNumber,
         set: (value) => {
