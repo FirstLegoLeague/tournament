@@ -48,7 +48,7 @@ export class MatchesComponent implements OnInit {
   }
 
   newMatch () {
-    const match = new Match()
+    const match = new Match(this.tables())
     match.matchTeams = this.tables().map(table => ({ tableId: table.tableId, teamNumber: null }))
     return match
   }
