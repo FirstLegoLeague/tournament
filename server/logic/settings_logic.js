@@ -18,7 +18,7 @@ subscribe(`tournamentData:deleted`, () => {
 function setDefaultSettings () {
   const defaultSettings = {
     'tournamentStage': 'practice',
-    'tournamentTitle': 'World Festival Houston 2019',
+    'tournamentTitle': 'World Festival 2020',
     'numberOfPracticeRounds': 1,
     'numberOfRankingRounds': 3,
     'tournamentCurrentMatch': 0,
