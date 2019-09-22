@@ -25,7 +25,6 @@ exports.getRouter = function () {
           res.send(data)
         })
     }).catch(err => {
-      console.log(err)
       MsLogger.error(err)
       res.sendStatus(500)
     })
@@ -37,11 +36,11 @@ exports.getRouter = function () {
 function getDefaultMatchesForTeam (teamNumber, stages) {
   const matches = []
 
-  for (const stage of stages) {
-    for (let i = 1; i <= stages[stage].matchAmount; i++) {
+  for (const index in stages) {
+    for (let i = 1; i <= stages[index].matchAmount; i++) {
       const match = {}
       match._id = createRandomId(RANDOM_ID_LENGTH)
-      match.stage = stages[stage].stageName
+      match.stage = stages[index].stageName
       match.matchId = i
       match.matchTeams = [{
         'teamNumber': teamNumber,
