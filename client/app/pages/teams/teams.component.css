@@ -1,8 +1,11 @@
-.top-bar .menu > :not(:first-child) {
-    margin-left: 1em;
+#teams {
+    height: 100%;
 }
 
-#search-filter{
-    max-width: unset;
-    width: 25vw;
+#teams > .column {
+    height: 100%;
+}
+
+#teams > .column > .segment {
+    height: 100%;
 }

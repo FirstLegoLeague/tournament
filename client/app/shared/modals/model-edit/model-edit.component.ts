@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { Editable, EditableModalService } from '../../models/interfaces/modal-model'
 import { Notifications } from '../../services/notifications.service'
 import { EditService } from '../../services/edit-service.service'
+import { ModalsService } from '../../services/modals.service'
 
 @Component({
   selector: 'model-edit',
@@ -12,8 +13,11 @@ import { EditService } from '../../services/edit-service.service'
 export class ModelEdit {
 
   loading: boolean
+  modal: any
 
-  constructor (private editModalsService: EditService, private notifications: Notifications) { }
+  constructor (private editModalsService: EditService, private notifications: Notifications, private modalsService: ModalsService) {
+    this.modal = modalsService.modal('edit-modal')
+  }
 
   model () {
     return this.editModalsService.getEditModel()
@@ -36,9 +40,12 @@ export class ModelEdit {
     })
   }
 
+  open () {
+    this.modal.open()
+  }
+
   close () {
-    let closeButton: HTMLElement = document.querySelector('#model-edit [data-close]')
-    closeButton.click()
+    this.modal.close()
   }
 
   reload () {
@@ -47,6 +54,10 @@ export class ModelEdit {
 
   isInputType (checkedType) {
     return ['text', 'time'].some(type => type === checkedType)
+  }
+
+  trackByDisplay (index, field) {
+    return field.display
   }
 
 }

@@ -1,19 +1,11 @@
 <base href="/">
-<div class="top-bar">
-  <div class="top-bar-left">
-    <app-navigation></app-navigation>
-  </div>
-  <div class="top-bar-right">
-    <ul class="menu">
-      <li><global-actions></global-actions></li>
-    </ul>
-  </div>
+<div class="ui splashing iconed page menu">
+  <app-navigation class="menu"></app-navigation>
+  <global-actions class="right menu"></global-actions>
 </div>
-<div class="top-bar-page">
+<div>
       <router-outlet></router-outlet>
 </div>
-<data-upload></data-upload>
-<image-upload></image-upload>
+
 <model-edit></model-edit>
 <model-delete></model-delete>
-<tables></tables>

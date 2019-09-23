@@ -4,6 +4,7 @@ import { RequestService } from './request.service'
 import { Match } from '../models/match'
 import { EditableModalService, DeletableModalService } from '../models/interfaces/modal-model'
 import { map } from 'rxjs/operators'
+import { TablesService } from './tables.service'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class MatchesService implements EditableModalService, DeletableModalServi
   private initStarted: boolean = false
   public matches: Match[] = []
 
-  constructor (private requests: RequestService) {
+  constructor (private requests: RequestService, private tablesService: TablesService) {
   }
 
   init () {
@@ -52,7 +53,7 @@ export class MatchesService implements EditableModalService, DeletableModalServi
 
   reload (): Observable<any> {
     return this.requestAll().pipe(map((matches: Match[]) => {
-      this.matches = matches.map(match => new Match().deserialize(match))
+      this.matches = matches.map(match => new Match(this.tablesService.tables).deserialize(match))
       return this.matches
     }))
   }

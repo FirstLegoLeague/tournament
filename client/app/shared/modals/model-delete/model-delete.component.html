@@ -1,16 +1,16 @@
-<div id="model-delete" class="fast reveal" [ngClass]="{ 'loading': loading }" data-reveal data-animation-in="hinge-in-from-middle-y" data-animation-out="hinge-out-from-middle-y">
-  <h4 *ngIf="model()">{{model().title()}} is about to be permanently deleted</h4>
-  <div class="subheader">Warning: You can’t undo this action.</div>
-  <div class="dimmer">
-    <div class="loader"></div>
+<div id="delete-modal" class="ui small basic modal" [ngClass]="{ 'loading': loading }">
+  <div class="ui icon header" *ngIf="model()">
+    <i class="trash icon"></i>
+    {{model().title()}} is about to be permanently deleted
+    <br/>
+    Warning: You can’t undo this action.
   </div>
 
-  <div class="grid-x align-center button-group">
-    <div class="button" (click)="close()">No, I think I'll pass...</div>
-    <div class="alert button" (click)="delete()">Yes, just do it!</div>
+  <div class="actions">
+    <div class="ui primary inverted button" (click)="close()">No, I think I'll pass...</div>
+    <div class="ui red inverted button" (click)="delete()">
+      <i class="ui trash icon"></i>
+      Yes, just do it!
+    </div>
   </div>
-
-  <button id="tournament-data-close-button" class="close-button" data-close aria-label="Close modal" type="button">
-    <span aria-hidden="true">&times;</span>
-  </button>
 </div>

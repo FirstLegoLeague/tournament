@@ -1,12 +1,6 @@
-<ul class="dropdown menu" data-dropdown-menu>
-    <li><tournament-status></tournament-status></li>
-
-    <li [ngClass]="{'disabled': hasData}">
-        <a class="button" data-open="data-upload">Import</a>
-    </li>
-
-    <li>
-        <a class="button" href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
-    </li>
-</ul>
-
+<tournament-status></tournament-status>
+<data-upload></data-upload>
+<a class="icon item">
+	<i class="ui sign out alternate icon"></i>
+	<div class="hover text">Logout</div>
+</a>

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
+
 import { Deletable, DeletableModalService } from '../../models/interfaces/modal-model'
 import { Notifications } from '../../services/notifications.service'
 import { DeleteService } from '../../services/delete-service.service'
+import { ModalsService } from '../../services/modals.service'
 
 @Component({
   selector: 'model-delete',
@@ -11,8 +13,10 @@ import { DeleteService } from '../../services/delete-service.service'
 export class ModelDelete {
 
   loading: boolean
+  modal: any
 
-  constructor (private deleteService: DeleteService, private notifications: Notifications) {
+  constructor (private deleteService: DeleteService, private notifications: Notifications, private modalsService: ModalsService) {
+    this.modal = modalsService.modal('delete-modal')
   }
 
   model () {
@@ -39,9 +43,12 @@ export class ModelDelete {
     })
   }
 
+  open () {
+    this.modal.open()
+  }
+
   close () {
-    let closeButton: HTMLElement = document.querySelector('#model-delete [data-close]')
-    closeButton.click()
+    this.modal.close()
   }
 
   reload () {

@@ -1,20 +1,25 @@
-import { Component } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop'
+import { forkJoin } from 'rxjs'
 
 import { FileType } from '../../enums/file-type'
 import { Team } from '../../models/team'
 import { ParserService } from '../../services/parser.service'
 import { TournamentDataService } from '../../services/tournament-data.service'
 import { TeamsService } from '../../services/teams.service'
+import { MatchesService } from '../../services/matches.service'
 import { Notifications } from '../../services/notifications.service'
 import { LoggerService } from '../../services/logger.service'
+import { ModalsService } from '../../services/modals.service'
+
+declare var jQuery: any
 
 @Component({
   selector: 'data-upload',
   templateUrl: './data-upload.component.html',
   styleUrls: ['./data-upload.component.css']
 })
-export class DataUpload {
+export class DataUpload implements OnInit {
   public file: UploadFile
   public content: string
   public fileHovering: Boolean
@@ -22,12 +27,24 @@ export class DataUpload {
   public data: any
   public teams: Array<Team>
   public fileType: FileType
+  @Input() public hasData: boolean = true
+  modal: any
 
   constructor (private parser: ParserService,
               private teamsService: TeamsService,
+              private matchService: MatchesService,
               private tournamentDataService: TournamentDataService,
               private notifications: Notifications,
-              private logger: LoggerService) {
+              private logger: LoggerService,
+              private modalsService: ModalsService) {
+    this.modal = modalsService.modal('data-upload')
+  }
+
+  ngOnInit () {
+    this.load()
+    this.tournamentDataService.dataReload.subscribe(() => {
+      this.load()
+    })
   }
 
   public dropped (event: UploadEvent) {
@@ -71,8 +88,12 @@ export class DataUpload {
     this.fileHovering = false
   }
 
-  public close () {
-    document.getElementById('data-close-button').click()
+  open () {
+    this.modal.open()
+  }
+
+  close () {
+    this.modal.close()
   }
 
   public clearModal () {
@@ -82,6 +103,23 @@ export class DataUpload {
     this.loading = false
     this.data = null
     this.teams = null
+  }
+
+  public timeString (dateString) {
+    return dateString.match(/T(.+)Z/)[1]
+  }
+
+  private load () {
+    forkJoin([this.teamsService.requestAll(), this.matchService.requestAll()]).subscribe(
+            data => {
+              let teams = data[0]
+              let matches = data[1]
+                // @ts-ignore
+              this.hasData = (teams.length > 0) || (matches.length > 0)
+            },
+            () => {
+              this.hasData = true
+            })
   }
 
   private parseSchedule () {

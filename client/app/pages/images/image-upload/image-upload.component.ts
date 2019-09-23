@@ -1,10 +1,10 @@
 import { Component } from '@angular/core'
 import { UploadEvent, UploadFile, FileSystemFileEntry } from 'ngx-file-drop'
 
-import { ParserService } from '../../services/parser.service'
-import { ImagesService } from '../../services/images.service'
-import { Notifications } from '../../services/notifications.service'
-import { Image } from '../../models/image'
+import { ParserService } from '../../../shared/services/parser.service'
+import { ImagesService } from '../../../shared/services/images.service'
+import { Notifications } from '../../../shared/services/notifications.service'
+import { Image } from '../../../shared/models/image'
 
 @Component({
   selector: 'image-upload',
@@ -37,12 +37,10 @@ export class ImageUploadComponent {
         formData.append('imageFile', file, name)
         this.imagesService.upload(formData).subscribe(() => {
           this.notifications.success('Image upload succeeded')
-          this.close()
           this.loading = false
           this.imagesService.reload().subscribe()
         },() => {
           this.notifications.error('Image upload failed')
-          this.close()
           this.loading = false
         })
       })
@@ -58,9 +56,4 @@ export class ImageUploadComponent {
   public fileLeave (event) {
     this.fileHovering = false
   }
-
-  public close () {
-    document.getElementById('images-close-button').click()
-  }
-
 }
