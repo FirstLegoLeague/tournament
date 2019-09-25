@@ -322,10 +322,10 @@
   resolved "https://registry.yarnpkg.com/@first-lego-league/eslint-config/-/eslint-config-1.0.0.tgz#897677bf32a4ea842bbf4e3a63b225d6a044d4a4"
   integrity sha512-FYWnInc/zvbnV794tOhQS44qVVi4d9XJkJRWiZo7luWmwkJg8evP+vi7623klw7UrSsPv8q8J1nSHllh3ks4UQ==
 
-"@first-lego-league/ms-auth@^1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-auth/-/ms-auth-1.4.1.tgz#3ca752357e99ed14c4824ddd9e8d92bc4de989f9"
-  integrity sha512-E6ybfApFX4wV2S57zwCwUFl6XjM56U614+XDMvMKZt6WTn5N3qI68SoAhC5EalWxjjNfhp0K/yZZ9cwO0V4W4Q==
+"@first-lego-league/ms-auth@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-auth/-/ms-auth-1.4.2.tgz#89004bddcdd1dcb7ca1e28bcb99557077cbfef61"
+  integrity sha512-WR/9N09GeqrSSBjYosIg1dXnwvaQTyY8Goj4ob0WwBxnP2hmjd8bpfbUpUhmJIacp6j+zGhiRnBLivPIa5n6FA==
   dependencies:
     body-parser "^1.19.0"
     cookie "^0.4.0"
@@ -333,10 +333,10 @@
     jsonwebtoken "^8.5.1"
     router "^1.3.3"
 
-"@first-lego-league/ms-correlation@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-correlation/-/ms-correlation-1.0.1.tgz#00d2dd31686537be3e58adc3650c436caf93238f"
-  integrity sha512-MRAbDC6/h8Ixbz1mvJkrKZdTs/3D/Z6fLSTwMP3aIxd+xi2K6+XrjuVduHNYrggVuI9bCf+R/tNB9TkgIuT5Xg==
+"@first-lego-league/ms-correlation@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@first-lego-league/ms-correlation/-/ms-correlation-1.0.2.tgz#ca344a57dcf1a651f2f8c2cf26c07863b56250a3"
+  integrity sha512-bSiaewfo8ErJQE2LjRrN+spBgSfuuK+wJrEuVFVkSCWTNYEX+2l2QNni7bEFPsZEcwM6+5jz09i82pbSUrchAw==
   dependencies:
     cookie "^0.4.0"
     jsonwebtoken "^8.5.1"

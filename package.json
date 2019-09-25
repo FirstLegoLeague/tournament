@@ -1,6 +1,6 @@
 {
   "name": "@first-lego-league/tournament",
-  "version": "2.1.0",
+  "version": "2.1.5",
   "main": "index.js",
   "repository": "git@github.com:FirstLegoLeague/tournament.git",
   "author": "Tal Taub <taltaub22@gmail.com>",
@@ -14,6 +14,7 @@
   "files": [
     "server",
     "dist/client",
+    "default-data",
     "index.js",
     "module.yml",
     "yarn.lock"
@@ -22,8 +23,8 @@
     "node": ">=8.x"
   },
   "dependencies": {
-    "@first-lego-league/ms-auth": "^1.4.1",
-    "@first-lego-league/ms-correlation": "^1.0.1",
+    "@first-lego-league/ms-auth": "^1.4.2",
+    "@first-lego-league/ms-correlation": "^1.0.2",
     "@first-lego-league/ms-logger": "^2.0.0",
     "@first-lego-league/user-interface": "^2.1.2",
     "base64-img-promise": "^1.0.5",
