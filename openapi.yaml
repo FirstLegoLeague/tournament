@@ -319,19 +319,25 @@ paths:
             application/json:
               schema: {}
               example: anything
-    delete:
-      summary: Get setting value
+    put:
+      summary: Replace settings value
       tags:
-        - settings
+        - table
       parameters:
         - name: settingName
           in: path
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {}
+            example: anything
       responses:
-        '200':
-          description: The setting deleted successfully
+        '204':
+          description: The settings value have been replaced
 components:
   schemas:
     team:
