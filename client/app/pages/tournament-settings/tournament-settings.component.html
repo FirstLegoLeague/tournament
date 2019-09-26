@@ -30,9 +30,9 @@
                         </div>
                     </div>
                     <div class="seven wide field">
-                        <label>{{settings['currentMatch'].display}}</label>
+                        <label>{{settings['currentMatch']?.display}}</label>
                         <div class="ui action input">
-                            <input type="number" [(ngModel)]="settings['currentMatch'].value">
+                            <input type="number" [ngModel]="settings['currentMatch']?.value" (ngModel)="settings['currentMatch'].value = $event">
                             <button class="ui icon button" (click)="save('currentMatch')"
                                     [disabled]="settings['currentMatch']?.value == undefined">
                                 <i class="ui save icon"></i>
@@ -89,8 +89,8 @@
                             </div>
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <label>Negative?</label>
                                     <input type="checkbox" [(ngModel)]="settings['scheduleTimeOffset'].negative">
+                                    <label>Negative?</label>
                                 </div>
                             </div>
                             <div class="field">
