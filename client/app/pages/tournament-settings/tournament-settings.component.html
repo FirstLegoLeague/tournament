@@ -2,6 +2,20 @@
     <div class="column">
         <div class="ui raised text container segment" [ngClass]="{ 'loading': loading }">
             <div *ngIf="!loading">
+                <div class="ui dividing header">Scoreboard</div>
+
+                <div class="ui form">
+                    <div class="seven wide field">
+                        <label>{{settings['tournamentTitle'].display}}</label>
+                        <div class="ui action input">
+                            <input type="text" [(ngModel)]="settings['tournamentTitle'].value">
+                            <button class="ui icon button" (click)="save('tournamentTitle')">
+                                <i class="ui save icon"></i>
+                                <div class="hover text">Save</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="ui dividing header">Tournament State</div>
                 <div class="ui form">
                     <div class="fields">
@@ -119,20 +133,7 @@
                     </div>
                 </div>
 
-                <div class="ui dividing header">Scoreboard</div>
 
-                <div class="ui form">
-                    <div class="seven wide field">
-                        <label>{{settings['tournamentTitle'].display}}</label>
-                        <div class="ui action input">
-                            <input type="text" [(ngModel)]="settings['tournamentTitle'].value">
-                            <button class="ui icon button" (click)="save('tournamentTitle')">
-                                <i class="ui save icon"></i>
-                                <div class="hover text">Save</div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
