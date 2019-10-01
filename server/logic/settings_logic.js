@@ -97,10 +97,33 @@ function getAllStages () {
   })
 }
 
+function calculateRounds (matches) {
+  const teams = {}
+  if (matches.length > 0) {
+    matches
+      .map(match => match.matchTeams)
+      .reduce((a, e) => a.concat(e), [])
+      .filter(x => x)
+      .map(x => x.teamNumber)
+      .filter(x => x)
+      .forEach(x => {
+        if (!teams[x]) {
+          teams[x] = 0
+        }
+        teams[x]++
+      })
+
+    return Math.max(...Object.values(teams))
+  }
+
+  return 0
+}
+
 Object.assign(exports, {
   getSetting,
   getAllSettings,
   updateSetting,
   setDefaultSettings,
-  getAllStages
+  getAllStages,
+  calculateRounds
 })

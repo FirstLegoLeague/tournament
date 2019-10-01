@@ -7,6 +7,7 @@ const { authroizationMiddlware } = require('@first-lego-league/ms-auth')
 
 const db = require('../utilities/mongo_connection')
 const mhubConnection = require('../utilities/mhub_connection')
+const { calculateRounds, updateSetting } = require('../logic/settings_logic')
 
 const router = new express.Router()
 const MsLogger = new Logger()
@@ -41,6 +42,11 @@ router.post('/', adminAction, (req, res) => {
   let rankingPromise
 
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
+  const rankingRoundsAmount = calculateRounds(data.rankingMatches)
+  updateSetting('numberOfRankingRounds', rankingRoundsAmount)
+  const practiceRoundsAmount = calculateRounds(data.practiceMatches)
+  updateSetting('numberOfPracticeRounds', practiceRoundsAmount)
+
   db.connection().then(conn => {
     if (data.tables && data.tables.length > 0) {
       tablesPromise = conn.db().collection('tables').insertMany(data.tables).then(() => {
