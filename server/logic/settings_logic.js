@@ -98,22 +98,22 @@ function getAllStages () {
 }
 
 function calculateRounds (matches) {
-  const teams = {}
+  const teamsMatchCount = {}
   if (matches.length > 0) {
     matches
       .map(match => match.matchTeams)
       .reduce((a, e) => a.concat(e), [])
-      .filter(x => x)
-      .map(x => x.teamNumber)
-      .filter(x => x)
-      .forEach(x => {
-        if (!teams[x]) {
-          teams[x] = 0
+      .filter(Boolean)
+      .map(matchTeam => matchTeam.teamNumber)
+      .filter(Boolean)
+      .forEach(team => {
+        if (!teamsMatchCount[team]) {
+          teamsMatchCount[team] = 0
         }
-        teams[x]++
+        teamsMatchCount[team]++
       })
 
-    return Math.max(...Object.values(teams))
+    return Math.max(...Object.values(teamsMatchCount))
   }
 
   return 0
