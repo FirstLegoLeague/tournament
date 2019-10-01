@@ -5,7 +5,7 @@ const formidable = require('formidable')
 
 const { publishUpdateMsg } = require('../utilities/mhub_connection')
 
-const { getAllImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder } = require('../logic/images_logic')
+const { getAllImages, getLocalImages, getGlobalImages, getImage, saveImageToImagePath, deleteImage, initImagesFolder } = require('../logic/images_logic')
 
 const adminAction = authroizationMiddlware(['admin', 'development'])
 const logger = new Logger()
@@ -25,7 +25,27 @@ router.get('/all', (req, res) => {
   })
 })
 
-router.get('/:imageName', (req, res) => {
+router.get('/global', (req, res) => {
+  getGlobalImages().then(images => {
+    res.send(images)
+  }).catch(err => {
+    logger.error(`An error has occurred ${err}`)
+    res.status(500)
+    res.send(err.message)
+  })
+})
+
+router.get('/local', (req, res) => {
+  getLocalImages().then(images => {
+    res.send(images)
+  }).catch(err => {
+    logger.error(`An error has occurred ${err}`)
+    res.status(500)
+    res.send(err.message)
+  })
+})
+
+router.get('/:imageName([^/]+/[^/]+)', (req, res) => {
   getImage(req.params.imageName).then(image => {
     res.send(image)
   }).catch(err => {
