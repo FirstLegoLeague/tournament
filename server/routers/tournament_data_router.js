@@ -44,8 +44,13 @@ router.post('/', adminAction, (req, res) => {
   const data = tournamentDataParser.parse(req.body.tourData, req.body.delimiter)
   const rankingRoundsAmount = calculateRounds(data.rankingMatches)
   updateSetting('numberOfRankingRounds', rankingRoundsAmount)
+
   const practiceRoundsAmount = calculateRounds(data.practiceMatches)
   updateSetting('numberOfPracticeRounds', practiceRoundsAmount)
+
+  if (practiceRoundsAmount === 0) {
+    updateSetting('tournamentStage', 'ranking')
+  }
 
   db.connection().then(conn => {
     if (data.tables && data.tables.length > 0) {
