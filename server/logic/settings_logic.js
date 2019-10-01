@@ -102,7 +102,7 @@ function calculateRounds (matches) {
   if (matches.length > 0) {
     matches
       .map(match => match.matchTeams)
-      .reduce((a, e) => a.concat(e), [])
+      .reduce((array, matchTeams) => array.concat(matchTeams), [])
       .filter(Boolean)
       .map(matchTeam => matchTeam.teamNumber)
       .filter(Boolean)
