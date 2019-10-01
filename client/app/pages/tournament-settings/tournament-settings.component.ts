@@ -17,6 +17,7 @@ export class TournamentSettingsComponent implements OnInit {
   public settings: object
   public loading: boolean = true
   public hasDataInDb = false
+  public hasMatches = false
 
   public MIN_AMOUNT_OF_ROUNDS = 0
   public MAX_AMOUNT_OF_ROUNDS = 5
@@ -44,6 +45,7 @@ export class TournamentSettingsComponent implements OnInit {
     this.tournamentSettingsService.getAllSettings().subscribe({
       next: (settings: object) => {
         this.haveDataInDb()
+        this.checkMatches()
         this.settings = {
           tournamentTitle: {
             display: 'Tournament Title',
@@ -189,7 +191,10 @@ export class TournamentSettingsComponent implements OnInit {
     })
   }
 
-  haveMatches () {
-    return this.tournamentDataService.hasMatches()
+  checkMatches () {
+    return this.tournamentDataService.hasMatches().subscribe(result => {
+      this.hasMatches = result
+    })
   }
+
 }

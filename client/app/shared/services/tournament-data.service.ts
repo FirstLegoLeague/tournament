@@ -62,6 +62,8 @@ export class TournamentDataService implements DeletableModalService {
     return this.matches.requestAll()
             .pipe(map(matches => {
               return (matches as Array<Match>).length > 0
+            }, () => {
+              return true
             }))
   }
 
