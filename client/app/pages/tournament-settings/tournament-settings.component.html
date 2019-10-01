@@ -67,14 +67,16 @@
                                 <input type="number"
                                        [(ngModel)]="settings['numberOfPracticeRounds'].value"
                                        min="{{MIN_AMOUNT_OF_ROUNDS}}"
-                                       max="{{MAX_AMOUNT_OF_ROUNDS}}">
+                                       max="{{MAX_AMOUNT_OF_ROUNDS}}"
+                                        [disabled]="haveMatches() | async" >
                             </div>
                             <div class="field">
                                 <label>{{settings['numberOfRankingRounds'].display}}</label>
                                 <input type="number"
                                        [(ngModel)]="settings['numberOfRankingRounds'].value"
                                        min="{{MIN_AMOUNT_OF_ROUNDS}}"
-                                       max="{{MAX_AMOUNT_OF_ROUNDS}}">
+                                       max="{{MAX_AMOUNT_OF_ROUNDS}}"
+                                       [disabled]="haveMatches() | async">
                             </div>
                             <div class="field">
                                 <button class="ui button" (click)="saveNumberOFRounds()"

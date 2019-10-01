@@ -188,4 +188,8 @@ export class TournamentSettingsComponent implements OnInit {
       this.hasDataInDb = result
     })
   }
+
+  haveMatches () {
+    return this.tournamentDataService.hasMatches()
+  }
 }
