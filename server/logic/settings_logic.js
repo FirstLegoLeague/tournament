@@ -97,10 +97,33 @@ function getAllStages () {
   })
 }
 
+function calculateRounds (matches) {
+  const teamsMatchCount = {}
+  if (matches.length > 0) {
+    matches
+      .map(match => match.matchTeams)
+      .reduce((array, matchTeams) => array.concat(matchTeams), [])
+      .filter(Boolean)
+      .map(matchTeam => matchTeam.teamNumber)
+      .filter(Boolean)
+      .forEach(team => {
+        if (!teamsMatchCount[team]) {
+          teamsMatchCount[team] = 0
+        }
+        teamsMatchCount[team]++
+      })
+
+    return Math.max(...Object.values(teamsMatchCount))
+  }
+
+  return 0
+}
+
 Object.assign(exports, {
   getSetting,
   getAllSettings,
   updateSetting,
   setDefaultSettings,
-  getAllStages
+  getAllStages,
+  calculateRounds
 })
