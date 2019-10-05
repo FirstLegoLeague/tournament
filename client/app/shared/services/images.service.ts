@@ -19,7 +19,7 @@ export class ImagesService implements DeletableModalService {
   }
 
   reload () {
-    return this.requests.get('/image/all').pipe(map((images: Image[]) => {
+    return this.requests.get('/image/local').pipe(map((images: Image[]) => {
       this.images = images.map(image => new Image().deserialize(image))
       return this.images
     }))

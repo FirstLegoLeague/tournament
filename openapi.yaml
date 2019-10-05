@@ -252,6 +252,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/image'
+  /image/global:
+    get:
+      summary: Get all global sponsor images
+      tags:
+        - image
+      responses:
+        '200':
+          description: The images retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
+  /image/local:
+    get:
+      summary: Get all local sponsors images
+      tags:
+        - image
+      responses:
+        '200':
+          description: The images retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/image'
   /image:
     post:
       summary: Create a new image
@@ -270,13 +294,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/image'
-  /image/{name}:
+  /image/{path}:
     get:
       summary: Get image
       tags:
         - image
       parameters:
-        - name: name
+        - name: path
           in: path
           required: true
           schema:
@@ -289,7 +313,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/image'
     delete:
-      summary: Delete image
+      summary: Delete local sponsor image
       tags:
         - image
       parameters: 

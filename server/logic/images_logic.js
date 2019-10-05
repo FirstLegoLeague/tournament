@@ -9,65 +9,95 @@ const ALLOWED_FORMATS = ['jpg', 'jpeg', 'png', 'gif']
 function initImagesFolder () {
   return fs.exists(IMAGES_DIR).then(exist => {
     if (!exist) {
-      const mkdirPromise = fs.mkdir(IMAGES_DIR)
-      const copyImagesPromise = fs.copy('default-data/images', IMAGES_DIR)
-      return Promise.all([mkdirPromise, copyImagesPromise])
+      return fs.mkdir(IMAGES_DIR)
     }
+  }).then(() => {
+    return Promise.all(['local', 'global'].map(subdir => {
+      const subdirPath = path.resolve(IMAGES_DIR, subdir)
+      return fs.exists(subdirPath).then(subdirExists => {
+        if (!subdirExists) {
+          const mkdirPromise = fs.mkdir(subdirPath)
+          const copyImagesPromise = fs.copy(`default-data/images/${subdir}`, subdirPath)
+          return Promise.all([mkdirPromise, copyImagesPromise])
+        }
+      })
+    }))
   })
 }
 
-function getAllImagesNames () {
-  return fs.readdir(IMAGES_DIR)
+function getGlobalImagesPaths () {
+  return fs.readdir(path.resolve(IMAGES_DIR, 'global'))
+    .then(images => images.map(image => `global/${image}`))
 }
 
-function getAllImages () {
-  return getAllImagesNames()
-    .then(names => {
-      const images = names.filter(filename => ALLOWED_FORMATS.find(x => x === filename.split('.').pop().toLowerCase()))
-        .map(createReturnObject)
-      return Promise.all(images)
+function getLocalImagesPaths () {
+  return fs.readdir(path.resolve(IMAGES_DIR, 'local'))
+    .then(images => images.map(image => `local/${image}`))
+}
+
+function getAllImagesPaths () {
+  return Promise.all([getGlobalImagesPaths(), getLocalImagesPaths()])
+    .then(([globalImages, localImages]) => {
+      return []
+        .concat(globalImages)
+        .concat(localImages)
     })
 }
 
-function getImage (name) {
-  return getAllImagesNames().then(images => {
-    const image = images.find(x => x === name)
-    if (!image) {
-      throw new Error('Image does not exists')
+function getImagesFromPaths (imagesPaths) {
+  return Promise.all(imagesPaths
+    .filter(imagePath => ALLOWED_FORMATS.find(x => x === imagePath.split('.').pop().toLowerCase()))
+    .map(createReturnObject))
+}
+
+function getGlobalImages () {
+  return getGlobalImagesPaths().then(getImagesFromPaths)
+}
+
+function getLocalImages () {
+  return getLocalImagesPaths().then(getImagesFromPaths)
+}
+
+function getAllImages () {
+  return Promise.all([getGlobalImages(), getLocalImages()])
+    .then(([global, local]) => ({ global, local }))
+}
+
+function validateImageExistance (imagePath, shouldExist = true) {
+  return getAllImagesPaths().then(images => {
+    const image = images.find(x => x === imagePath)
+    if (Boolean(image) !== shouldExist) {
+      throw new Error(`Image ${shouldExist ? 'does not' : 'already'} exists`)
     }
-    return createReturnObject(image)
+    return image
   })
 }
 
-function saveImageFromBase64 (name, data) {
-  return getAllImagesNames().then(images => {
-    const image = images.find(x => x === name)
-    if (image) {
-      throw new Error('Image with that name already exists')
-    }
-    return img(data, IMAGES_DIR, name)
-  })
+function getImage (imagePath) {
+  return validateImageExistance(imagePath)
+    .then(createReturnObject)
+}
+
+function saveImageFromBase64 (imagePath, data) {
+  return validateImageExistance(imagePath, false)
+    .then(() => img(data, IMAGES_DIR, imagePath))
 }
 
 function saveImageToImagePath (imageTempPath, imageName) {
-  return getAllImagesNames().then(images => {
-    const image = images.find(x => x === imageName)
-    if (image) {
-      throw new Error('Image with that name already exists')
-    }
-    return fs.move(imageTempPath, path.resolve(IMAGES_DIR, imageName))
-  })
+  const imagePath = `local/${imageName}`
+  return validateImageExistance(imagePath, false)
+    .then(image => fs.move(imageTempPath, path.resolve(IMAGES_DIR, imagePath)))
 }
 
-function deleteImage (name) {
-  return fs.unlink(path.resolve(IMAGES_DIR, name))
+function deleteImage (imageName) {
+  return fs.unlink(path.resolve(IMAGES_DIR, 'local', imageName))
 }
 
-function createReturnObject (imageName) {
-  return Promise.try(() => base64(path.resolve(IMAGES_DIR, imageName)))
+function createReturnObject (imagePath) {
+  return Promise.try(() => base64(path.resolve(IMAGES_DIR, imagePath)))
     .then(data => {
       return {
-        name: imageName,
+        name: imagePath.split('/').slice(-1)[0],
         image: data
       }
     })
@@ -75,6 +105,8 @@ function createReturnObject (imageName) {
 
 Object.assign(exports, {
   initImagesFolder,
+  getLocalImages,
+  getGlobalImages,
   getAllImages,
   getImage,
   deleteImage,

@@ -14,7 +14,7 @@ export class NavigationComponent implements OnInit {
   constructor () {
   	this.links = [
       { href: '/settings', title: 'Tournament Settings', icon: 'cogs' },
-      { href: '/images', title: 'Images', icon: 'image outline' },
+      { href: '/images', title: 'Sponsor Logos', icon: 'image outline' },
       { href: '/teams', title: 'Teams', icon: 'users' },
       { href: '/matches', title: 'Matches', icon: 'calendar alternate outline' }
   	]
