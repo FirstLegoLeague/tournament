@@ -7,6 +7,7 @@ import { Observable } from 'rxjs'
 import { forkJoin } from 'rxjs/observable/forkJoin'
 import { DeletableModalService } from '../models/interfaces/modal-model'
 import { map } from 'rxjs/operators'
+import { Match } from '../models/match'
 
 @Injectable({
   providedIn: 'root'
@@ -52,9 +53,18 @@ export class TournamentDataService implements DeletableModalService {
                 // @ts-ignore
       return (teams.length > 0) || (matches.length > 0)
     },
-        () => {
-          return true
-        }))
+            () => {
+              return true
+            }))
+  }
+
+  hasMatches () {
+    return this.matches.requestAll()
+            .pipe(map(matches => {
+              return (matches as Array<Match>).length > 0
+            }, () => {
+              return true
+            }))
   }
 
 }
