@@ -82,7 +82,7 @@
         <div class="ui base primary button" (click)="upload($event)" [ngClass]="{ 'disabled': !data && !teams }">
             <i class="ui upload icon"></i>Import
         </div>
-        <div class="ui base red inverted close button">
+        <div class="ui base red inverted close button" (click)="close()">
             <i class="ui close icon"></i>Cancel
         </div>
     </div>
