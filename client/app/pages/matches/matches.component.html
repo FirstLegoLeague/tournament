@@ -28,7 +28,7 @@
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th *ngFor="let table of tables()">
-                                {{table.tableName}} (Table {{table.tableId + 1}})
+                                {{table.tableName}}
                             </th>
                             <th *ngFor="let missingTable of missingFieldsArray(amountofMissingHeaderFields())"></th>
                             <th>Action</th>
