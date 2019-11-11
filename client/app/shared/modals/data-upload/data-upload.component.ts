@@ -94,9 +94,10 @@ export class DataUpload implements OnInit {
 
   close () {
     this.modal.close()
+    this.clearModalData()
   }
 
-  public clearModal () {
+  clearModalData () {
     this.file = null
     this.content = null
     this.fileHovering = false
