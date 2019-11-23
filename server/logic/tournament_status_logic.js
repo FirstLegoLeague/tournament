@@ -25,15 +25,12 @@ const clockStartEvent = function () {
       .then(() => getCurrentMatchNumber())
       .then(number => {
         if (number === 0) {
-          return getSetting(CURRENT_STAGE_NAME)
-            .then(currStage => getFirstMatchInStage(currStage))
-            .then(match => setCurrentMatchNumber(match.matchId))
-            .then(() => publishMatchAvailable())
+          return resetMatchNumberByStage()
         } else {
           return setCurrentMatchNumber(number + 1)
-            .then(() => publishMatchAvailable())
         }
       })
+      .then(() => publishMatchAvailable())
       .catch(e => {
         MsLogger.warn(`Error when trying to set the next match number: ${e.message}`)
       })
@@ -53,11 +50,23 @@ subscribe(`${OFFSET_TIME_NAME}:updated`, publishMatchAvailable)
 
 subscribe(`teams:reload`, publishMatchAvailable)
 subscribe(`tournamentData:deleted`, resetMatchNumber)
-subscribe(`${CURRENT_STAGE_NAME}:updated`, resetMatchNumber)
+subscribe(`${CURRENT_STAGE_NAME}:updated`, resetMatchNumberByStage)
 
 function resetMatchNumber () {
   MsLogger.info('Resetting current match number to 0')
   return setCurrentMatchNumber(0)
+    .catch(e => {
+      MsLogger.error(e.message)
+    })
+}
+
+function resetMatchNumberByStage () {
+  return getSetting(CURRENT_STAGE_NAME)
+    .then(currStage => getFirstMatchInStage(currStage))
+    .then(match => {
+      MsLogger.info(`Resetting current match number to ${match}`)
+      return setCurrentMatchNumber(match.matchId)
+    })
     .catch(e => {
       MsLogger.error(e.message)
     })
