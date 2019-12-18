@@ -11,7 +11,8 @@
                 type="{{field.type}}"
                 value="{{field.get()}}"
                 (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"
-                [ngClass]="{ 'disabled': field.editable == false && model().savedInDB() }"/>
+                [ngClass]="{ disabled: field.editable == false && model().savedInDB() }"
+                [disabled]="field.editable == false && model().savedInDB()"/>
         <select *ngIf="field.type == 'select' && field.options.length > 0"
                 (change)="(field.editable || !model().savedInDB()) ? field.set($event.target.value) : false"  >
             <option *ngFor="let option of field.options" value="{{option.value}}"  [selected]="option.value == field.get()">{{option.display}}</option>
@@ -27,7 +28,7 @@
       Save
     </div>
     <div class="ui red inverted button" (click)="close()">
-      <i class="ui trash icon"></i>
+      <i class="ui close icon"></i>
       Cancel
     </div>
   </div>

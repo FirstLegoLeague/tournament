@@ -49,26 +49,31 @@ export class DataUpload implements OnInit {
 
   public dropped (event: UploadEvent) {
     this.file = event.files[0]
-    this.loading = true
-    if (this.file.fileEntry.isFile) {
-      const fileEntry = this.file.fileEntry as FileSystemFileEntry
-      fileEntry.file((file: File) => {
-        const fileReader = new FileReader()
-        fileReader.onload = (e) => {
-          this.content = fileReader.result
-          if (this.content.startsWith('Version Number', 0)) {
-            this.fileType = FileType.Schedule
-            this.parseSchedule()
-          } else {
-            this.fileType = FileType.TeamList
-            this.parseTeamList()
-          }
-        }
-        fileReader.readAsText(file, 'UTF-8')
-      })
-    } else {
+    if (!this.file.fileEntry.isFile) {
       this.file = null
+      return
     }
+    if (!this.file.fileEntry.name.endsWith('.csv')) {
+      this.notifications.error('File must be a CSV file')
+      this.file = null
+      return
+    }
+    this.loading = true
+    const fileEntry = this.file.fileEntry as FileSystemFileEntry
+    fileEntry.file((file: File) => {
+      const fileReader = new FileReader()
+      fileReader.onload = (e) => {
+        this.content = fileReader.result
+        if (this.content.startsWith('Version Number', 0)) {
+          this.fileType = FileType.Schedule
+          this.parseSchedule()
+        } else {
+          this.fileType = FileType.TeamList
+          this.parseTeamList()
+        }
+      }
+      fileReader.readAsText(file, 'UTF-8')
+    })
   }
 
   public upload (event) {
@@ -94,9 +99,10 @@ export class DataUpload implements OnInit {
 
   close () {
     this.modal.close()
+    this.clearModalData()
   }
 
-  public clearModal () {
+  clearModalData () {
     this.file = null
     this.content = null
     this.fileHovering = false
