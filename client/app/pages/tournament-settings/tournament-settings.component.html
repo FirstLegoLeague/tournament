@@ -46,8 +46,7 @@
                     <div class="seven wide field">
                         <label>{{settings['currentMatch']?.display}}</label>
                         <div class="ui action input">
-                            <input type="number" [ngModel]="settings['currentMatch']?.value"
-                                   (ngModel)="settings['currentMatch'].value = $event">
+                            <input type="number" [(ngModel)]="settings['currentMatch'].value">
                             <button class="ui icon button" (click)="save('currentMatch')"
                                     [disabled]="settings['currentMatch']?.value == undefined">
                                 <i class="ui save icon"></i>
