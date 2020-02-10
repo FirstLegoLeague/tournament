@@ -60,7 +60,7 @@ function getMatchesByTime (time, amountOfMatches, stage) {
         { 'startTime': { $gt: new Date(time) } },
         { 'stage': stageToQuery }
       ]
-    }).limit(amountOfMatches).toArray()
+    }).sort({ 'startTime': 1 }).limit(amountOfMatches).toArray()
   })
 }
 
