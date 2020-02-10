@@ -15,7 +15,7 @@ exports.getRouter = function () {
     db.connection().then(connection => {
       return connection.db().collection('matches')
         .find({ 'matchTeams.teamNumber': parseInt(req.params.team) })
-        .sort({'stage':1})
+        .sort({ 'stage': 1 })
         .toArray()
         .then(data => {
           if (!data || data.length === 0) {
