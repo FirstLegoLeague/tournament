@@ -65,7 +65,7 @@ function resetMatchNumberByStage () {
     .then(currStage => getFirstMatchInStage(currStage))
     .then(match => {
       MsLogger.info(`Resetting current match number to ${match}`)
-      return setCurrentMatchNumber(match.matchId)
+      return setCurrentMatchNumber(match.matchId - 1)
     })
     .catch(e => {
       MsLogger.error(e.message)
