@@ -140,8 +140,12 @@ function getCurrentMatchNumber () {
 }
 
 function setCurrentMatchNumber (newMatch) {
-  return isMatchInCurrentStage(newMatch).then(result => {
-    if (result || newMatch === 0) {
+  return Promise.all([
+    isMatchInCurrentStage(newMatch),
+    getSetting(CURRENT_STAGE_NAME)
+      .then(currStage => getFirstMatchInStage(currStage))
+  ]).then(([matchInCurrentStage, firstMatchInCurrentStage]) => {
+    if (matchInCurrentStage || newMatch === firstMatchInCurrentStage - 1) {
       return updateSetting(CURRENT_MATCH_NAME, newMatch).then(() => {
         publishMatchAvailable()
         return true
