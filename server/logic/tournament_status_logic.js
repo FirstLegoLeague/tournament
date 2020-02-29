@@ -62,9 +62,12 @@ function resetMatchNumber () {
 
 function resetMatchNumberByStage () {
   return getSetting(CURRENT_STAGE_NAME)
-    .then(currStage => getFirstMatchInStage(currStage))
+    .then(currStage => {getFirstMatchInStage(currStage)
+      MsLogger.info(`resetMatchNumberByStage: currentState ${currStage}`)
+    })
     .then(match => {
-      MsLogger.info(`Resetting current match number to ${match}`)
+      MsLogger.info("resetMatchNumberByStage: Match:" + JSON.stringify(match))
+      MsLogger.info(`Resetting current match number to ${match.matchId - 1}`)
       return setCurrentMatchNumber(match.matchId - 1)
     })
     .catch(e => {
@@ -119,7 +122,9 @@ function publishMatchAvailable () {
           publishUpdateMsg('CurrentMatch', newMatch)
         })
     } else {
+      MsLogger.info("publishMatchAvailable: Match:" + JSON.stringify(match))
       return getSetting(CURRENT_STAGE_NAME).then(stage => {
+        MsLogger.warn(`Publishing current stage/match ${stage}/0`)
         publishUpdateMsg('CurrentMatch', { matchId: 0, stage: stage, startTime: new Date().getTime() })
       })
     }
@@ -145,14 +150,13 @@ function setCurrentMatchNumber (newMatch) {
     getSetting(CURRENT_STAGE_NAME)
       .then(currStage => getFirstMatchInStage(currStage))
   ]).then(([matchInCurrentStage, firstMatchInCurrentStage]) => {
-    if (matchInCurrentStage || newMatch === firstMatchInCurrentStage - 1) {
+    if (matchInCurrentStage || newMatch === firstMatchInCurrentStage.matchId - 1) {
       return updateSetting(CURRENT_MATCH_NAME, newMatch).then(() => {
         publishMatchAvailable()
         return true
       })
     }
-
-    throw new Error(`Match # ${newMatch} is not in the current stage. could not update`)
+    throw new Error(`Match # ${newMatch} is not in the current stage. Cannot update`)
   })
 }
 

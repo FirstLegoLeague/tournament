@@ -82,7 +82,7 @@ function updateSetting (settingName, value) {
       .then(dbResponse => {
         if (dbResponse.ok === 1) {
           publishMsg(MHUB_NODES.PROTECTED, `${settingName}:updated`, { value })
-          logger.info(`Updated setting ${settingName} With value: ${value} Successfully`)
+          logger.info(`Successfully updated setting ${settingName} with value: ${value}`)
           return true
         }
       }).catch(err => {

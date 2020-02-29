@@ -31,8 +31,10 @@ function getFirstMatchInStage (stage) {
       'stage': stage
     }).sort({ 'startTime': 1 }).limit(1).toArray().then(matches => {
       if (matches.length >= 1) {
+        MsLogger.debug(`1st match in stage ${stage} is ` + JSON.stringify(matches[0]))
         return matches[0]
       }
+      MsLogger.warn(`1st match in stage ${stage} not found`)
       return null
     })
   })
