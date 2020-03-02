@@ -74,6 +74,7 @@ function getSetting (settingName) {
 }
 
 function updateSetting (settingName, value) {
+  logger.debug ("updateSetting ENTER")
   return db.connection().then(connection => {
     const setDocument = {}
     setDocument[settingName] = value

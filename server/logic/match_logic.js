@@ -26,7 +26,9 @@ function getMatch (matchNumber, stage) {
 }
 
 function getFirstMatchInStage (stage) {
+  MsLogger.info("getFirstMatchInStage ENTER")
   return db.connect().then(connection => {
+    MsLogger.debug("got connection")
     return connection.db().collection(MATCH_COLLECTION).find({
       'stage': stage
     }).sort({ 'startTime': 1 }).limit(1).toArray().then(matches => {
@@ -72,7 +74,7 @@ function getMatchForTable (tableId, stage, fromMatch = 0, amount = 1) {
   }
 
   return db.connect().then(connection => {
-    return connection.db().collection(MATCH_COLLECTION).find({
+    return cd (MATCH_COLLECTION).find({
       $and: [
         { 'matchTeams': { $elemMatch: { 'tableId': tableId, 'teamNumber': { $ne: null } } } },
         { 'matchId': { $gt: fromMatch } },

@@ -61,6 +61,7 @@ function resetMatchNumber () {
 }
 
 function resetMatchNumberByStage () {
+  MsLogger.debug ("resetMatchNumberByStage ENTER")
   return getSetting(CURRENT_STAGE_NAME)
     .then(currStage => {getFirstMatchInStage(currStage)
       MsLogger.info(`resetMatchNumberByStage: currentState ${currStage}`)
@@ -145,6 +146,7 @@ function getCurrentMatchNumber () {
 }
 
 function setCurrentMatchNumber (newMatch) {
+  MsLogger.debug ("setCurrentMatchNumber ENTER")
   return Promise.all([
     isMatchInCurrentStage(newMatch),
     getSetting(CURRENT_STAGE_NAME)
