@@ -145,7 +145,7 @@ function setCurrentMatchNumber (newMatch) {
     getSetting(CURRENT_STAGE_NAME)
       .then(currStage => getFirstMatchInStage(currStage))
   ]).then(([matchInCurrentStage, firstMatchInCurrentStage]) => {
-    if (matchInCurrentStage || newMatch === firstMatchInCurrentStage - 1) {
+    if (matchInCurrentStage || newMatch === firstMatchInCurrentStage.matchId - 1) {
       return updateSetting(CURRENT_MATCH_NAME, newMatch).then(() => {
         publishMatchAvailable()
         return true
