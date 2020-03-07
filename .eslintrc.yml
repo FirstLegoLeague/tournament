@@ -1,1 +1,3 @@
-extends: "@first-lego-league"
+extends:
+  - first-lego-league
+  - first-lego-league/tests

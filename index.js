@@ -4,109 +4,76 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const version = require('project-version')
 const { correlationMiddleware } = require('@first-lego-league/ms-correlation')
-const { authenticationMiddleware, authenticationDevMiddleware } = require('@first-lego-league/ms-auth')
+const { authenticationMiddleware, authenticationDevMiddleware, authroizationMiddlware } = require('@first-lego-league/ms-auth')
 const { loggerMiddleware, Logger } = require('@first-lego-league/ms-logger')
-const EventEmitter = require('events').EventEmitter
+const { MongoCollectionServer, MongoEntityServer } = require('@first-lego-league/synced-resources')
 
-const { Team } = require('./server/models/Team')
-const { Match } = require('./server/models/Match')
-const { Table } = require('./server/models/Table')
+const { configRouter } = require('./server/routers/config')
+const { scheduleRouter } = require('./server/routers/schedule')
+
+const { Team } = require('./resources/team')
+const { Table } = require('./resources/table')
+const { Match } = require('./resources/match')
+const { Image } = require('./resources/image')
+const { Status } = require('./resources/status')
+const { Settings } = require('./resources/settings')
+
+const DEFAULT_PORT = 3001
 
 const logger = new Logger()
-const db = require('./server/utilities/mongo_connection')
+logger.info(`-------------------- Tournament version ${version} startup --------------------`)
 
-const appPort = process.env.PORT || 3001
-const authenticationMiddlewareToUse = process.env.NODE_ENV === 'development' ? authenticationDevMiddleware() : authenticationMiddleware
-
-logger.info(`-------------------- tournament version ${version} startup --------------------`)
+const port = process.env.PORT || DEFAULT_PORT
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(correlationMiddleware)
 app.use(loggerMiddleware)
 app.use(cors())
 
-const { getSettingsRouter } = require('./server/routers/general_settings_router')
-const { configRouter } = require('./server/routers/config_router')
-const crudRouter = require('./server/routers/crud_router').getRouter
-const { tournamentDataRouter } = require('./server/routers/tournament_data_router')
-const matchTeamRouter = require('./server/routers/matchTeam_router')
-const teamsBatchUploadRouter = require('./server/routers/teams_batchupload_router')
-const lastMatchIdRouter = require('./server/routers/last_matchId_router').router
-const tournamentStatusRouter = require('./server/routers/tournament_status_router')
-const { imagesRouter } = require('./server/routers/images_router')
+const authMiddleware = process.env.NODE_ENV === 'development' ? authenticationDevMiddleware() : authenticationMiddleware
+const adminAction = authroizationMiddlware(['admin', 'development'])
 
-EventEmitter.defaultMaxListeners = 12
+app.post(authMiddleware, adminAction)
+app.put(authMiddleware, adminAction)
+app.delete(authMiddleware, adminAction)
 
-app.post(authenticationMiddlewareToUse)
-app.put(authenticationMiddlewareToUse)
-app.delete(authenticationMiddlewareToUse)
+app.use('/teams', new MongoCollectionServer(Team))
+app.use('/table', new MongoCollectionServer(Table))
+app.use('/match', new MongoCollectionServer(Match))
+app.use('/image', new MongoCollectionServer(Image))
+app.use('/status', new MongoEntityServer(Status, { initialValue: Status.initialValue }))
+app.use('/settings', new MongoEntityServer(Settings, { initialValue: Settings.initialValue }))
 
-app.use('/settings', getSettingsRouter())
-app.use('/image', imagesRouter)
-app.all('/config', configRouter)
+app.use('/config', configRouter)
+app.use(scheduleRouter)
 
-app.use('/tournamentData', tournamentDataRouter)
+app.use(authMiddleware, adminAction)
 
-const teamLogic = require('./server/logic/team_logic')
-
-app.use('/team', crudRouter({
-  'collectionName': 'teams',
-  'IdField': Team.IdField,
-  'mhubNamespace': 'teams',
-  'extraRouters': [teamsBatchUploadRouter.getRouter(), matchTeamRouter.getRouter()],
-  'validationMethods': {
-    'delete': teamLogic.deleteValidation,
-    'post': teamLogic.createValidation,
-    'put': teamLogic.deleteValidation
-  }
-}))
-
-const matchLogic = require('./server/logic/match_logic')
-
-app.use('/match', crudRouter({
-  'collectionName': 'matches',
-  'IdField': Match.IdField,
-  'extraRouters': [lastMatchIdRouter, tournamentStatusRouter.getRouter()],
-  'preprocessing': matchLogic.offsetMatch,
-  'mhubNamespace': 'matches'
-}))
-
-app.use('/table', crudRouter({
-  'collectionName': 'tables',
-  'IdField': Table.IdField,
-  'mhubNamespace': 'tables'
-}))
-
-app.use(authenticationMiddlewareToUse)
-
-app.use(express.static(path.join(__dirname, 'dist/client')))
+app.use(express.static(path.join(__dirname, 'dist', 'client')))
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/client/index.html'))
+  res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'))
 })
 
-db.connect().then(() => {
-  app.listen(appPort, () => {
-    logger.info('Server started on port ' + appPort)
-  })
+app.listen(port, () => {
+  logger.info(`tournament service listening on port ${port}`)
 })
 
 process.on('SIGINT', () => {
   logger.info('Process received SIGINT: shutting down')
-  db.close()
   process.exit(130)
 })
 
 process.on('uncaughtException', err => {
   logger.fatal(err.message)
-  console.error(err)
   process.exit(1)
 })
 
 process.on('unhandledRejection', err => {
   logger.fatal(err.message)
-  console.error(err)
   process.exit(1)
 })
