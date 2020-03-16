@@ -16,19 +16,52 @@ const BLOCK_HEADER = 'Block Format'
 const TABLES_NAMES_LINE = 'Table Names'
 const TABLES_COUNT_LINE = 'Number of Tables'
 
+exports.parse = data => {
+  const lines = data.split(LINE_SEPERATOR).map(line => line.split(DELIMETER))
+
+  const blocks = lines.reduce((blocksArray, line, index) => {
+    if (line[0] === BLOCK_HEADER) {
+      const blockId = parseInt(line[1])
+      const blockData = blockFormats.find(b => b.blockId === blockId)
+      if (blockData) {
+        const block = Object.assign({ }, blockData)
+        const headerStart = index
+        const headerEnd = index + block.headerLength
+        const bodyStart = headerEnd + 1
+        const bodyLength = Number(lines[index + block.bodyLengthLocationInHeader.line][block.bodyLengthLocationInHeader.cell])
+        const bodyEnd = headerEnd + bodyLength
+        block.header = lines.filter((l, i) => i >= headerStart && i <= headerEnd)
+        block.body = lines.filter((l, i) => i >= bodyStart && i <= bodyEnd)
+        blocksArray.push(block)
+      }
+    }
+    return blocksArray
+  }, [])
+
+  if (blocks.length === 0) {
+    throw new ParsingException('Format Mismatch')
+  }
+
+  return blocks.reduce((schedule, block) => {
+    schedule = block.apply(schedule, block.body, block.header)
+    return schedule
+  }, { })
+}
+
 // Data section in the CSV file
-const BLOCKS = [
+const blockFormats = [
   {
     blockId: 1, // teams
     headerLength: 1,
     bodyLengthLocationInHeader: { line: 1, cell: 1 },
     apply: (schedule, body) => {
       schedule.teams = body.map(line => new Team(TEAM_FIELDS.reduce((attrs, field, index) => Object.assign({ [field]: line[index] }, attrs), { })))
+      validate(schedule.teams)
       try {
         schedule.teams.forEach(team => team.validate({ collection: schedule.teams }))
       } catch (error) {
         if (error instanceof InvalidEntry) {
-          throw new ParsingException(`Could not parse file: ${error.message}`)
+          throw new ParsingException(`Could not parse file. ${error.message}`)
         }
       }
       return schedule
@@ -56,39 +89,6 @@ const BLOCKS = [
     }
   }
 ]
-
-exports.parse = data => {
-  const lines = data.split(LINE_SEPERATOR).map(line => line.split(DELIMETER))
-
-  const blocks = lines.reduce((blocksArray, line, index) => {
-    if (line[0] === BLOCK_HEADER) {
-      const blockId = parseInt(line[1])
-      const blockData = BLOCKS.find(b => b.blockId === blockId)
-      if (blockData) {
-        const block = Object.assign({ }, blockData)
-        const headerStart = index
-        const headerEnd = index + block.headerLength
-        const bodyStart = headerEnd + 1
-        const bodyLength = Number(lines[index + block.bodyLengthLocationInHeader.line][block.bodyLengthLocationInHeader.cell])
-        const bodyEnd = headerEnd + bodyLength
-        block.header = lines.filter((l, i) => i >= headerStart && i <= headerEnd)
-        block.body = lines.filter((l, i) => i >= bodyStart && i <= bodyEnd)
-        blocksArray.push(block)
-      }
-    }
-    return blocksArray
-  }, [])
-
-  if (blocks.length === 0) {
-    throw new ParsingException('Format Mismatch')
-  }
-
-  return blocks.reduce((schedule, block) => {
-    schedule = block.apply(schedule, block.body, block.header)
-    return schedule
-  }, { })
-}
-
 const applyTables = (blockHeader, schedule) => {
   const tablesNamesLine = blockHeader.find(line => line[0] === TABLES_NAMES_LINE)
   const tablesCountLine = blockHeader.find(line => line[0] === TABLES_COUNT_LINE)
@@ -100,13 +100,7 @@ const applyTables = (blockHeader, schedule) => {
     schedule.tables = tables
   }
 
-  try {
-    schedule.tables.forEach(table => table.validate({ collection: tables }))
-  } catch (error) {
-    if (error instanceof InvalidEntry) {
-      throw new ParsingException(`Could not parse file: ${error.message}`)
-    }
-  }
+  validate(schedule.tables)
 }
 
 const applyMatches = (blockBody, schedule, stage) => {
@@ -123,11 +117,15 @@ const applyMatches = (blockBody, schedule, stage) => {
 
   schedule.matches = (schedule.matches || []).concat(matches)
 
+  validate(schedule.matches)
+}
+
+const validate = collection => {
   try {
-    matches.forEach(match => match.validate({ collection: schedule.matches }))
+    collection.forEach(entry => entry.validate({ collection }))
   } catch (error) {
     if (error instanceof InvalidEntry) {
-      throw new ParsingException(`Could not parse file: ${error.message}`)
+      throw new ParsingException(`Could not parse file. ${error.message}`)
     }
   }
 }

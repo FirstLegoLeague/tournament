@@ -2,7 +2,7 @@ const express = require('express')
 const { MongoResourceAdapter } = require('@first-lego-league/synced-resources')
 const Promise = require('bluebird')
 
-const { importData } = require('../logic/data_import')
+const { parse } = require('../logic/parse')
 
 const { Team } = require('../../resources/team')
 const { Table } = require('../../resources/table')
@@ -41,11 +41,15 @@ const deleteSchedule = () => {
 }
 
 router.get((req, res) => {
-  res.status(200).send(importData(req.query.data))
+  res.status(200).send(parse(req.query.data))
+    .catch(error => {
+      req.logger.error(error)
+      res.sendStatus(500)
+    })
 })
 
 router.post((req, res) => {
-  importData(req.body.data)
+  parse(req.body.data)
     .then(schedule => saveSchedule(schedule))
     .then(() => res.sendStatus(201))
     .catch(error => {
@@ -63,4 +67,4 @@ router.delete((req, res) => {
     })
 })
 
-exports.ScheduleRouter = router
+exports.scheduleRouter = router

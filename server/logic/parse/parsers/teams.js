@@ -25,7 +25,7 @@ exports.parse = data => {
     teams.forEach(team => team.validate({ collection: teams }))
   } catch (error) {
     if (error instanceof InvalidEntry) {
-      throw new ParsingException('Could not parse teams')
+      throw new ParsingException(`Could not parse file. ${error.message}`)
     }
   }
 

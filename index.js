@@ -42,16 +42,16 @@ app.put(authMiddleware, adminAction)
 app.delete(authMiddleware, adminAction)
 
 app.use('/teams', new MongoCollectionServer(Team))
-app.use('/table', new MongoCollectionServer(Table))
-app.use('/match', new MongoCollectionServer(Match))
-app.use('/image', new MongoCollectionServer(Image))
+app.use('/tables', new MongoCollectionServer(Table))
+app.use('/matches', new MongoCollectionServer(Match))
+app.use('/images', new MongoCollectionServer(Image))
 app.use('/status', new MongoEntityServer(Status, { initialValue: Status.initialValue }))
 app.use('/settings', new MongoEntityServer(Settings, { initialValue: Settings.initialValue }))
 
 app.use('/config', configRouter)
-app.use(scheduleRouter)
-
 app.use(authMiddleware, adminAction)
+
+app.use(scheduleRouter)
 
 app.use(express.static(path.join(__dirname, 'dist', 'client')))
 
@@ -60,7 +60,7 @@ app.get('*', (req, res) => {
 })
 
 app.listen(port, () => {
-  logger.info(`tournament service listening on port ${port}`)
+  logger.info(`Tournament service listening on port ${port}`)
 })
 
 process.on('SIGINT', () => {
