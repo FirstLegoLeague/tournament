@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser'
-import { ErrorHandler, NgModule } from '@angular/core'
+import { ErrorHandler, NgModule, APP_INITIALIZER } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { FileDropModule } from 'ngx-file-drop'
 
 import { AppComponent } from './app.component'
@@ -12,6 +12,9 @@ import { HomePageComponent } from './home/home-page/home-page.component'
 
 import { ErrorLogger } from './services/error_logger.service'
 import { RequestInterceptor } from './services/request_interceptor.service'
+import { RequestService } from './services/request.service';
+import { ScheduleModalComponent } from './modals/schedule-modal/schedule-modal.component';
+import { UploadFileComponent } from './generics/upload-file/upload-file.component'
 
 const appRoutes = [
   { path: 'home', component: HomePageComponent }
@@ -21,7 +24,9 @@ const appRoutes = [
   declarations: [
     AppComponent,
     NavigationComponent,
-    HomePageComponent
+    HomePageComponent,
+    ScheduleModalComponent,
+    UploadFileComponent
   ],
   imports: [
     FormsModule,

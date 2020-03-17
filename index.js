@@ -35,7 +35,7 @@ app.use(loggerMiddleware)
 app.use(cors())
 
 const authMiddleware = process.env.NODE_ENV === 'development' ? authenticationDevMiddleware() : authenticationMiddleware
-const adminAction = authroizationMiddlware(['admin', 'development'])
+const adminAction = process.env.NODE_ENV === 'development' ? (req, res, next) => { next() } : authroizationMiddlware(['admin', 'development'])
 
 app.post(authMiddleware, adminAction)
 app.put(authMiddleware, adminAction)

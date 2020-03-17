@@ -6,3 +6,4 @@ type: 'node'
 script: 'index.js'
 require:
   mongodb
+config: []

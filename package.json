@@ -18,9 +18,9 @@
     "test:ui": "karma start --single-run --browsers ChromeHeadless",
     "test:ui-coverage": "yarpm test:ui --reporters coverage",
     "lint": "eslint ./server ./test && ng lint client",
-    "build": "ng build",
+    "build": "ng build --prod",
     "debug": "devl --inspect-brk",
-    "prepack": "ng build --prod"
+    "prepack": "yarpm build"
   },
   "files": [
     "server",

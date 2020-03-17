@@ -8,12 +8,11 @@ import { TablesService } from '../../services/resource_clients/tables.service'
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-
   constructor (private tables: TablesService) {
   	this.tables = tables
   }
 
   ngOnInit() {
+  	this.tables.init()
   }
-
 }

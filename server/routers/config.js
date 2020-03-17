@@ -2,7 +2,7 @@ const express = require('express')
 
 const Configuration = require('@first-lego-league/ms-configuration')
 
-const router = express.Router()
+const router = new express.Router()
 
 router.get('/', (req, res) => {
   Configuration.all().then(config => {
