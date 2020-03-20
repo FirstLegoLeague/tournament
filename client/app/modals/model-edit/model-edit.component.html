@@ -1,0 +1,34 @@
+<div id="edit-modal" class="ui small basic modal" [ngClass]="{ 'loading': loading }">
+  <div class="ui header" *ngIf="show()">
+    Edit {{title()}}
+  </div>
+
+  <div class="content" *ngIf="show()">
+    <div class="ui inverted form">
+      <div class="field" *ngFor="let field of fields(); trackBy: trackByDisplay">
+        <label>{{field.display}}</label>
+        <input *ngIf="isInputType(field.type)"
+                type="{{field.type}}"
+                value="{{field.get(model())}}"
+                (change)="(field.editable || !model()._id) ? field.set(model(), $event.target.value) : false"
+                [ngClass]="{ disabled: field.editable == false && model()._id }"
+                [disabled]="field.editable == false && model()._id"/>
+        <select *ngIf="field.type == 'select' && field.options.length > 0"
+                (change)="(field.editable || !model()._id) ? field.set(model(), $event.target.value) : false">
+            <option *ngFor="let option of field.options" value="{{option.value}}" [selected]="option.value === field.get(model())">{{option.display}}</option>
+        </select>
+    </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="ui primary inverted button" (click)="save()">
+      <i class="ui save icon"></i>
+      Save
+    </div>
+    <div class="ui red inverted button" (click)="close()">
+      <i class="ui close icon"></i>
+      Cancel
+    </div>
+  </div>
+</div>

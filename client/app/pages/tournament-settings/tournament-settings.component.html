@@ -1,0 +1,145 @@
+<div class="ui padded grid">
+    <div class="column">
+        <div class="ui raised text container segment" [ngClass]="{ 'loading': loading }">
+            <div *ngIf="!loading">
+                <div class="ui dividing header">Scoreboard</div>
+
+                <div class="ui form">
+                    <div class="seven wide field">
+                        <label>Tournament Title</label>
+                        <div class="ui action input">
+                            <input type="text" [(ngModel)]="settingsService.data().tournamentTitle">
+                            <button class="ui icon button" (click)="save('tournamentTitle')">
+                                <i class="ui save icon"></i>
+                                <div class="hover text">Save</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui dividing header">Tournament State</div>
+                <div class="ui form">
+                    <div class="fields">
+                        <div class="seven wide field">
+                            <label>Current Stage</label>
+                            <div class="ui action input">
+                                <select id="stage-dropdown" class="ui selection dropdown" [(ngModel)]="settingsService.data().currentStage"
+                                        [disabled]="currentStageOptions == undefined">
+                                    <option *ngFor="let option of currentStageOptions"
+                                            value="{{option}}">
+                                        {{option | upperCaseFirstLetter}}
+                                    </option>
+                                </select>
+                                <button class="ui icon button" (click)="save('currentStage')"
+                                        [disabled]="currentStageOptions == undefined">
+                                    <i class="ui save icon"></i>
+                                    <div class="hover text">Save</div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="nine wide field">
+                            <div class="ui info message">
+                                <i class="ui info icon"></i>
+                                Changing the current stage will reset the current match counter.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="seven wide field">
+                        <label>Next Match</label>
+                        <div class="ui action input">
+                            <input type="number" [ngModel]="statusService.data().nextMatchId"
+                                   (ngModel)="statusService.data().nextMatchId = $event">
+                            <button class="ui icon button" (click)="save('nextMatchId')"
+                                    [disabled]="statusService.data().nextMatchId == undefined">
+                                <i class="ui save icon"></i>
+                                <div class="hover text">Save</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui dividing header">Tournament</div>
+
+                <div class="ui form">
+                    <div class="ui grid">
+                        <div class="seven wide column">
+                            <div class="ui header">Number of rounds per stage</div>
+                            <div class="field">
+                                <label>Practice rounds</label>
+                                <input type="number"
+                                       [(ngModel)]="settingsService.data().numberOfPracticeRounds"
+                                       min="{{MIN_AMOUNT_OF_ROUNDS}}"
+                                       max="{{MAX_AMOUNT_OF_ROUNDS}}"
+                                       [disabled]="hasMatches"/>
+                            </div>
+                            <div class="field">
+                                <label>Ranking rounds</label>
+                                <input type="number"
+                                       [(ngModel)]="settingsService.data().numberOfRankingRounds"
+                                       min="{{MIN_AMOUNT_OF_ROUNDS}}"
+                                       max="{{MAX_AMOUNT_OF_ROUNDS}}"
+                                       [disabled]="hasMatches"/>
+                            </div>
+                            <div class="field">
+                                <button class="ui button" (click)="saveNumberOfRounds()"
+                                        [disabled]="hasMatches">
+                                    <i class="ui save icon"></i>Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="nine wide column">
+                            <div class="ui info message">
+                                <i class="ui info icon"></i>
+                                This setting is used when you import a partial schedule file or a team list.
+                            </div>
+                        </div>
+                        <div class="sixteen wide column">
+                            <div class="ui header">Schedule offset</div>
+                            <div class="fields">
+                                <div class="two wide field">
+                                    <label>Hours</label>
+                                    <input type="number" [(ngModel)]="settingsService.data().scheduleTimeOffset.hoursValue"
+                                           min="0">
+                                </div>
+                                <div class="two wide field">
+                                    <label>Minutes</label>
+                                    <input type="number" [(ngModel)]="settingsService.data().scheduleTimeOffset.minutesValue"
+                                           min="0" max="59">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" [(ngModel)]="settingsService.data().scheduleTimeOffset.negative">
+                                    <label>Negative?</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button class="ui button" (click)="save('scheduleTimeOffset')"
+                                        [disabled]="">
+                                    <i class="ui save icon"></i>Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="seven wide column">
+                            <div class="ui header">Delete Tournament Data</div>
+                            <div class="field">
+                                <button class="ui red button"
+                                        (click)="openClearScheduleModal()" [disabled]="!hasDataInDb">
+                                    <i class="ui trash icon"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="nine wide column">
+                            <div class="ui info message">
+                                <i class="ui info icon"></i>
+                                Press Delete to delete Teams and Matches.<br/>
+                                Note: You must first delete all scoring data.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

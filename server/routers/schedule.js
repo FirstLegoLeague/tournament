@@ -40,16 +40,17 @@ const deleteSchedule = () => {
   ])
 }
 
-router.get((req, res) => {
-  res.status(200).send(parse(req.query.data))
+router.get('/', (req, res) => {
+  parse(req.query.data, req.logger)
+    .then(schedule => res.status(200).json(schedule))
     .catch(error => {
       req.logger.error(error)
       res.sendStatus(500)
     })
 })
 
-router.post((req, res) => {
-  parse(req.body.data)
+router.post('/', (req, res) => {
+  parse(req.body.data, req.logger)
     .then(schedule => saveSchedule(schedule))
     .then(() => res.sendStatus(201))
     .catch(error => {
@@ -58,7 +59,7 @@ router.post((req, res) => {
     })
 })
 
-router.delete((req, res) => {
+router.delete('/', (req, res) => {
   deleteSchedule()
     .then(() => res.sendStatus(201))
     .catch(error => {

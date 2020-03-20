@@ -1,0 +1,11 @@
+#teams {
+    height: 100%;
+}
+
+#teams > .column {
+    height: 100%;
+}
+
+#teams > .column > .segment {
+    height: 100%;
+}

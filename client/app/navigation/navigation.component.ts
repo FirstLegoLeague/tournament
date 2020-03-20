@@ -12,9 +12,12 @@ export class NavigationComponent implements OnInit {
   public loading: Object
 
   constructor () {
-    this.links = [
-      { href: '/home', title: 'Home', icon: 'home' }
-    ]
+  	this.links = [
+      { href: '/tournament-settings', title: 'Tournament Settings', icon: 'cogs' },
+      { href: '/tournament-logos', title: 'Sponsor Logos', icon: 'image outline' },
+      { href: '/tournament-teams', title: 'Teams', icon: 'users' },
+      { href: '/tournament-matches', title: 'Matches', icon: 'calendar alternate outline' }
+  	]
   }
 
   ngOnInit () {

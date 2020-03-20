@@ -6,7 +6,7 @@ file-drop.segment {
 	height: 18rem;
 }
 
-file-drop.segment > .drop-zone, #image-upload file-drop > .drop-zone {
+file-drop.segment > .drop-zone, #logo-upload file-drop > .drop-zone {
 	margin: 0;
     height: 100%;
     border: none;

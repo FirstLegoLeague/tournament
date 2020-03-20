@@ -1,0 +1,19 @@
+#matches {
+    height: 100%;
+}
+
+#matches > .column {
+    height: 100%;
+}
+
+#matches > .column > .segment {
+    height: 100%;
+}
+
+thead {
+    height: 5.3em !important;
+}
+
+tbody {
+    height: calc(100% - 5.3em) !important;
+}

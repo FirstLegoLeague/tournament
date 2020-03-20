@@ -7,7 +7,8 @@ class Table extends FieldsModel {
 }
 
 Table.FIELDS = [
-  { field: 'name', type: String, required: true }
+  { key: '_id', type: String, defaultValue: undefined },
+  { key: 'name', type: String, defaultValue: '', required: true }
 ]
 
 Table.developmentCollection = () => {

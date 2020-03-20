@@ -7,7 +7,7 @@ const { Match } = require('../../../../resources/match')
 const { Team } = require('../../../../resources/team')
 const { Table } = require('../../../../resources/table')
 
-const TEAM_FIELDS = Team.FIELDS.map(({ field }) => field)
+const TEAM_FIELDS = Team.FIELDS.map(({ key }) => key).filter(key => key !== '_id')
 
 // CSV format constants
 const LINE_SEPERATOR = '\n'
@@ -69,7 +69,7 @@ const blockFormats = [
   },
   {
     blockId: 2, // ranking matches
-    headerLength: 6,
+    headerLength: 5,
     bodyLengthLocationInHeader: { line: 1, cell: 1 },
     apply: (schedule, body, header) => {
       applyTables(header, schedule)
@@ -80,7 +80,7 @@ const blockFormats = [
   // Blcok format with blockId 3 is for judging rooms, which is not yet implemented in the TMS.
   {
     blockId: 4, // practice matches
-    headerLength: 6,
+    headerLength: 5,
     bodyLengthLocationInHeader: { line: 1, cell: 1 },
     apply: (schedule, body, header) => {
       applyTables(header, schedule)
@@ -134,4 +134,5 @@ const parseDate = str => {
   return moment(str, 'hh:mm:ss A')
     .set({ year: 1970, month: 0, date: 1 })
     .toDate()
+    .toISOString()
 }

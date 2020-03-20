@@ -10,12 +10,12 @@ const { MongoCollectionServer, MongoEntityServer } = require('@first-lego-league
 
 const { configRouter } = require('./server/routers/config')
 const { scheduleRouter } = require('./server/routers/schedule')
+const { statusRouter } = require('./server/routers/status')
+const { matchesRouter } = require('./server/routers/matches')
 
 const { Team } = require('./resources/team')
 const { Table } = require('./resources/table')
-const { Match } = require('./resources/match')
-const { Image } = require('./resources/image')
-const { Status } = require('./resources/status')
+const { Logo } = require('./resources/logo')
 const { Settings } = require('./resources/settings')
 
 const DEFAULT_PORT = 3001
@@ -35,7 +35,7 @@ app.use(loggerMiddleware)
 app.use(cors())
 
 const authMiddleware = process.env.NODE_ENV === 'development' ? authenticationDevMiddleware() : authenticationMiddleware
-const adminAction = process.env.NODE_ENV === 'development' ? (req, res, next) => { next() } : authroizationMiddlware(['admin', 'development'])
+const adminAction = authroizationMiddlware(['admin', 'development'])
 
 app.post(authMiddleware, adminAction)
 app.put(authMiddleware, adminAction)
@@ -43,15 +43,14 @@ app.delete(authMiddleware, adminAction)
 
 app.use('/teams', new MongoCollectionServer(Team))
 app.use('/tables', new MongoCollectionServer(Table))
-app.use('/matches', new MongoCollectionServer(Match))
-app.use('/images', new MongoCollectionServer(Image))
-app.use('/status', new MongoEntityServer(Status, { initialValue: Status.initialValue }))
+app.use('/matches', matchesRouter)
+app.use('/logos', new MongoCollectionServer(Logo))
 app.use('/settings', new MongoEntityServer(Settings, { initialValue: Settings.initialValue }))
-
+app.use('/status', statusRouter)
 app.use('/config', configRouter)
-app.use(authMiddleware, adminAction)
 
-app.use(scheduleRouter)
+app.use(authMiddleware, adminAction)
+app.use('/schedule', scheduleRouter)
 
 app.use(express.static(path.join(__dirname, 'dist', 'client')))
 

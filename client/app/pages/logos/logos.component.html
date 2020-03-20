@@ -1,0 +1,19 @@
+<div class="ui one column padded grid">
+    <div class="column">
+        <div class="ui centered cards">
+            <div class="card" *ngFor="let logo of logos()" [ngClass]="{'loading':loading}">
+                <div class="logo content">
+                    <img src="{{logo.source}}">
+                </div>
+                <div class="extra content">
+                    <i class="ui red link trash right floated icon"
+                       (click)="setDeleteModel(logo)">
+                    </i>
+                    <div class="header">{{logo.filename}}</div>
+                </div>
+            </div>
+            <logo-upload class="ui link card">
+            </logo-upload>
+        </div>
+    </div>
+</div>

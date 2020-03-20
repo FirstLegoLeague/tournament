@@ -6,24 +6,26 @@ class Team extends FieldsModel {
   }
 
   validate ({ collection }) {
-    if (collection.filter(team => team.number === this.number).length !== 1) {
+    super.validate({ collection })
+    if (collection.filter(team => team.number === this.number).length > 1) {
       throw new InvalidEntry('Duplicate team number')
     }
   }
 }
 
 Team.FIELDS = [
-  { field: 'number', type: Number, required: true },
-  { field: 'name', type: String, required: true },
-  { field: 'affiliation', type: String },
-  { field: 'cityState', type: String },
-  { field: 'country', type: String },
-  { field: 'coach1', type: String },
-  { field: 'coach2', type: String },
-  { field: 'judgingGroup', type: String },
-  { field: 'pitNumber', type: Number },
-  { field: 'pitLocation', type: String },
-  { field: 'language', type: String }
+  { key: '_id', type: String, defaultValue: undefined },
+  { key: 'number', type: Number, required: true },
+  { key: 'name', type: String, required: true },
+  { key: 'affiliation', type: String },
+  { key: 'cityState', type: String },
+  { key: 'country', type: String },
+  { key: 'coach1', type: String },
+  { key: 'coach2', type: String },
+  { key: 'judgingGroup', type: String },
+  { key: 'pitNumber', type: Number },
+  { key: 'pitLocation', type: String },
+  { key: 'language', type: String }
 ]
 
 exports.Team = Team

@@ -6,7 +6,7 @@ const { Team } = require('../../../../resources/team')
 const LINE_SEPERATOR = '\n'
 const DELIMETER = ','
 
-const TEAM_FIELDS = Team.FIELDS.map(({ field }) => field)
+const TEAM_FIELDS = Team.FIELDS.map(({ key }) => key).filter(key => key !== '_id')
 
 exports.parse = data => {
   const lines = data
