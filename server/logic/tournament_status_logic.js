@@ -65,7 +65,7 @@ function resetMatchNumberByStage () {
     .then(currStage => getFirstMatchInStage(currStage))
     .then(match => {
       MsLogger.info(`Resetting current match number to ${match}`)
-      return setCurrentMatchNumber(match.matchId)
+      return setCurrentMatchNumber(match.matchId - 1)
     })
     .catch(e => {
       MsLogger.error(e.message)
@@ -140,8 +140,12 @@ function getCurrentMatchNumber () {
 }
 
 function setCurrentMatchNumber (newMatch) {
-  return isMatchInCurrentStage(newMatch).then(result => {
-    if (result || newMatch === 0) {
+  return Promise.all([
+    isMatchInCurrentStage(newMatch),
+    getSetting(CURRENT_STAGE_NAME)
+      .then(currStage => getFirstMatchInStage(currStage))
+  ]).then(([matchInCurrentStage, firstMatchInCurrentStage]) => {
+    if (matchInCurrentStage || newMatch === firstMatchInCurrentStage.matchId - 1) {
       return updateSetting(CURRENT_MATCH_NAME, newMatch).then(() => {
         publishMatchAvailable()
         return true
